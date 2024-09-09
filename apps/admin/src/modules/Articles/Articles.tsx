@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 const Articles = () => {
   const { isLoading, error, data } = useQuery({
     queryKey: ['repoData'],
-    queryFn: () => fetch('https://api.github.com/repos/TanStack/query').then((res) => res.json()),
+    queryFn: () => fetch('https://api.github.com/repos/zpectah/aitne-cms').then((res) => res.json()),
   });
 
   if (isLoading) return 'Loading...';

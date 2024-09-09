@@ -9,7 +9,7 @@ const Dashboard = () => {
     <ViewLayout meta={{ title: 'Dashboard' }}>
       ...Dashboard...
       <div>
-        ...view router... <Button>Button</Button>{' '}
+        ...view router... <Button>Button</Button>
       </div>
     </ViewLayout>
   );

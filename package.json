@@ -8,11 +8,22 @@
   },
   "scripts": {
     "initial": "bash ./scripts/initial.sh",
-    "start:admin": "dotenv -e .env -- nx serve admin",
-    "start:admin:host": "nx serve admin --host",
+
+    "start:admin": "nx serve admin --mode development",
+    "start:admin:host": "nx serve admin --mode development --host",
     "start:api": "nx serve api",
+    "build:admin": "nx build admin --mode production --emptyOutDir",
+    "build:api": "nx build api --mode production --emptyOutDir",
+
     "lint:all": "nx run-many --target=lint --all",
-    "test:vite": "vitest"
+    "test:vite": "vitest",
+
+    "db:start": "docker compose up",
+    "db:stop": "docker compose stop",
+    "db:clear": "docker compose down",
+
+    "sql:dump": "bash ./scripts/sql:dump.sh",
+    "sql:import": "bash ./scripts/sql:import.sh"
   },
   "private": true,
   "dependencies": {
