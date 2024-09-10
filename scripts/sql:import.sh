@@ -2,6 +2,6 @@
 
 export $(grep -v '^#' .env | xargs)
 
-param=${1:-$DB_DUMP_DEFAULT}
+param=${1:-'dump'}
 
-docker exec -i $DB_ROOT_CONTAINER mysql -u $DB_USER -p$DB_PASSWORD $DB_NAME < migrations/$param.sql
+docker exec -i $CMS_DOCKER_DB_CONTAINER mysql -u $CMS_DB_USER -p$CMS_DB_PASSWORD $CMS_DB_NAME < migrations/$param.sql

@@ -1,8 +1,8 @@
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import cms from '../../build';
+import aitne from '../../aitne.config';
 
 export default {
-  cms,
+  cms: aitne,
   locales: {
     default: 'en',
     fallback: 'en',

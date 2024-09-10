@@ -2,14 +2,12 @@ services:
 
   # MYSQL
   mysql:
-    container_name: cms_db
+    container_name: ${CMS_DOCKER_DB_CONTAINER}
     image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
       - mysql-data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "${CMS_DB_PORT}:3306"
     networks:
       - app-network
 
