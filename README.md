@@ -2,23 +2,65 @@
 
 ## Motivation
 
-Motivací bylo vytvořit plně customizovatelné Headless CMS a plně si ho přizpůsobit vlastním potřebám.
+The motivation was to create a fully customizable Headless CMS and fully adapt it to your own needs.
 
 ## Description
 
-CMS nabízí základní typy obsahu, jako je [article, page, category, tag] a lze jej rozšířit o vlastní schémata modelů.
+The CMS offers basic content types such as [article, page, category, tag] and can be extended with custom model schemas.
 
 ## Development
 
-### 1. Prepare
+### Installation
+To run the application, we need Docker, or better Docker Desktop. The database and Adminer for database management run in the container.
 
-#### Scripts
+1. Install dependencies:
+    ```sh
+    yarn install
+    ```
+2. Running the wizard to create base variables:
+    ```sh
+    yarn setup:env
+    ```
+3. Preparing the container for Docker (At the first start, images of dependencies in Docker are downloaded):
+    ```sh
+    yarn db:start
+    ```
+4. Running the database preparation wizard:
+    ```sh
+    yarn setup:db
+    ```
 
-#### Database
+### Development
 
-### 2. Development server
+1. Running the development script in a browser window:
+    ```sh
+    yarn start:admin
+    ```
+   Or if you need to share on local network:
+    ```sh
+    yarn start:admin:host
+    ```
+2. Starting a server with an API:
+    ```sh
+    yarn start:api
+    ```
 
-### 3. Deployment
+### Linter
+Run code and syntax check:
+```sh
+yarn lint:all
+```
+
+### Tests
+Running tests:
+```sh
+yarn test:vite
+```
+
+### Other scripts
+
+* todo
+
 
 ## Models
 
