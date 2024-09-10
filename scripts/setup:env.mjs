@@ -1,9 +1,7 @@
 import inquirer from 'inquirer';
 import fs from 'fs';
 import path from 'path';
-import crypto from 'node:crypto';
-
-import utils from './utils.mjs';
+import utils from './utils/index.mjs';
 
 const TOKEN_ENV_KEY = 'CMS_INTEGRITY_TOKEN';
 const ENV_SRC = '.env.example';
@@ -12,8 +10,6 @@ const ENV_PROD = '.env.production';
 const ENV_SRC_PATH = path.join(process.cwd(), ENV_SRC);
 const ENV_DEV_PATH = path.join(process.cwd(), ENV_DEV);
 const ENV_PROD_PATH = path.join(process.cwd(), ENV_PROD);
-
-const getToken = () => crypto.randomBytes(16).toString('hex');
 
 const replaceKeyValue = (content, key, newValue) => {
   const regex = new RegExp(`^(${key}=)(.*)$`, 'm');
@@ -24,7 +20,7 @@ const replaceKeyValue = (content, key, newValue) => {
 const prepareDevEnv = async () => {
   try {
     const data = await fs.promises.readFile(ENV_SRC_PATH, 'utf8');
-    const content = replaceKeyValue(data, TOKEN_ENV_KEY, getToken());
+    const content = replaceKeyValue(data, TOKEN_ENV_KEY, utils.getSalt(8));
 
     utils.createFile(ENV_DEV_PATH, content);
   } catch (err) {
@@ -40,7 +36,7 @@ const updateDevEnv = async ({
 }) => {
   try {
     let data = await fs.promises.readFile(ENV_SRC_PATH, 'utf8');
-    data = replaceKeyValue(data, TOKEN_ENV_KEY, getToken());
+    data = replaceKeyValue(data, TOKEN_ENV_KEY, utils.getSalt(8));
     data = replaceKeyValue(data, 'CMS_DB_NAME', dbName);
     data = replaceKeyValue(data, 'CMS_DB_USER', dbUser);
     data = replaceKeyValue(data, 'CMS_DB_PASSWORD', dbPass);
@@ -55,7 +51,7 @@ const updateDevEnv = async ({
 const prepareProdEnv = async () => {
   try {
     const data = await fs.promises.readFile(ENV_SRC_PATH, 'utf8');
-    const content = replaceKeyValue(data, TOKEN_ENV_KEY, getToken());
+    const content = replaceKeyValue(data, TOKEN_ENV_KEY, utils.getSalt(8));
 
     utils.createFile(ENV_PROD_PATH, content);
   } catch (err) {
@@ -63,29 +59,33 @@ const prepareProdEnv = async () => {
   }
 };
 
-const initialSetup = async () => {
+const setupEnv = async () => {
   try {
-    console.log('*** Aitne CMS setup ***');
-    console.log('This will prepare environment variable files in your project.');
+    console.log('**********************************');
+    console.log('*   AitneCMS environment setup   *');
+    console.log('**********************************');
+    console.log('\n');
+    console.log('Now we will prepare the environment variables in the project');
+    console.log('\n');
 
     const intro = await inquirer.prompt([
       {
         type: 'confirm',
         name: 'create_prod_env',
-        message: `Do you want to create environment for production?`,
+        message: 'Do you want to create variables for production as well?',
         default: false,
       },
       {
         type: 'confirm',
         name: 'update_dev_env',
-        message: `Do you want to edit "${ENV_DEV}", or you can do it manually later?`,
+        message: `Do you want to edit development variables now?`,
         default: false,
       },
     ]);
 
-    prepareDevEnv();
+    await prepareDevEnv();
 
-    if (intro.create_prod_env) prepareProdEnv();
+    if (intro.create_prod_env) await prepareProdEnv();
     if (intro.update_dev_env) {
       const setup_db = await inquirer.prompt([
         {
@@ -111,16 +111,17 @@ const initialSetup = async () => {
         },
       ]);
 
-      updateDevEnv(setup_db);
+      await updateDevEnv(setup_db);
     }
 
     // Results:
     console.log(`✔️󠀠   Environment file "${ENV_DEV}" was created`);
     if (intro.create_prod_env) console.log(`✔️󠀠   Environment file "${ENV_PROD}" was created`);
     if (intro.update_dev_env) console.log(`✔️󠀠   Environment file "${ENV_DEV}" was updated`);
+    console.log('\n');
   } catch (err) {
     console.error(err);
   }
 }
 
-initialSetup();
+setupEnv();
