@@ -16,6 +16,7 @@
     "build:api": "nx build api --mode production --emptyOutDir",
     "lint:all": "nx run-many --target=lint --all",
     "test:vite": "vitest",
+    "db:create": "docker compose create",
     "db:start": "docker compose up",
     "db:start:silent": "docker compose up -d",
     "db:stop": "docker compose stop",

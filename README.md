@@ -23,12 +23,13 @@ To run the application, we need Docker, or better Docker Desktop. The database a
     ```
 3. Preparing the container for Docker (At the first start, images of dependencies in Docker are downloaded):
     ```sh
-    yarn db:start
+    yarn db:create
     ```
 4. Running the database preparation wizard:
     ```sh
     yarn setup:db
     ```
+ 
 
 ### Development
 
@@ -44,6 +45,10 @@ To run the application, we need Docker, or better Docker Desktop. The database a
     ```sh
     yarn start:api
     ```
+3. Running Docker container:
+    ```sh
+    yarn db:start
+    ``` 
 
 ### Linter
 Run code and syntax check:
