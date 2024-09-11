@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 
 import { WithChildren } from '@common';
 import config from '../../../../config';
-import { LayoutContainer } from '../LayoutContainer';
+import { LayoutContainer, LayoutContainerProps } from '../LayoutContainer';
 
 const ViewLayoutWrapper = styled('div', {
   shouldForwardProp: (propName) => propName !== 'isCentered',
@@ -27,9 +27,10 @@ interface ViewLayoutProps extends WithChildren {
     disableTitlePrefix?: boolean;
   };
   title?: ReactNode;
+  layoutContainerProps?: Partial<LayoutContainerProps>;
 }
 
-const ViewLayout = ({ children, isCentered, meta, title }: ViewLayoutProps) => {
+const ViewLayout = ({ children, isCentered, meta, title, layoutContainerProps }: ViewLayoutProps) => {
   useEffect(() => {
     if (meta?.title) {
       document.title = `${meta.disableTitlePrefix ? '' : `${config.cms.meta.name} | `}${meta.title}`;
@@ -38,7 +39,7 @@ const ViewLayout = ({ children, isCentered, meta, title }: ViewLayoutProps) => {
 
   return (
     <ViewLayoutWrapper isCentered={isCentered}>
-      <LayoutContainer>
+      <LayoutContainer {...layoutContainerProps}>
         <Stack>
           {title && <Typography variant="h2">{title}</Typography>}
           <ViewLayoutContent>{children}</ViewLayoutContent>

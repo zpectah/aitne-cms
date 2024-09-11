@@ -2,7 +2,7 @@ import Container, { ContainerProps } from '@mui/material/Container';
 
 import { WithChildren } from '@common';
 
-interface LayoutContainerProps extends WithChildren {
+export interface LayoutContainerProps extends WithChildren {
   containerProps?: Partial<Omit<ContainerProps, 'children'>>;
 }
 

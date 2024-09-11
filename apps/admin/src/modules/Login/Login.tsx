@@ -4,7 +4,12 @@ const Login = () => {
   console.log('page view: Login');
 
   return (
-    <ViewLayout isCentered meta={{ title: 'Login' }} title="Login">
+    <ViewLayout
+      isCentered
+      layoutContainerProps={{ containerProps: { maxWidth: 'md' } }}
+      meta={{ title: 'Login' }}
+      title="Login"
+    >
       <p>
         Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
         orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus

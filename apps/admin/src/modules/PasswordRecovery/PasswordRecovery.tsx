@@ -1,7 +1,12 @@
 import { ViewLayout } from '../../components';
 
 const PasswordRecovery = () => (
-  <ViewLayout isCentered meta={{ title: 'Password recovery' }} title="Password recovery">
+  <ViewLayout
+    isCentered
+    layoutContainerProps={{ containerProps: { maxWidth: 'md' } }}
+    meta={{ title: 'Password recovery' }}
+    title="Password recovery"
+  >
     <p>
       Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
       orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus
