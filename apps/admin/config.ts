@@ -25,5 +25,11 @@ export default {
     articles: {
       path: '/articles',
     },
+    settings: {
+      path: '/settings',
+    },
+    users: {
+      path: '/users',
+    },
   },
 };

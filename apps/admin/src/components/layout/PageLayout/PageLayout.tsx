@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { styled } from '@mui/material';
 
+import { useLayoutStore, useBreakpoint } from '../../../hooks';
 import { SIDEBAR_DESKTOP_WIDTH } from '../../../styles';
 import { Header } from '../Header';
 import { Footer } from '../Footer';
@@ -16,31 +17,48 @@ const PageLayoutWrapper = styled('div', {
 }));
 
 const PageLayoutContent = styled('div', {
-  shouldForwardProp: (propName) => propName !== 'isMinimal',
-})<{ readonly isMinimal?: boolean }>(({ isMinimal }) => ({
-  width: isMinimal ? '100%' : `calc(100% - ${SIDEBAR_DESKTOP_WIDTH})`,
-  height: '100%',
-  position: 'fixed',
-  top: 0,
-  left: isMinimal ? 0 : SIDEBAR_DESKTOP_WIDTH,
-  display: 'flex',
-  flexDirection: 'column',
-  overflow: 'auto',
-}));
+  shouldForwardProp: (propName) => propName !== 'isMinimal' && propName !== 'isOpen' && propName !== 'isMobile',
+})<{ readonly isMinimal?: boolean; readonly isOpen?: boolean; readonly isMobile?: boolean }>(
+  ({ isMinimal, isOpen, isMobile }) => {
+    const mobileOverrides = isMobile
+      ? {
+          width: '100%',
+          left: 0,
+        }
+      : {};
+
+    return {
+      width: isMinimal || !isOpen ? '100%' : `calc(100% - ${SIDEBAR_DESKTOP_WIDTH})`,
+      height: '100%',
+      position: 'fixed',
+      top: 0,
+      left: isMinimal || !isOpen ? 0 : SIDEBAR_DESKTOP_WIDTH,
+      display: 'flex',
+      overflow: 'auto',
+      flexDirection: 'column',
+      ...mobileOverrides,
+    };
+  }
+);
 
 interface PageLayoutProps {
   isMinimal?: boolean;
 }
 
-const PageLayout = ({ isMinimal }: PageLayoutProps) => (
-  <PageLayoutWrapper isMinimal={isMinimal}>
-    {!isMinimal && <Sidebar />}
-    <PageLayoutContent isMinimal={isMinimal}>
-      {!isMinimal && <Header />}
-      <Outlet />
-      {!isMinimal && <Footer />}
-    </PageLayoutContent>
-  </PageLayoutWrapper>
-);
+const PageLayout = ({ isMinimal }: PageLayoutProps) => {
+  const { sidebarOpen } = useLayoutStore();
+  const { isMobile } = useBreakpoint();
+
+  return (
+    <PageLayoutWrapper isMinimal={isMinimal}>
+      {!isMinimal && <Sidebar />}
+      <PageLayoutContent isMinimal={isMinimal} isMobile={isMobile} isOpen={sidebarOpen}>
+        {!isMinimal && <Header />}
+        <Outlet />
+        {!isMinimal && <Footer />}
+      </PageLayoutContent>
+    </PageLayoutWrapper>
+  );
+};
 
 export default PageLayout;

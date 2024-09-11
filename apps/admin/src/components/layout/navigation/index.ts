@@ -1,1 +1,2 @@
-export { default as SidebarNavigation } from './SidebarNavigation';
+export { default as SidebarNavigationPrimary } from './SidebarNavigationPrimary';
+export { default as SidebarNavigationSecondary } from './SidebarNavigationSecondary';

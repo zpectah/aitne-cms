@@ -1,15 +1,17 @@
 import { styled } from '@mui/material';
+import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
+
 import { WithChildren } from '@common';
 
 const ViewLayoutWrapper = styled('div', {
   shouldForwardProp: (propName) => propName !== 'isCentered',
 })<{ readonly isCentered?: boolean }>(({ isCentered }) => ({
   width: '100%',
+  flex: '1 1 auto',
 
   display: 'flex',
   flexDirection: 'column',
-  flex: '1 1 auto',
-
   alignItems: isCentered ? 'center' : 'initial',
   justifyContent: isCentered ? 'center' : 'initial',
 }));
@@ -31,7 +33,11 @@ const ViewLayout = ({ children, isCentered, meta = {} }: ViewLayoutProps) => {
 
   return (
     <ViewLayoutWrapper isCentered={isCentered}>
-      <ViewLayoutContent>{children}</ViewLayoutContent>
+      <Container>
+        <Stack>
+          <ViewLayoutContent>{children}</ViewLayoutContent>
+        </Stack>
+      </Container>
     </ViewLayoutWrapper>
   );
 };

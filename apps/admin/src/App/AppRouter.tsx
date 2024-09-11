@@ -9,6 +9,8 @@ const Login = lazy(() => import('../modules/Login/Login'));
 const PasswordRecovery = lazy(() => import('../modules/PasswordRecovery/PasswordRecovery'));
 const Dashboard = lazy(() => import('../modules/Dashboard/Dashboard'));
 const Articles = lazy(() => import('../modules/Articles/Articles'));
+const Users = lazy(() => import('../modules/Users/Users'));
+const Settings = lazy(() => import('../modules/Settings/Settings'));
 
 const AppRouter = () => {
   const { routes } = config;
@@ -60,6 +62,14 @@ const AppRouter = () => {
           {
             path: routes.articles.path,
             element: <Articles />,
+          },
+          {
+            path: routes.users.path,
+            element: <Users />,
+          },
+          {
+            path: routes.settings.path,
+            element: <Settings />,
           },
         ],
       },
