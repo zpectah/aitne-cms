@@ -13,7 +13,7 @@ const Articles = () => {
   if (error) return `An error has occurred: ${error.message}`;
 
   return (
-    <ViewLayout meta={{}}>
+    <ViewLayout meta={{ title: 'Articles' }} title="Articles">
       ...Articles...
       <div>
         <div>

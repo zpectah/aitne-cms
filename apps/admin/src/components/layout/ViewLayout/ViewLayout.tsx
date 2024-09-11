@@ -1,43 +1,49 @@
+import { ReactNode, useEffect } from 'react';
 import { styled } from '@mui/material';
 import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 
 import { WithChildren } from '@common';
+import config from '../../../../config';
+import { LayoutContainer } from '../LayoutContainer';
 
 const ViewLayoutWrapper = styled('div', {
   shouldForwardProp: (propName) => propName !== 'isCentered',
 })<{ readonly isCentered?: boolean }>(({ isCentered }) => ({
   width: '100%',
   flex: '1 1 auto',
-
   display: 'flex',
   flexDirection: 'column',
   alignItems: isCentered ? 'center' : 'initial',
   justifyContent: isCentered ? 'center' : 'initial',
 }));
 
-const ViewLayoutContent = styled('main')(() => ({
-  // flex: '1 1 auto',
-}));
+const ViewLayoutContent = styled('main')(() => ({}));
 
 interface ViewLayoutProps extends WithChildren {
   isCentered?: boolean;
   meta?: {
     title?: string;
-    description?: string;
+    disableTitlePrefix?: boolean;
   };
+  title?: ReactNode;
 }
 
-const ViewLayout = ({ children, isCentered, meta = {} }: ViewLayoutProps) => {
-  // TODO - meta ...
+const ViewLayout = ({ children, isCentered, meta, title }: ViewLayoutProps) => {
+  useEffect(() => {
+    if (meta?.title) {
+      document.title = `${meta.disableTitlePrefix ? '' : `${config.cms.meta.name} | `}${meta.title}`;
+    }
+  }, [meta]);
 
   return (
     <ViewLayoutWrapper isCentered={isCentered}>
-      <Container>
+      <LayoutContainer>
         <Stack>
+          {title && <Typography variant="h2">{title}</Typography>}
           <ViewLayoutContent>{children}</ViewLayoutContent>
         </Stack>
-      </Container>
+      </LayoutContainer>
     </ViewLayoutWrapper>
   );
 };

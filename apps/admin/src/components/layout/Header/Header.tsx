@@ -1,10 +1,15 @@
 import { styled } from '@mui/material';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import Container from '@mui/material/Container';
+import MenuIcon from '@mui/icons-material/Menu';
 
 import { useLayoutStore } from '../../../hooks';
 import { HEADER_DESKTOP_HEIGHT } from '../../../styles';
+import { LayoutContainer } from '../LayoutContainer';
+import HeaderNotifications from './HeaderNotifications';
+import HeaderUser from './HeaderUser';
+import HeaderSearch from './HeaderSearch';
+import HeaderBreadcrumbs from './HeaderBreadcrumbs';
 
 const HeaderWrapper = styled('header')(({ theme }) => ({
   width: '100%',
@@ -28,29 +33,23 @@ const Header = () => {
 
   return (
     <HeaderWrapper>
-      <Container>
+      <LayoutContainer>
         <HeaderContent>
-          <Stack direction="row" gap={1}>
+          <Stack alignItems="center" direction="row" gap={2} justifyContent="start">
             {!sidebarOpen && (
-              <Button onClick={sidebarToggle} size="small" variant="outlined">
-                menu
-              </Button>
+              <IconButton onClick={sidebarToggle}>
+                <MenuIcon />
+              </IconButton>
             )}
-            <div>Some title or whatever ...</div>
+            <HeaderBreadcrumbs />
           </Stack>
-          <Stack direction="row" gap={1}>
-            <Button size="small" variant="outlined">
-              search
-            </Button>
-            <Button size="small" variant="outlined">
-              notification
-            </Button>
-            <Button size="small" variant="outlined">
-              user
-            </Button>
+          <Stack direction="row" gap={2}>
+            <HeaderSearch />
+            <HeaderNotifications />
+            <HeaderUser />
           </Stack>
         </HeaderContent>
-      </Container>
+      </LayoutContainer>
     </HeaderWrapper>
   );
 };

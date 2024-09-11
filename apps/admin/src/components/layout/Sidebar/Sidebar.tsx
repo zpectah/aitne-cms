@@ -1,5 +1,7 @@
 import { styled } from '@mui/material';
-import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 
 import { useLayoutStore, useBreakpoint } from '../../../hooks';
 import { SidebarNavigationPrimary, SidebarNavigationSecondary } from '../navigation';
@@ -39,10 +41,11 @@ const SidebarHeading = styled('div', {
   flex: '0 0 auto',
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'space-between',
+  justifyContent: isMobile ? 'start' : 'space-between',
   paddingLeft: '1rem',
   paddingRight: '1rem',
   flexDirection: isMobile ? 'row-reverse' : 'row',
+  gap: 8,
 }));
 
 const SidebarContent = styled('div')(() => ({
@@ -67,10 +70,12 @@ const Sidebar = () => {
   return (
     <SidebarWrapper isMobile={isMobile} isOpen={sidebarOpen}>
       <SidebarHeading isMobile={isMobile}>
-        Sidebar heading
-        <Button onClick={sidebarToggle} size="small" variant="outlined">
-          menu
-        </Button>
+        <Typography component="h1" variant="h1">
+          logo
+        </Typography>
+        <IconButton onClick={sidebarToggle}>
+          <MenuOpenIcon />
+        </IconButton>
       </SidebarHeading>
       <SidebarContent>
         <SidebarNavigationPrimary />
