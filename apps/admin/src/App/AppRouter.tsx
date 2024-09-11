@@ -1,9 +1,9 @@
 import { lazy } from 'react';
 import { RouterProvider, createBrowserRouter, Navigate } from 'react-router-dom';
 
+import config from '../../config';
 import { PageLayout, PageLayoutPreloader } from '../components';
 import { Error } from '../modules';
-import config from '../../config';
 
 const Login = lazy(() => import('../modules/Login/Login'));
 const PasswordRecovery = lazy(() => import('../modules/PasswordRecovery/PasswordRecovery'));
@@ -17,7 +17,7 @@ const AppRouter = () => {
     [
       {
         path: routes.error.path,
-        element: <PageLayout />,
+        element: <PageLayout isMinimal />,
         children: [
           {
             path: routes.error.path,
@@ -27,7 +27,7 @@ const AppRouter = () => {
       },
       {
         path: routes.login.path,
-        element: <PageLayout />,
+        element: <PageLayout isMinimal />,
         children: [
           {
             path: routes.login.path,
@@ -37,7 +37,7 @@ const AppRouter = () => {
       },
       {
         path: routes.passwordRecovery.path,
-        element: <PageLayout />,
+        element: <PageLayout isMinimal />,
         children: [
           {
             path: routes.passwordRecovery.path,

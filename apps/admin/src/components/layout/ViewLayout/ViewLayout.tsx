@@ -1,12 +1,24 @@
 import { styled } from '@mui/material';
 import { WithChildren } from '@common';
-import { Sidebar } from '../Sidebar';
 
-const ViewLayoutWrapper = styled('div')(() => ({}));
-const ViewLayoutContent = styled('main')(() => ({}));
+const ViewLayoutWrapper = styled('div', {
+  shouldForwardProp: (propName) => propName !== 'isCentered',
+})<{ readonly isCentered?: boolean }>(({ isCentered }) => ({
+  width: '100%',
+
+  display: 'flex',
+  flexDirection: 'column',
+  flex: '1 1 auto',
+
+  alignItems: isCentered ? 'center' : 'initial',
+  justifyContent: isCentered ? 'center' : 'initial',
+}));
+
+const ViewLayoutContent = styled('main')(() => ({
+  // flex: '1 1 auto',
+}));
 
 interface ViewLayoutProps extends WithChildren {
-  withoutSidebar?: boolean;
   isCentered?: boolean;
   meta?: {
     title?: string;
@@ -14,11 +26,14 @@ interface ViewLayoutProps extends WithChildren {
   };
 }
 
-const ViewLayout = ({ children, withoutSidebar, isCentered, meta = {} }: ViewLayoutProps) => (
-  <ViewLayoutWrapper>
-    {!withoutSidebar && <Sidebar />}
-    <ViewLayoutContent>{children}</ViewLayoutContent>
-  </ViewLayoutWrapper>
-);
+const ViewLayout = ({ children, isCentered, meta = {} }: ViewLayoutProps) => {
+  // TODO - meta ...
+
+  return (
+    <ViewLayoutWrapper isCentered={isCentered}>
+      <ViewLayoutContent>{children}</ViewLayoutContent>
+    </ViewLayoutWrapper>
+  );
+};
 
 export default ViewLayout;
