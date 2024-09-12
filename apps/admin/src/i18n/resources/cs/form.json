@@ -1,0 +1,6 @@
+{
+  "msg.error.required": "Field is required",
+  "msg.error.minLength": "Insufficient number of characters",
+  "msg.error.min": "Minimum value exceeded",
+  "msg.error.max": "Maximum value exceeded"
+}

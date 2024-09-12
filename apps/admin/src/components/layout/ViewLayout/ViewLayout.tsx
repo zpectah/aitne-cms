@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from 'react';
 import { styled } from '@mui/material';
-import Stack from '@mui/material/Stack';
+import Stack, { StackProps } from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { WithChildren } from '@common';
@@ -28,9 +28,10 @@ interface ViewLayoutProps extends WithChildren {
   };
   title?: ReactNode;
   layoutContainerProps?: Partial<LayoutContainerProps>;
+  layoutStackProps?: StackProps;
 }
 
-const ViewLayout = ({ children, isCentered, meta, title, layoutContainerProps }: ViewLayoutProps) => {
+const ViewLayout = ({ children, isCentered, meta, title, layoutContainerProps, layoutStackProps }: ViewLayoutProps) => {
   useEffect(() => {
     if (meta?.title) {
       document.title = `${meta.disableTitlePrefix ? '' : `${config.cms.meta.name} | `}${meta.title}`;
@@ -40,9 +41,11 @@ const ViewLayout = ({ children, isCentered, meta, title, layoutContainerProps }:
   return (
     <ViewLayoutWrapper isCentered={isCentered}>
       <LayoutContainer {...layoutContainerProps}>
-        <Stack>
+        <Stack gap={2} {...layoutStackProps}>
           {title && <Typography variant="h2">{title}</Typography>}
-          <ViewLayoutContent>{children}</ViewLayoutContent>
+          <ViewLayoutContent>
+            <Stack gap={2}>{children}</Stack>
+          </ViewLayoutContent>
         </Stack>
       </LayoutContainer>
     </ViewLayoutWrapper>

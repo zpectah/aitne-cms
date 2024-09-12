@@ -69,6 +69,25 @@ const theme = createTheme({
         variant: 'contained',
       },
     },
+    MuiCard: {
+      defaultProps: {
+        variant: 'outlined',
+      },
+    },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          fontSize: '.9rem',
+        },
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          fontWeight: 600,
+        },
+      },
+    },
   },
 });
 

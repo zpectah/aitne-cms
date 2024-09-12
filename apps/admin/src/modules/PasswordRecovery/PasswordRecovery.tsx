@@ -1,4 +1,4 @@
-import { ViewLayout } from '../../components';
+import { ViewLayout, MiniFooter } from '../../components';
 
 const PasswordRecovery = () => (
   <ViewLayout
@@ -16,6 +16,7 @@ const PasswordRecovery = () => (
       lorem fringilla. Nisi commodo metus, consectetur et elit cursus rutrum ligula odio leo semper, erat id porttitor
       cursus neque.
     </p>
+    <MiniFooter />
   </ViewLayout>
 );
 

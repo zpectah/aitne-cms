@@ -53,7 +53,7 @@ const AppRouter = () => {
         children: [
           {
             path: routes.root,
-            element: <Navigate replace to="/dashboard" />,
+            element: <Navigate replace to={routes.login.path} />,
           },
           {
             path: routes.dashboard.path,
