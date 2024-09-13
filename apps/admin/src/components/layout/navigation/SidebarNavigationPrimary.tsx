@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import { styled } from '@mui/material';
 import List from '@mui/material/List';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
@@ -12,6 +13,7 @@ const NavigationWrapper = styled('nav')(() => ({
 }));
 
 const SidebarNavigationPrimary = () => {
+  const { pathname } = useLocation();
   const { routes } = config;
 
   const navItems = [
@@ -45,7 +47,7 @@ const SidebarNavigationPrimary = () => {
     <NavigationWrapper>
       <List disablePadding>
         {navItems.map(({ path, label, key, ...rest }) => (
-          <SidebarNavigationItem key={key} to={path} {...rest}>
+          <SidebarNavigationItem key={key} selected={pathname.includes(path)} to={path} {...rest}>
             {label}
           </SidebarNavigationItem>
         ))}

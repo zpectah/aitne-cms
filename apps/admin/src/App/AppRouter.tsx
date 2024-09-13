@@ -48,11 +48,11 @@ const AppRouter = () => {
         ],
       },
       {
-        path: routes.root,
+        path: routes.root.path,
         element: <PageLayout />,
         children: [
           {
-            path: routes.root,
+            path: routes.root.path,
             element: <Navigate replace to={routes.login.path} />,
           },
           {
@@ -60,21 +60,33 @@ const AppRouter = () => {
             element: <Dashboard />,
           },
           {
+            path: routes.settings.path,
+            element: <Settings />,
+          },
+          {
             path: routes.articles.path,
             element: <Articles />,
+            children: [
+              {
+                path: `${routes.articles.path}/:id`,
+                element: <Articles />,
+              },
+            ],
           },
           {
             path: routes.users.path,
             element: <Users />,
-          },
-          {
-            path: routes.settings.path,
-            element: <Settings />,
+            children: [
+              {
+                path: `${routes.users.path}/:id`,
+                element: <Users />,
+              },
+            ],
           },
         ],
       },
     ],
-    { basename: routes.root }
+    { basename: routes.root.path }
   );
 
   return <RouterProvider fallbackElement={<PageLayoutPreloader />} router={router} />;

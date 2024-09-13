@@ -4,5 +4,4 @@ export default {
     name: 'AitneCMS',
     description: 'Open Source Headless CMS with NX.js, Docker, Node.js and React',
   },
-  traffic: {},
 };

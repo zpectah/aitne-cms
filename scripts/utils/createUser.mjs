@@ -36,8 +36,8 @@ const createUser = async ({ firstname, lastname, email, password }) => {
     const timestamp = utils.getTimestamp();
 
     const [rows] = await connection.execute(
-      'INSERT INTO cms_users (firstname, middlename, lastname, email, password, type, role, context, salt, created, updated, active, deleted) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
-      [firstname, '', lastname, email, hashedPassword, 'default', 'admin', 'node', salt, timestamp, timestamp, 1, 0]
+      'INSERT INTO cms_users (firstname, lastname, email, password, type, role, salt, created, updated, active, deleted) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+      [firstname, lastname, email, hashedPassword, 'default', 'admin', salt, timestamp, timestamp, 1, 0]
     );
 
     connection.end();
