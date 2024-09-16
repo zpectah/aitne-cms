@@ -17,3 +17,5 @@ export interface UsersModel {
   active: number;
   deleted: number;
 }
+
+export type User = Omit<UsersModel, 'id'>;

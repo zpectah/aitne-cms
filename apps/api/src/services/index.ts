@@ -1,1 +1,1 @@
-export { default as ResponseService } from './ResponseService';
+export { default as users } from './users.service';
