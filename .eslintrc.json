@@ -33,6 +33,7 @@
         "unnamedComponents": [ "arrow-function", "function-expression" ]
       }
     ],
+    "@typescript-eslint/no-unsafe-return": "off",
     "@typescript-eslint/no-floating-promises": "off",
     "react/jsx-one-expression-per-line": "off",
     "spaced-comment": ["warn", "always"],
@@ -63,7 +64,8 @@
       2,
       {
         "checksVoidReturn": {
-          "attributes": false
+          "attributes": false,
+          "arguments": false
         }
       }
     ],

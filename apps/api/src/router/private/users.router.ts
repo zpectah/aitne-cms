@@ -3,10 +3,10 @@ import { users } from '../../controllers';
 
 const router = Router();
 
-router.get('/', users.getUsers);
-router.get('/:id', users.getUserById);
-router.post('/', users.createUser);
-router.put('/:id', users.updateUser);
-router.delete('/:id', users.deleteUser);
+router.get('/', users.get);
+router.get('/:id', users.getById);
+router.put('/', users.create);
+router.patch('/:id', users.update);
+router.patch('/:id', users.delete);
 
 export default router;

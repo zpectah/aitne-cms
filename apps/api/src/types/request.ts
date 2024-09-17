@@ -1,3 +1,13 @@
+import { ResultSetHeader, RowDataPacket } from 'mysql2/promise';
+
+export type MysqlPromiseRequest =
+  | ResultSetHeader
+  | ResultSetHeader[]
+  | RowDataPacket[]
+  | RowDataPacket[][]
+  | [RowDataPacket[], ResultSetHeader];
+
+// TODO
 export type RequestParameters = {
   version?: string | undefined;
 } & {

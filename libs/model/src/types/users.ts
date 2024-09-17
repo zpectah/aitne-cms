@@ -1,3 +1,5 @@
+import { RowDataPacket } from 'mysql2';
+
 import { usersTypeKeys, usersRoleKeys } from '../enums';
 
 export type UsersType = keyof typeof usersTypeKeys;
@@ -18,4 +20,4 @@ export interface UsersModel {
   deleted: number;
 }
 
-export type User = Omit<UsersModel, 'id'>;
+export type UsersModelData = RowDataPacket & UsersModel;

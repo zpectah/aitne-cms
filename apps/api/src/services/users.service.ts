@@ -1,6 +1,7 @@
-import mysql, { RowDataPacket, ResultSetHeader, OkPacket } from 'mysql2/promise';
+import mysql, { ResultSetHeader } from 'mysql2/promise';
 
-import { UsersModel } from '@model';
+import { UsersModel, UsersModelData } from '@model';
+import { getTimestamp } from '@common';
 
 const conn = mysql.createPool({
   host: 'localhost',
@@ -9,74 +10,54 @@ const conn = mysql.createPool({
   database: process.env.CMS_DB_NAME,
 });
 
-// Typ pro uživatele
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
+export const getUsers = async (): Promise<UsersModelData[]> => {
+  const [rows] = await conn.query<UsersModelData[]>(`SELECT * FROM cms_users WHERE deleted = 0`);
 
-// Mock databáze
-const users: User[] = [
-  { id: 1, name: 'Alice', email: 'alice@example.com' },
-  { id: 2, name: 'Bob', email: 'bob@example.com' },
-];
-
-export const getUsers = async (): Promise<
-  | OkPacket
-  | ResultSetHeader
-  | ResultSetHeader[]
-  | RowDataPacket[]
-  | RowDataPacket[][]
-  | OkPacket[]
-  | [RowDataPacket[], ResultSetHeader]
-> => {
-  const [rows] = await conn.query('SELECT * FROM cms_users WHERE deleted = 0');
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return rows ?? [];
 };
 
-const getUserById = async (id: number): Promise<User | null> => {
-  return users.find((user) => user.id === id) || null;
+const getUserById = async (id: number): Promise<UsersModelData[]> => {
+  const [rows] = await conn.query<UsersModelData[]>(`SELECT * FROM cms_users WHERE id = ? AND deleted = 0`, [id]);
+
+  return rows ?? [];
 };
 
-const createUser = async (data: Omit<User, 'id'>): Promise<User> => {
-  const newUser = { ...data, id: users.length + 1 };
+const createUser = async (
+  data: Omit<UsersModel, 'id' | 'created' | 'updated' | 'deleted'>
+): Promise<Pick<UsersModelData, 'id'>> => {
+  const { firstname, lastname, email, password, type, role, salt } = data;
+  const now = getTimestamp();
 
-  users.push(newUser);
+  const [result] = await conn.execute<ResultSetHeader>(
+    `INSERT INTO cms_users (firstname, lastname, email, password, type, role, salt, created, updated, active, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 0)`,
+    [firstname, lastname, email, password, type, role, salt, now, now]
+  );
 
-  return newUser;
+  return { id: result.insertId };
 };
 
-const updateUser = async (id: number, data: Partial<User>): Promise<User | null> => {
-  const userIndex = users.findIndex((user) => user.id === id);
+const updateUser = async (id: number, data: Partial<UsersModel>): Promise<{ affectedRows: number }> => {
+  const { firstname, lastname, email, password, type, role, salt, active } = data;
+  const now = getTimestamp();
 
-  if (userIndex !== -1) {
-    users[userIndex] = { ...users[userIndex], ...data };
+  const [result] = await conn.execute<ResultSetHeader>(
+    `UPDATE cms_users SET firstname = ?, lastname = ?, email = ?, password = ?, type = ?, role = ?, salt = ?, active = ?, updated = ? WHERE id = ? AND deleted = 0`,
+    [firstname, lastname, email, password, type, role, salt, active, now, id]
+  );
 
-    return users[userIndex];
-  }
-
-  return null;
+  return { affectedRows: result.affectedRows };
 };
 
-const deleteUser = async (id: number): Promise<boolean> => {
-  const userIndex = users.findIndex((user) => user.id === id);
+const deleteUser = async (id: number): Promise<{ affectedRows: number }> => {
+  const [result] = await conn.execute<ResultSetHeader>(`UPDATE cms_users SET deleted = 1 WHERE id = ?`, [id]);
 
-  if (userIndex !== -1) {
-    users.splice(userIndex, 1);
-
-    return true;
-  }
-
-  return false;
+  return { affectedRows: result.affectedRows };
 };
 
 export default {
-  getUsers,
-  getUserById,
-  createUser,
-  updateUser,
-  deleteUser,
+  get: getUsers,
+  getById: getUserById,
+  create: createUser,
+  update: updateUser,
+  delete: deleteUser,
 };
