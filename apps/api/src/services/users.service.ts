@@ -3,6 +3,7 @@ import mysql, { ResultSetHeader } from 'mysql2/promise';
 import { UsersModel, UsersModelData } from '@model';
 import { getTimestamp } from '@common';
 
+// TODO - make this common
 const conn = mysql.createPool({
   host: 'localhost',
   user: process.env.CMS_DB_USER,
