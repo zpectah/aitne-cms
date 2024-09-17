@@ -72,12 +72,6 @@ CREATE TABLE `cms_users` (
 -- Dumping data for table `cms_users`
 --
 
-LOCK TABLES `cms_users` WRITE;
-/*!40000 ALTER TABLE `cms_users` DISABLE KEYS */;
-INSERT INTO `cms_users` VALUES (1,'tomas','sychra','test@email.com','0f464bbdc568ff9a103a6b1a4106dae205a267423c6d7b98445d664411ab3581','default','admin','e17e0afb9f2d530d120c9837b638e2fc','2024-09-10T16:44:37.448Z','2024-09-10T16:44:37.448Z',1,0);
-/*!40000 ALTER TABLE `cms_users` ENABLE KEYS */;
-UNLOCK TABLES;
-
 --
 -- Table structure for table `users_test`
 --
