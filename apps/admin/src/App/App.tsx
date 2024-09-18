@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AppProvider from './AppProvider';
 import AppRouter from './AppRouter';
 import AppPreloader from './AppPreloader';
+import { ConfirmDialog } from '../components';
 
 import '../i18n';
 
@@ -20,6 +21,7 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <AppProvider>
         <AppRouter />
+        <ConfirmDialog />
       </AppProvider>
     </QueryClientProvider>
   </Suspense>

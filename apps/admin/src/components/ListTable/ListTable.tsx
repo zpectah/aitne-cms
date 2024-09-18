@@ -17,6 +17,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Stack from '@mui/material/Stack';
 
+import { useConfirmSore } from '../../hooks';
 import { ListTableProps, ListTableItemProps } from './types';
 import { useListTable } from './useListTable';
 
@@ -57,27 +58,14 @@ const ListTable = <T extends ListTableItemProps>({
     perPage,
   });
 
+  const { onOpen: onConfirmOpen } = useConfirmSore();
   const navigate = useNavigate();
-
-  const openHandler = (id: number) => {
-    navigate(`${rootPath}/${id}`);
-  };
-
-  const deleteRowHandler = (id: number) => {
-    // TODO #confirm here or later???
-    //
-    onRowDelete(id);
-  };
-
-  const deleteSelectedHandler = () => {
-    // TODO #confirm here or later???
-    //
-    onSelectedDelete?.(selected);
-  };
-
-  const exportSelectedHandler = () => {
-    onSelectedExport?.(selected);
-  };
+  const openHandler = (id: number) => navigate(`${rootPath}/${id}`);
+  const deleteRowHandler = (id: number) => onRowDelete(id);
+  const deleteRowConfirmHandler = (id: number) => onConfirmOpen(() => deleteRowHandler(id), '...todo...', '');
+  const deleteSelectedHandler = () => onSelectedDelete(selected);
+  const deleteSelectedConfirmHandler = () => onConfirmOpen(() => deleteSelectedHandler(), '...todo...', '');
+  const exportSelectedHandler = () => onSelectedExport?.(selected);
 
   const rowSelectHandler = (event: MouseEvent<unknown>, id: number) => {
     onSelect(event, id);
@@ -122,10 +110,10 @@ const ListTable = <T extends ListTableItemProps>({
         >
           <Box>searchbar</Box>
           <Stack direction="row" gap={1}>
-            <Button disabled={selected.length === 0} onClick={deleteSelectedHandler} size="small" variant="outlined">
+            <Button disabled={selected.length === 0} onClick={deleteSelectedConfirmHandler} variant="outlined">
               Delete selected
             </Button>
-            <Button disabled={selected.length === 0} onClick={exportSelectedHandler} size="small" variant="outlined">
+            <Button disabled={selected.length === 0} onClick={exportSelectedHandler} variant="outlined">
               Export selected
             </Button>
           </Stack>
@@ -169,7 +157,7 @@ const ListTable = <T extends ListTableItemProps>({
                         <IconButton onClick={() => openHandler(item.id)}>
                           <EditIcon />
                         </IconButton>
-                        <IconButton onClick={() => deleteRowHandler(item.id)}>
+                        <IconButton onClick={() => deleteRowConfirmHandler(item.id)}>
                           <DeleteIcon />
                         </IconButton>
                       </Stack>
