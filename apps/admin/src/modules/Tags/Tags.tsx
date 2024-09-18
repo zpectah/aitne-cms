@@ -1,6 +1,6 @@
 import { ViewLayout, DetailDrawerWrapper } from '../../components';
-import TagsList from './Tags.list';
-import TagsDetail from './Tags.detail';
+import TagsList from './TagsList';
+import TagsDetail from './TagsDetail';
 
 const Tags = () => {
   console.log('page view: Users');

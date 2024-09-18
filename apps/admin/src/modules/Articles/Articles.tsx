@@ -1,6 +1,6 @@
 import { ViewLayout, DetailDrawerWrapper } from '../../components';
-import ArticlesList from './Articles.list';
-import ArticlesDetail from './Articles.detail';
+import ArticlesList from './ArticlesList';
+import ArticlesDetail from './ArticlesDetail';
 
 const Articles = () => (
   <ViewLayout meta={{ title: 'Articles' }} title="Articles">

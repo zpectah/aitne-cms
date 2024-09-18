@@ -1,4 +1,4 @@
-export const SettingsGlobal = () => {
+export const SettingsPanelGlobal = () => {
   return (
     <>
       ...SettingsGlobal...
@@ -17,4 +17,4 @@ export const SettingsGlobal = () => {
   );
 };
 
-export default SettingsGlobal;
+export default SettingsPanelGlobal;

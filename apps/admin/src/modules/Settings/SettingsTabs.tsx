@@ -6,10 +6,10 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
 import config from '../../../config';
-import SettingsGlobal from './Settings.global';
-import SettingsSystem from './Settings.system';
-import SettingsLocales from './Settings.locales';
-import SettingsMaintenance from './System.maintenance';
+import SettingsPanelGlobal from './SettingsPanel.global';
+import SettingsPanelSystem from './SettingsPanel.system';
+import SettingsPanelLocales from './SettingsPanel.locales';
+import SettingsMaintenance from './SettingsPanel.maintenance';
 
 const TABS_PANEL_PFX = 'settings-panel-';
 const TABS_TAB_PFX = 'settings-tab-';
@@ -25,13 +25,13 @@ const SettingsTabs = () => {
       case 'system':
         return (
           <Box aria-labelledby={`${TABS_TAB_PFX}system`} id={`${TABS_PANEL_PFX}system`} role="tabpanel">
-            <SettingsSystem />
+            <SettingsPanelSystem />
           </Box>
         );
       case 'locales':
         return (
           <Box aria-labelledby={`${TABS_TAB_PFX}locales`} id={`${TABS_PANEL_PFX}locales`} role="tabpanel">
-            <SettingsLocales />
+            <SettingsPanelLocales />
           </Box>
         );
       case 'maintenance':
@@ -44,7 +44,7 @@ const SettingsTabs = () => {
       default:
         return (
           <Box aria-labelledby={`${TABS_TAB_PFX}global`} id={`${TABS_PANEL_PFX}global`} role="tabpanel">
-            <SettingsGlobal />
+            <SettingsPanelGlobal />
           </Box>
         );
     }

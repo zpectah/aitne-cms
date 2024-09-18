@@ -4,7 +4,7 @@ import List from '@mui/material/List';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import HomeIcon from '@mui/icons-material/Home';
 import ArticleIcon from '@mui/icons-material/Article';
-import LabelIcon from '@mui/icons-material/Label';
+import TagIcon from '@mui/icons-material/Tag';
 
 import config from '../../../../config';
 import SidebarNavigationItem from './SidebarNavigationItem';
@@ -34,7 +34,7 @@ const SidebarNavigationPrimary = () => {
       key: 2,
       path: routes.tags.path,
       label: 'Tags',
-      icon: <LabelIcon />,
+      icon: <TagIcon />,
     },
     {
       key: 100,

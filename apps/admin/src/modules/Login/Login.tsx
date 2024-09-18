@@ -1,5 +1,5 @@
 import { ViewLayout, MiniFooter } from '../../components';
-import LoginForm from './Login.form';
+import LoginForm from './LoginForm';
 
 const Login = () => {
   console.log('page view: Login');

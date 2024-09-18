@@ -1,6 +1,6 @@
 import { ViewLayout, DetailDrawerWrapper } from '../../components';
-import UsersList from './Users.list';
-import UsersDetail from './Users.detail';
+import UsersList from './UsersList';
+import UsersDetail from './UsersDetail';
 
 const Users = () => {
   console.log('page view: Users');
