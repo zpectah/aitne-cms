@@ -1,18 +1,14 @@
+import { useTranslation } from 'react-i18next';
+
 import { ViewLayout } from '../../components';
-import SettingsGlobal from './Settings.global';
-import SettingsSystem from './Settings.system';
-import SettingsLocales from './Settings.locales';
-import SettingsMaintenance from './System.maintenance';
+import SettingsTabs from './SettingsTabs';
 
 const Settings = () => {
-  console.log('page view: Settings');
+  const { t } = useTranslation();
 
   return (
-    <ViewLayout meta={{ title: 'Settings' }} title="Settings">
-      <SettingsGlobal />
-      <SettingsSystem />
-      <SettingsLocales />
-      <SettingsMaintenance />
+    <ViewLayout meta={{ title: t('page.settings') }} title={t('page.settings')}>
+      <SettingsTabs />
     </ViewLayout>
   );
 };

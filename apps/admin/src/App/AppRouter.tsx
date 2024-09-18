@@ -62,6 +62,12 @@ const AppRouter = () => {
           {
             path: routes.settings.path,
             element: <Settings />,
+            children: [
+              {
+                path: `${routes.settings.path}/:panel`,
+                element: <Settings />,
+              },
+            ],
           },
           {
             path: routes.articles.path,

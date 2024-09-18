@@ -1,3 +1,14 @@
 {
-  "btn.ok": "OK"
+  "btn.ok": "OK",
+
+  "page.login": "Login",
+  "page.password-recovery": "Password Recovery",
+  "page.dashboard": "Dashboard",
+  "page.articles": "Articles",
+  "page.settings": "Settings",
+  "page.settings.panel.global": "Global",
+  "page.settings.panel.system": "System",
+  "page.settings.panel.locales": "Locales",
+  "page.settings.panel.maintenance": "Maintenance",
+  "page.users": "Users"
 }

@@ -34,6 +34,23 @@ export default {
     settings: {
       path: '/settings',
       label: 'page.settings',
+      routes: {
+        global: {
+          label: 'page.settings.panel.global',
+        },
+        system: {
+          path: '/settings/system',
+          label: 'page.settings.panel.system',
+        },
+        locales: {
+          path: '/settings/locales',
+          label: 'page.settings.panel.locales',
+        },
+        maintenance: {
+          path: '/settings/maintenance',
+          label: 'page.settings.panel.maintenance',
+        },
+      },
     },
     users: {
       path: '/users',
