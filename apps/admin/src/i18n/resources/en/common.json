@@ -10,5 +10,6 @@
   "page.settings.panel.system": "System",
   "page.settings.panel.locales": "Locales",
   "page.settings.panel.maintenance": "Maintenance",
-  "page.users": "Users"
+  "page.users": "Users",
+  "page.tags": "Tags"
 }

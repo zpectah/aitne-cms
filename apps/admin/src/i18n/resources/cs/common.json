@@ -10,5 +10,6 @@
   "page.settings.panel.system": "System",
   "page.settings.panel.locales": "Locales",
   "page.settings.panel.maintenance": "Údržba",
-  "page.users": "Uživatelé"
+  "page.users": "Uživatelé",
+  "page.tags": "Tagy"
 }

@@ -11,6 +11,7 @@ const Dashboard = lazy(() => import('../modules/Dashboard/Dashboard'));
 const Articles = lazy(() => import('../modules/Articles/Articles'));
 const Users = lazy(() => import('../modules/Users/Users'));
 const Settings = lazy(() => import('../modules/Settings/Settings'));
+const Tags = lazy(() => import('../modules/Tags/Tags'));
 
 const AppRouter = () => {
   const { routes } = config;
@@ -86,6 +87,16 @@ const AppRouter = () => {
               {
                 path: `${routes.users.path}/:id`,
                 element: <Users />,
+              },
+            ],
+          },
+          {
+            path: routes.tags.path,
+            element: <Tags />,
+            children: [
+              {
+                path: `${routes.tags.path}/:id`,
+                element: <Tags />,
               },
             ],
           },

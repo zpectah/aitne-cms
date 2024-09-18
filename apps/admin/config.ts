@@ -56,5 +56,9 @@ export default {
       path: '/users',
       label: 'page.users',
     },
+    tags: {
+      path: '/tags',
+      label: 'page.tags',
+    },
   },
 };
