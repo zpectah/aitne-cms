@@ -5,10 +5,10 @@ import Button from '@mui/material/Button';
 
 import config from '../../../config';
 import { DetailDrawerLayout, FormField, SwitchControlled, Select } from '../../components';
-import { useTagsDetailForm } from './hooks';
+import { useTagsDetail } from './hooks';
 
 const TagsDetail = () => {
-  const { options, onSubmit } = useTagsDetailForm();
+  const { options, onSubmit } = useTagsDetail();
 
   return (
     <DetailDrawerLayout

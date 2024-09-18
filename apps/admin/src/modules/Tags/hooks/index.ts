@@ -1,1 +1,2 @@
-export * from './useTagsDetailForm';
+export * from './useTagsDetail';
+export * from './useTagsList';
