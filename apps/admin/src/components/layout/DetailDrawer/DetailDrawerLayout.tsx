@@ -6,10 +6,11 @@ import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { ElementProps, WithChildren } from '@common';
+import { WithChildren } from '@common';
 import { HEADER_DESKTOP_HEIGHT } from '../../../styles';
+import { Form, FormProps } from '../../form';
 
-const DetailDrawerLayoutForm = styled('form')({
+const DetailDrawerLayoutForm = styled(Form)({
   width: '100%',
   height: '100%',
   display: 'flex',
@@ -40,10 +41,9 @@ const DetailDrawerLayoutInner = styled('div')(({ theme }) => ({
 }));
 
 const DetailDrawerLayoutContent = styled('div')(({ theme }) => ({
-  flex: '1 1 auto',
-  flexGrow: 1,
-
   [theme.breakpoints.up('md')]: {
+    flex: '1 1 auto',
+    flexGrow: 1,
     overflowY: 'auto',
   },
 }));
@@ -57,12 +57,14 @@ const DetailDrawerLayoutContentScrollable = styled('div')(({ theme }) => ({
 }));
 
 const DetailDrawerLayoutSidebar = styled('div')(({ theme }) => ({
-  width: '200px',
+  width: '100%',
   flex: '0 0 auto',
   padding: '1rem',
 
   [theme.breakpoints.up('md')]: {
+    width: '250px',
     overflowY: 'auto',
+    borderLeft: `1px solid ${theme.palette.divider}`,
   },
 }));
 
@@ -76,15 +78,13 @@ const DetailDrawerLayoutFooter = styled('div')(({ theme }) => ({
   borderTop: `1px solid ${theme.palette.divider}`,
 }));
 
-type FormProps = ElementProps<'form'>;
-
 interface DetailDrawerLayoutProps extends WithChildren {
   rootPath: string;
   title: ReactNode;
   sidebar?: ReactNode;
   headerSlot?: ReactNode;
   footer?: ReactNode;
-  formProps?: FormProps;
+  formProps?: Partial<FormProps>;
 }
 
 const DetailDrawerLayout = ({

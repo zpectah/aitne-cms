@@ -1,9 +1,13 @@
 import { RowDataPacket } from 'mysql2';
 
+import { tagsColorKeys } from '../enums';
+
+export type TagsColor = keyof typeof tagsColorKeys;
+
 export interface TagsModel {
   id: number;
   name: string;
-  color: string;
+  color: TagsColor;
   created: string;
   updated: string;
   active: number;

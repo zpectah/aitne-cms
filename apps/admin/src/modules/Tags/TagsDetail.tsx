@@ -1,84 +1,47 @@
 import { Link } from 'react-router-dom';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
-import { DetailDrawerLayout } from '../../components';
+import config from '../../../config';
+import { DetailDrawerLayout, FormField, SwitchControlled, Select } from '../../components';
+import { useTagsDetailForm } from './hooks';
 
 const TagsDetail = () => {
+  const { options, onSubmit } = useTagsDetailForm();
+
   return (
     <DetailDrawerLayout
       footer={
         <>
-          <button>button</button>
-          <button>button</button>
+          <Stack direction="row" gap={2}>
+            <Button type="submit">Submit</Button>
+          </Stack>
+          <Button component={Link} to={config.routes.tags.path} variant="outlined">
+            Close
+          </Button>
         </>
       }
       formProps={{
-        onSubmit: (e) => {
-          e.preventDefault();
-        },
+        onSubmit,
       }}
-      rootPath="/tags"
+      rootPath={config.routes.tags.path}
       sidebar={
-        <>
-          Some sort of sidebar
-          <p>
-            Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod.
-            Metus mi orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed
-            elementum luctus aliquet. Magna et elit, sodales duis id vestibulum odio bibendum erat id adipiscing, varius
-            at lacinia scelerisque. Mauris eu sed vitae, sit amet vivamus fusce nulla facilisis accumsan at sem,
-            imperdiet suspendisse nisl porttitor. Arcu vitae, nisi commodo libero convallis eget fusce ante augue
-            iaculis, felis dignissim tempus a lorem fringilla.
-          </p>
-        </>
+        <Stack>
+          <SwitchControlled defaultChecked label="Active" />
+          <SwitchControlled label="Delete" />
+        </Stack>
       }
-      title="Detail title"
+      title="Detail title ... by selected ID"
     >
-      ...Tags Detail...
-      <p>
-        Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
-        orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus
-        aliquet. Magna et elit, sodales duis id vestibulum odio bibendum erat id adipiscing, varius at lacinia
-        scelerisque. Mauris eu sed vitae, sit amet vivamus fusce nulla facilisis accumsan at sem, imperdiet suspendisse
-        nisl porttitor. Arcu vitae, nisi commodo libero convallis eget fusce ante augue iaculis, felis dignissim tempus
-        a lorem fringilla.
-      </p>
-      <br />
-      <p>
-        Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
-        orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus
-        aliquet. Magna et elit, sodales duis id vestibulum odio bibendum erat id adipiscing, varius at lacinia
-        scelerisque. Mauris eu sed vitae, sit amet vivamus fusce nulla facilisis accumsan at sem, imperdiet suspendisse
-        nisl porttitor. Arcu vitae, nisi commodo libero convallis eget fusce ante augue iaculis, felis dignissim tempus
-        a lorem fringilla.
-      </p>
-      <br />
-      <Link to="/tags">Link to list</Link>
-      <p>
-        Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
-        orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus
-        aliquet. Magna et elit, sodales duis id vestibulum odio bibendum erat id adipiscing, varius at lacinia
-        scelerisque. Mauris eu sed vitae, sit amet vivamus fusce nulla facilisis accumsan at sem, imperdiet suspendisse
-        nisl porttitor. Arcu vitae, nisi commodo libero convallis eget fusce ante augue iaculis, felis dignissim tempus
-        a lorem fringilla.
-      </p>
-      <br />
-      <p>
-        Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
-        orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus
-        aliquet. Magna et elit, sodales duis id vestibulum odio bibendum erat id adipiscing, varius at lacinia
-        scelerisque. Mauris eu sed vitae, sit amet vivamus fusce nulla facilisis accumsan at sem, imperdiet suspendisse
-        nisl porttitor. Arcu vitae, nisi commodo libero convallis eget fusce ante augue iaculis, felis dignissim tempus
-        a lorem fringilla.
-      </p>
-      <br />
-      <p>
-        Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
-        orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus
-        aliquet. Magna et elit, sodales duis id vestibulum odio bibendum erat id adipiscing, varius at lacinia
-        scelerisque. Mauris eu sed vitae, sit amet vivamus fusce nulla facilisis accumsan at sem, imperdiet suspendisse
-        nisl porttitor. Arcu vitae, nisi commodo libero convallis eget fusce ante augue iaculis, felis dignissim tempus
-        a lorem fringilla.
-      </p>
-      <br />
+      <Stack component="section" gap={2}>
+        <FormField label="Name">
+          <TextField name="tags.name" placeholder="Tag name" />
+        </FormField>
+        <FormField label="Color">
+          <Select defaultValue="none" items={options.color} name="tags.color" placeholder="Select tag color" />
+        </FormField>
+      </Stack>
     </DetailDrawerLayout>
   );
 };
