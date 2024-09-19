@@ -5,15 +5,15 @@ import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 
 import { useLayoutStore, useBreakpoint } from '../../../hooks';
 import { SidebarNavigationPrimary, SidebarNavigationSecondary } from '../navigation';
-import { SIDEBAR_DESKTOP_WIDTH, HEADER_DESKTOP_HEIGHT } from '../../../styles';
+import { SIDEBAR_DESKTOP_WIDTH, SIDEBAR_WIDTH_WIDTH, HEADER_DESKTOP_HEIGHT } from '../../../styles';
 
 const SidebarWrapper = styled('aside', {
   shouldForwardProp: (propName) => propName !== 'isOpen' && propName !== 'isMobile',
 })<{ readonly isOpen?: boolean; readonly isMobile?: boolean }>(({ isOpen, isMobile }) => {
   const mobileOverrides = isMobile
     ? {
-        width: '100%',
-        left: isOpen ? 0 : `-100%`,
+        width: SIDEBAR_WIDTH_WIDTH,
+        left: isOpen ? 0 : `calc(${SIDEBAR_WIDTH_WIDTH} * -1)`,
         backgroundColor: 'rgb(200,200,200)',
       }
     : {};

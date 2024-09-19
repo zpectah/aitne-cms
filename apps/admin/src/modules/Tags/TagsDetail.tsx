@@ -1,13 +1,20 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 import config from '../../../config';
 import { DetailDrawerLayout, FormField, SwitchControlled, Select } from '../../components';
+import { useTagsDetailQuery } from '../../hooks';
 import { useTagsDetail } from './hooks';
 
 const TagsDetail = () => {
+  const { id } = useParams();
+
+  const {
+    query: { data },
+  } = useTagsDetailQuery(id ? parseInt(id, 10) : undefined);
+
   const { options, onSubmit } = useTagsDetail();
 
   return (
@@ -35,6 +42,9 @@ const TagsDetail = () => {
       title="Detail title ... by selected ID"
     >
       <Stack component="section" gap={2}>
+        <pre>
+          <code>{JSON.stringify(data, null, 2)}</code>
+        </pre>
         <FormField label="Name">
           <TextField name="tags.name" placeholder="Tag name" />
         </FormField>

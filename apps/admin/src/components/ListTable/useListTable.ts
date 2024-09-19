@@ -1,6 +1,6 @@
 import { useState, useMemo, MouseEvent, ChangeEvent } from 'react';
 
-import { ListTableItemProps, UseListTable, ListTableOrder } from './types';
+import { listTableOrderKeys, ListTableItemProps, UseListTable, ListTableOrder } from './types';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -18,22 +18,22 @@ function getComparator<Key extends keyof never>(
   order: ListTableOrder,
   orderBy: Key
 ): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
-  return order === 'desc'
+  return order === listTableOrderKeys.desc
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 export const useListTable = <T extends ListTableItemProps>({ items = [], perPage = 15 }: UseListTable<T>) => {
-  const [order, setOrder] = useState<ListTableOrder>('asc');
+  const [order, setOrder] = useState<ListTableOrder>(listTableOrderKeys.asc);
   const [orderBy, setOrderBy] = useState<keyof T>('id');
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(perPage);
 
   const sortRequestHandler = (event: MouseEvent<unknown>, property: keyof T) => {
-    const isAsc = orderBy === property && order === 'asc';
+    const isAsc = orderBy === property && order === listTableOrderKeys.asc;
 
-    setOrder(isAsc ? 'desc' : 'asc');
+    setOrder(isAsc ? listTableOrderKeys.desc : listTableOrderKeys.asc);
     setOrderBy(property);
   };
 

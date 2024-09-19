@@ -62,9 +62,15 @@ const ListTable = <T extends ListTableItemProps>({
   const navigate = useNavigate();
   const openHandler = (id: number) => navigate(`${rootPath}/${id}`);
   const deleteRowHandler = (id: number) => onRowDelete(id);
-  const deleteRowConfirmHandler = (id: number) => onConfirmOpen(() => deleteRowHandler(id), '...todo...', '');
+
+  const deleteRowConfirmHandler = (id: number) =>
+    onConfirmOpen(() => deleteRowHandler(id), 'Do you want to delete this item?', undefined);
+
   const deleteSelectedHandler = () => onSelectedDelete(selected);
-  const deleteSelectedConfirmHandler = () => onConfirmOpen(() => deleteSelectedHandler(), '...todo...', '');
+
+  const deleteSelectedConfirmHandler = () =>
+    onConfirmOpen(() => deleteSelectedHandler(), 'Do you want to delete these items?', undefined);
+
   const exportSelectedHandler = () => onSelectedExport?.(selected);
 
   const rowSelectHandler = (event: MouseEvent<unknown>, id: number) => {
@@ -143,7 +149,7 @@ const ListTable = <T extends ListTableItemProps>({
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((item: T) => {
+              {rows.map((item: T, index) => {
                 const isSelected = selected.includes(item.id);
 
                 return (
@@ -151,7 +157,7 @@ const ListTable = <T extends ListTableItemProps>({
                     <TableCell component="th" padding="checkbox" sx={{ width: '50px', textAlign: 'center' }}>
                       <Checkbox checked={isSelected} onClick={(e) => rowSelectHandler(e, item.id)} {...checkboxProps} />
                     </TableCell>
-                    {renderRow(item)}
+                    {renderRow(item, index)}
                     <TableCell align="right" sx={{ width: '200px' }}>
                       <Stack direction="row" gap={2} sx={{ display: 'inline-flex' }}>
                         <IconButton onClick={() => openHandler(item.id)}>

@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+import { DIALOG_TRANSITION_DELAY } from '../../styles';
+
 interface ConfirmStore {
   dialogOpen: boolean;
   dialogTitle: string | undefined;
@@ -15,7 +17,10 @@ const useConfirmSore = create<ConfirmStore>((set) => {
   };
 
   const closeHandler = () => {
-    set({ dialogOpen: false, dialogTitle: undefined, dialogDescription: undefined, confirmCallback: () => {} });
+    set({ dialogOpen: false });
+    setTimeout(() => {
+      set({ dialogTitle: undefined, dialogDescription: undefined, confirmCallback: () => {} });
+    }, DIALOG_TRANSITION_DELAY);
   };
 
   return {

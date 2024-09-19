@@ -2,7 +2,12 @@ import { ReactNode } from 'react';
 import { TableCellProps } from '@mui/material/TableCell';
 import { CheckboxProps } from '@mui/material/Checkbox';
 
-export type ListTableOrder = 'asc' | 'desc';
+export const listTableOrderKeys = {
+  asc: 'asc',
+  desc: 'desc',
+} as const;
+
+export type ListTableOrder = keyof typeof listTableOrderKeys;
 
 export interface ListTableItemProps {
   id: number;
@@ -10,7 +15,7 @@ export interface ListTableItemProps {
 
 export interface ListTableProps<T extends ListTableItemProps> {
   items: T[];
-  renderRow: (props: T) => ReactNode;
+  renderRow: (props: T, index: number) => ReactNode;
   headingCells: TableCellProps[];
   rootPath: string;
   perPage?: number;
