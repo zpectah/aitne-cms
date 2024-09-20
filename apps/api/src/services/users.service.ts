@@ -1,24 +1,17 @@
-import mysql, { ResultSetHeader } from 'mysql2/promise';
+import { ResultSetHeader } from 'mysql2/promise';
 
 import { UsersModel, UsersModelData } from '@model';
 import { getTimestamp } from '@common';
-
-// TODO - make this common
-const conn = mysql.createPool({
-  host: 'localhost',
-  user: process.env.CMS_DB_USER,
-  password: process.env.CMS_DB_PASSWORD,
-  database: process.env.CMS_DB_NAME,
-});
+import { pool } from '../utils';
 
 export const getUsers = async (): Promise<UsersModelData[]> => {
-  const [rows] = await conn.query<UsersModelData[]>(`SELECT * FROM cms_users WHERE deleted = 0`);
+  const [rows] = await pool.query<UsersModelData[]>(`SELECT * FROM cms_users WHERE deleted = 0`);
 
   return rows ?? [];
 };
 
 const getUserById = async (id: number): Promise<UsersModelData[]> => {
-  const [rows] = await conn.query<UsersModelData[]>(`SELECT * FROM cms_users WHERE id = ? AND deleted = 0`, [id]);
+  const [rows] = await pool.query<UsersModelData[]>(`SELECT * FROM cms_users WHERE id = ? AND deleted = 0`, [id]);
 
   return rows ?? [];
 };
@@ -29,7 +22,7 @@ const createUser = async (
   const { firstname, lastname, email, password, type, role, salt } = data;
   const now = getTimestamp();
 
-  const [result] = await conn.execute<ResultSetHeader>(
+  const [result] = await pool.execute<ResultSetHeader>(
     `INSERT INTO cms_users (firstname, lastname, email, password, type, role, salt, created, updated, active, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 0)`,
     [firstname, lastname, email, password, type, role, salt, now, now]
   );
@@ -41,7 +34,7 @@ const updateUser = async (id: number, data: Partial<UsersModel>): Promise<{ affe
   const { firstname, lastname, email, password, type, role, salt, active } = data;
   const now = getTimestamp();
 
-  const [result] = await conn.execute<ResultSetHeader>(
+  const [result] = await pool.execute<ResultSetHeader>(
     `UPDATE cms_users SET firstname = ?, lastname = ?, email = ?, password = ?, type = ?, role = ?, salt = ?, active = ?, updated = ? WHERE id = ? AND deleted = 0`,
     [firstname, lastname, email, password, type, role, salt, active, now, id]
   );
@@ -50,7 +43,7 @@ const updateUser = async (id: number, data: Partial<UsersModel>): Promise<{ affe
 };
 
 const deleteUser = async (id: number): Promise<{ affectedRows: number }> => {
-  const [result] = await conn.execute<ResultSetHeader>(`UPDATE cms_users SET deleted = 1 WHERE id = ?`, [id]);
+  const [result] = await pool.execute<ResultSetHeader>(`UPDATE cms_users SET deleted = 1 WHERE id = ?`, [id]);
 
   return { affectedRows: result.affectedRows };
 };

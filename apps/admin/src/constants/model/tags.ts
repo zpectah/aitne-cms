@@ -1,8 +1,8 @@
-import { tagsColorKeys, TagsDetailForm } from '@model';
+import { tagsColorKeys, TagsColor, TagsFormData } from '@model';
 
-export const tagsBlankModel: TagsDetailForm = {
+export const tagsBlankModel: TagsFormData = {
   name: '',
-  color: tagsColorKeys.none as keyof typeof tagsColorKeys,
+  color: tagsColorKeys.none as TagsColor,
   active: 1,
   deleted: 0,
 };

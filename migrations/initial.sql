@@ -26,12 +26,12 @@ CREATE TABLE `cms_tags` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` text COLLATE utf8mb4_general_ci NOT NULL,
   `color` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
-  `created` timestamp NOT NULL,
-  `updated` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `active` int NOT NULL,
   `deleted` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `cms_tags` (
 
 LOCK TABLES `cms_tags` WRITE;
 /*!40000 ALTER TABLE `cms_tags` DISABLE KEYS */;
-INSERT INTO `cms_tags` VALUES (1,'tag1','none','2024-09-10 16:44:37','2024-09-10 16:44:37',1,0),(2,'tag2','none','2024-09-10 16:44:37','2024-09-10 16:44:37',1,0),(3,'tag3','black','2024-09-10 16:44:37','2024-09-10 16:44:37',1,0);
+INSERT INTO `cms_tags` VALUES (1,'tag1','none','2024-09-10 16:44:37','2024-09-10 16:44:37',1,0),(2,'tag2','none','2024-09-10 16:44:37','2024-09-10 16:44:37',1,0),(3,'tag3','black','2024-09-10 16:44:37','2024-09-10 16:44:37',1,0),(4,'sdfsdfsd','none','2024-09-20 12:20:06','2024-09-20 12:20:06',1,0),(5,'test tag','green','2024-09-20 12:27:24','2024-09-20 12:27:24',1,0);
 /*!40000 ALTER TABLE `cms_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -60,8 +60,8 @@ CREATE TABLE `cms_users` (
   `type` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
   `role` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
   `salt` text COLLATE utf8mb4_general_ci NOT NULL,
-  `created` timestamp NOT NULL,
-  `updated` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `active` int NOT NULL,
   `deleted` int NOT NULL,
   PRIMARY KEY (`id`)
@@ -106,4 +106,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-20 10:45:32
+-- Dump completed on 2024-09-20 12:27:54

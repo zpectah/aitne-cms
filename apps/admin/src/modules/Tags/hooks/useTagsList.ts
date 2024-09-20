@@ -1,12 +1,14 @@
 import { useMemo } from 'react';
 
 import { TagsModel } from '@model';
-import { useTagsQuery } from '../../../hooks';
+import { useTagsQuery, useTagsMutations } from '../../../hooks';
 
 export const useTagsList = () => {
   const {
     query: { data, ...query },
   } = useTagsQuery();
+
+  const { deleteMutation } = useTagsMutations();
 
   const heading = [
     {
@@ -32,6 +34,20 @@ export const useTagsList = () => {
   const rowDeleteHandler = (id: number) => {
     // TODO
     console.log('delete handler', id);
+
+    deleteMutation.mutate(
+      {
+        id,
+      },
+      {
+        onSuccess: () => {
+          console.log('delete success');
+        },
+        onError: () => {
+          console.log('on delete error');
+        },
+      }
+    );
   };
 
   const selectedDeleteHandler = (selected: readonly number[]) => {
