@@ -1,12 +1,13 @@
-import { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
-import { tagsColorKeys } from '@model';
+import { tagsColorKeys, TagsDetailForm } from '@model';
 import { useConfirmSore } from '../../../hooks';
 
 export const useTagsDetail = () => {
   const { t } = useTranslation('options');
+  const form = useForm<TagsDetailForm>({});
   const navigate = useNavigate();
   const { onOpen } = useConfirmSore();
   const colorKeys = Object.keys(tagsColorKeys);
@@ -26,10 +27,9 @@ export const useTagsDetail = () => {
     navigate('/tags');
   };
 
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
-    // TODO
-    e.preventDefault();
-
+  const submitHandler: SubmitHandler<TagsDetailForm> = (data, event) => {
+    console.log('data on submit', typeof data, data);
+    console.log('data event', event);
     // TODO #only if delete is triggered !!!
     onOpen(deleteHandler, '...todo...', '');
   };
@@ -37,5 +37,6 @@ export const useTagsDetail = () => {
   return {
     options,
     onSubmit: submitHandler,
+    form,
   };
 };

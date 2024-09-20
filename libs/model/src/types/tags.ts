@@ -15,3 +15,5 @@ export interface TagsModel {
 }
 
 export type TagsModelData = RowDataPacket & TagsModel;
+
+export type TagsDetailForm = Omit<TagsModel, 'id' | 'created' | 'updated'>;

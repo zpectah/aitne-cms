@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import FormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel';
 import Checkbox, { CheckboxProps } from '@mui/material/Checkbox';
 
@@ -6,8 +7,10 @@ export interface CheckboxControlledProps extends Omit<FormControlLabelProps, 'co
   defaultChecked?: boolean;
 }
 
-const CheckboxControlled = ({ checkboxProps, defaultChecked, ...rest }: CheckboxControlledProps) => (
-  <FormControlLabel control={<Checkbox defaultChecked={defaultChecked} {...checkboxProps} />} {...rest} />
+const CheckboxControlled = forwardRef<HTMLInputElement, CheckboxControlledProps>(
+  ({ checkboxProps, defaultChecked, ...rest }, ref) => (
+    <FormControlLabel control={<Checkbox defaultChecked={defaultChecked} {...checkboxProps} />} ref={ref} {...rest} />
+  )
 );
 
 export default CheckboxControlled;

@@ -17,10 +17,10 @@ export const getTags = async (): Promise<TagsModelData[]> => {
   return rows ?? [];
 };
 
-const getTagById = async (id: number): Promise<TagsModelData[]> => {
+const getTagById = async (id: number): Promise<TagsModelData> => {
   const [rows] = await conn.query<TagsModelData[]>(`SELECT * FROM cms_tags WHERE id = ? AND deleted = 0`, [id]);
 
-  return rows ?? [];
+  return rows[0];
 };
 
 const createTag = async (

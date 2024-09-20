@@ -27,11 +27,20 @@ interface ViewLayoutProps extends WithChildren {
     disableTitlePrefix?: boolean;
   };
   title?: ReactNode;
+  titleSlot?: ReactNode;
   layoutContainerProps?: Partial<LayoutContainerProps>;
   layoutStackProps?: StackProps;
 }
 
-const ViewLayout = ({ children, isCentered, meta, title, layoutContainerProps, layoutStackProps }: ViewLayoutProps) => {
+const ViewLayout = ({
+  children,
+  isCentered,
+  meta,
+  title,
+  titleSlot,
+  layoutContainerProps,
+  layoutStackProps,
+}: ViewLayoutProps) => {
   useEffect(() => {
     if (meta?.title) {
       document.title = `${meta.disableTitlePrefix ? '' : `${config.cms.meta.name} | `}${meta.title}`;
@@ -42,7 +51,10 @@ const ViewLayout = ({ children, isCentered, meta, title, layoutContainerProps, l
     <ViewLayoutWrapper isCentered={isCentered}>
       <LayoutContainer {...layoutContainerProps}>
         <Stack gap={2} {...layoutStackProps}>
-          {title && <Typography variant="h2">{title}</Typography>}
+          <Stack alignItems="center" direction="row" justifyContent="space-between">
+            {title && <Typography variant="h2">{title}</Typography>}
+            {titleSlot && titleSlot}
+          </Stack>
           <ViewLayoutContent>
             <Stack gap={2}>{children}</Stack>
           </ViewLayoutContent>

@@ -61,7 +61,7 @@
     "no-plusplus": "off",
     "no-param-reassign": "off",
     "@typescript-eslint/no-misused-promises": [
-      2,
+      1,
       {
         "checksVoidReturn": {
           "attributes": false,

@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import FormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel';
 import Switch, { SwitchProps } from '@mui/material/Switch';
 
@@ -6,8 +7,10 @@ export interface SwitchControlledProps extends Omit<FormControlLabelProps, 'cont
   defaultChecked?: boolean;
 }
 
-const CheckboxControlled = ({ switchProps, defaultChecked, ...rest }: SwitchControlledProps) => (
-  <FormControlLabel control={<Switch defaultChecked={defaultChecked} {...switchProps} />} {...rest} />
+const CheckboxControlled = forwardRef<HTMLInputElement, SwitchControlledProps>(
+  ({ switchProps, defaultChecked, ...rest }, ref) => (
+    <FormControlLabel control={<Switch defaultChecked={defaultChecked} {...switchProps} />} ref={ref} {...rest} />
+  )
 );
 
 export default CheckboxControlled;
