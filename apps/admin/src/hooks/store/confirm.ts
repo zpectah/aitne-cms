@@ -7,7 +7,7 @@ interface ConfirmStore {
   dialogTitle: string | undefined;
   dialogDescription: string | undefined;
   confirmCallback: () => void;
-  onOpen: (callback: () => void, title: string, description?: string) => void;
+  onConfirm: (callback: () => void, title: string, description?: string) => void;
   onClose: () => void;
 }
 
@@ -28,7 +28,7 @@ const useConfirmSore = create<ConfirmStore>((set) => {
     dialogTitle: undefined,
     dialogDescription: undefined,
     confirmCallback: () => {},
-    onOpen: openHandler,
+    onConfirm: openHandler,
     onClose: closeHandler,
   };
 });

@@ -8,7 +8,7 @@ import { useTagsList } from './hooks';
 const TagsList = () => {
   const {
     table: { heading, items },
-    query: { isLoading, isError },
+    query: { isError },
     onRowDelete,
     onSelectedDelete,
     onSelectedExport,

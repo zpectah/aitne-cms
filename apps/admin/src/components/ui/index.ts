@@ -1,2 +1,2 @@
 export * from './Button';
-export * from './PreloaderBase';
+export * from './Preloader';

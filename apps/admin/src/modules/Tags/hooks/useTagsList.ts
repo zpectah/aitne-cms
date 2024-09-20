@@ -5,7 +5,7 @@ import { useTagsQuery, useTagsMutations } from '../../../hooks';
 
 export const useTagsList = () => {
   const {
-    query: { data, ...query },
+    query: { data, isLoading, refetch, ...query },
   } = useTagsQuery();
 
   const { deleteMutation } = useTagsMutations();
@@ -24,30 +24,32 @@ export const useTagsList = () => {
   const items = useMemo(() => {
     let rows: TagsModel[] = [];
 
-    if (!query.isLoading && data) {
+    if (!isLoading && data) {
       rows = data;
     }
 
     return rows;
-  }, [data, query.isLoading]);
+  }, [data, isLoading]);
 
   const rowDeleteHandler = (id: number) => {
-    // TODO
-    console.log('delete handler', id);
-
-    deleteMutation.mutate(
-      {
-        id,
-      },
-      {
-        onSuccess: () => {
-          console.log('delete success');
+    try {
+      deleteMutation.mutate(
+        {
+          id,
         },
-        onError: () => {
-          console.log('on delete error');
-        },
-      }
-    );
+        {
+          onSuccess: () => {
+            console.log('delete success');
+            refetch();
+          },
+          onError: () => {
+            console.log('on delete error');
+          },
+        }
+      );
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const selectedDeleteHandler = (selected: readonly number[]) => {
@@ -65,6 +67,8 @@ export const useTagsList = () => {
       heading,
       items,
     },
+    isLoading,
+    refetch,
     query,
     onRowDelete: rowDeleteHandler,
     onSelectedDelete: selectedDeleteHandler,

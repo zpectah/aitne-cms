@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Controller } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
@@ -8,21 +8,33 @@ import Button from '@mui/material/Button';
 import config from '../../../config';
 import { DetailDrawerLayout, FormField, SwitchControlled, Select } from '../../components';
 import { tagsBlankModel } from '../../constants';
-import { useTagsDetailQuery } from '../../hooks';
+import { useConfirmSore, useTagsDetailQuery } from '../../hooks';
 import { useTagsDetail } from './hooks';
 
 const TagsDetail = () => {
   const { id } = useParams();
+  const { onConfirm } = useConfirmSore();
 
   const {
     options,
     onSubmit,
     form: { handleSubmit, reset, control },
+    isLoading,
   } = useTagsDetail();
 
   const {
     query: { data },
   } = useTagsDetailQuery(id ? parseInt(id, 10) : undefined);
+
+  const detailTitle = useMemo(() => {
+    if (id === 'new') {
+      return 'New tag';
+    }
+
+    if (data) {
+      return data.name;
+    }
+  }, [id, data]);
 
   useEffect(() => {
     if (id === 'new') {
@@ -45,6 +57,7 @@ const TagsDetail = () => {
       formProps={{
         onSubmit: handleSubmit(onSubmit),
       }}
+      isLoading={isLoading}
       rootPath={config.routes.tags.path}
       sidebar={
         <Stack>
@@ -67,20 +80,26 @@ const TagsDetail = () => {
               <SwitchControlled
                 checked={field.value === 1}
                 label="Deleted"
-                onChange={(_, checked) => field.onChange(checked ? 1 : 0)}
+                onChange={(_, checked) => {
+                  if (checked) {
+                    onConfirm(() => field.onChange(checked ? 1 : 0), 'This item will be deleted');
+                  } else {
+                    field.onChange(checked ? 1 : 0);
+                  }
+                }}
                 ref={field.ref}
               />
             )}
           />
         </Stack>
       }
-      title="Detail title ... by selected ID"
+      title={detailTitle}
     >
       <Stack component="section" gap={2}>
         <FormField label="Name">
           <Controller
             control={control}
-            defaultValue="none"
+            defaultValue=""
             name="name"
             render={({ field }) => <TextField placeholder="Tag name" {...field} />}
           />

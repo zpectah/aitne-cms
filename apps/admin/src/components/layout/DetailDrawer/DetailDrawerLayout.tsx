@@ -85,6 +85,7 @@ interface DetailDrawerLayoutProps extends WithChildren {
   headerSlot?: ReactNode;
   footer?: ReactNode;
   formProps?: Partial<FormProps>;
+  isLoading?: boolean;
 }
 
 const DetailDrawerLayout = ({
@@ -95,9 +96,12 @@ const DetailDrawerLayout = ({
   headerSlot,
   footer,
   formProps,
+  isLoading,
 }: DetailDrawerLayoutProps) => {
   const navigate = useNavigate();
   const closeHandler = () => navigate(rootPath);
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <DetailDrawerLayoutForm {...formProps}>

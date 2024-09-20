@@ -58,18 +58,18 @@ const ListTable = <T extends ListTableItemProps>({
     perPage,
   });
 
-  const { onOpen: onConfirmOpen } = useConfirmSore();
+  const { onConfirm } = useConfirmSore();
   const navigate = useNavigate();
   const openHandler = (id: number) => navigate(`${rootPath}/${id}`);
   const deleteRowHandler = (id: number) => onRowDelete(id);
 
   const deleteRowConfirmHandler = (id: number) =>
-    onConfirmOpen(() => deleteRowHandler(id), 'Do you want to delete this item?', undefined);
+    onConfirm(() => deleteRowHandler(id), 'Do you want to delete this item?', undefined);
 
   const deleteSelectedHandler = () => onSelectedDelete(selected);
 
   const deleteSelectedConfirmHandler = () =>
-    onConfirmOpen(() => deleteSelectedHandler(), 'Do you want to delete these items?', undefined);
+    onConfirm(() => deleteSelectedHandler(), 'Do you want to delete these items?', undefined);
 
   const exportSelectedHandler = () => onSelectedExport?.(selected);
 
