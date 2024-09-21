@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 
 import { tags as tagsService } from '../../services';
 
-const getTags = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const getTags = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const users = await tagsService.get();
 
@@ -12,7 +12,7 @@ const getTags = async (req: Request, res: Response, next: NextFunction): Promise
   }
 };
 
-const getTagById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const getTagById = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -28,7 +28,7 @@ const getTagById = async (req: Request, res: Response, next: NextFunction): Prom
   }
 };
 
-const createTag = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const createTag = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const newUser = await tagsService.create(req.body);
 
@@ -38,7 +38,7 @@ const createTag = async (req: Request, res: Response, next: NextFunction): Promi
   }
 };
 
-const updateTag = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const updateTag = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -54,7 +54,7 @@ const updateTag = async (req: Request, res: Response, next: NextFunction): Promi
   }
 };
 
-const deleteTag = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const deleteTag = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10);
 
   try {
@@ -70,10 +70,28 @@ const deleteTag = async (req: Request, res: Response, next: NextFunction): Promi
   }
 };
 
+const deleteSelectedTags = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { ids } = req.body;
+
+    // eslint-disable-next-line no-restricted-globals
+    if (!Array.isArray(ids) || ids.some(isNaN)) {
+      return res.status(400).json({ message: 'Invalid request. Provide an array of numeric IDs.' });
+    }
+
+    const result = await tagsService.deleteSelected(ids);
+
+    res.status(200).json({ message: `${result.affectedRows} items marked as deleted.` });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to update items.' });
+  }
+};
+
 export default {
   get: getTags,
   getById: getTagById,
   create: createTag,
   update: updateTag,
   delete: deleteTag,
+  deleteSelected: deleteSelectedTags,
 };

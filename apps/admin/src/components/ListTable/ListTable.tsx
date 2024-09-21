@@ -33,7 +33,6 @@ const ListTable = <T extends ListTableItemProps>({
   onRowSelect,
   onSelectAllRows,
   onSelectedDelete,
-  onSelectedExport,
   checkboxProps,
   showEmptyRows,
 }: ListTableProps<T>) => {
@@ -70,8 +69,6 @@ const ListTable = <T extends ListTableItemProps>({
 
   const deleteSelectedConfirmHandler = () =>
     onConfirm(() => deleteSelectedHandler(), 'Do you want to delete these items?', undefined);
-
-  const exportSelectedHandler = () => onSelectedExport?.(selected);
 
   const rowSelectHandler = (event: MouseEvent<unknown>, id: number) => {
     onSelect(event, id);
@@ -118,9 +115,6 @@ const ListTable = <T extends ListTableItemProps>({
           <Stack direction="row" gap={1}>
             <Button disabled={selected.length === 0} onClick={deleteSelectedConfirmHandler} variant="outlined">
               Delete selected
-            </Button>
-            <Button disabled={selected.length === 0} onClick={exportSelectedHandler} variant="outlined">
-              Export selected
             </Button>
           </Stack>
         </Stack>

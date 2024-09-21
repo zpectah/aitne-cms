@@ -10,5 +10,6 @@ router.put('/', tags.create);
 router.patch('/:id', tags.update);
 router.delete('/:id', tags.delete);
 // TODO #delete-multiple ids
+router.patch('/selected/delete', tags.deleteSelected);
 
 export default router;

@@ -22,7 +22,6 @@ export interface ListTableProps<T extends ListTableItemProps> {
   checkboxProps?: Partial<CheckboxProps>;
   onRowDelete: (id: number) => void;
   onSelectedDelete: (selected: readonly number[]) => void;
-  onSelectedExport: (selected: readonly number[]) => void;
   onRowDetail?: (id: number) => void;
   onRowSelect?: (id: number) => void;
   onSelectAllRows?: () => void;

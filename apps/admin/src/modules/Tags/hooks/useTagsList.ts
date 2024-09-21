@@ -8,7 +8,7 @@ export const useTagsList = () => {
     query: { data, isLoading, refetch, ...query },
   } = useTagsQuery();
 
-  const { deleteMutation } = useTagsMutations();
+  const { deleteMutation, deleteSelectedMutation } = useTagsMutations();
 
   const heading = [
     {
@@ -54,12 +54,27 @@ export const useTagsList = () => {
 
   const selectedDeleteHandler = (selected: readonly number[]) => {
     // TODO
+    // TOD --- confirm dialog
     console.log('onSelectedDelete handler', selected);
-  };
 
-  const selectedExportHandler = (selected: readonly number[]) => {
-    // TODO
-    console.log('onSelectedExport handler', selected);
+    try {
+      deleteSelectedMutation.mutate(
+        {
+          ids: selected,
+        },
+        {
+          onSuccess: () => {
+            console.log('delete selected success');
+            refetch();
+          },
+          onError: () => {
+            console.log('on delete selected error');
+          },
+        }
+      );
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return {
@@ -72,6 +87,5 @@ export const useTagsList = () => {
     query,
     onRowDelete: rowDeleteHandler,
     onSelectedDelete: selectedDeleteHandler,
-    onSelectedExport: selectedExportHandler,
   };
 };
