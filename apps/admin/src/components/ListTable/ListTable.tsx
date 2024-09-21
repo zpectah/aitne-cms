@@ -60,15 +60,22 @@ const ListTable = <T extends ListTableItemProps>({
   const { onConfirm } = useConfirmSore();
   const navigate = useNavigate();
   const openHandler = (id: number) => navigate(`${rootPath}/${id}`);
-  const deleteRowHandler = (id: number) => onRowDelete(id);
+
+  const deleteRowHandler = (id: number) => {
+    onRowDelete(id);
+    // Redirect to first page to prevent non-existing page when only one item on page is deleted
+    // TODO
+    // Maybe create some control for this case?
+    onPageChange(null, 0);
+  };
 
   const deleteRowConfirmHandler = (id: number) =>
-    onConfirm(() => deleteRowHandler(id), 'Do you want to delete this item?', undefined);
+    onConfirm(() => deleteRowHandler(id), 'Do you want to delete this item?');
 
   const deleteSelectedHandler = () => onSelectedDelete(selected);
 
   const deleteSelectedConfirmHandler = () =>
-    onConfirm(() => deleteSelectedHandler(), 'Do you want to delete these items?', undefined);
+    onConfirm(() => deleteSelectedHandler(), 'Do you want to delete these items?');
 
   const rowSelectHandler = (event: MouseEvent<unknown>, id: number) => {
     onSelect(event, id);
@@ -154,10 +161,10 @@ const ListTable = <T extends ListTableItemProps>({
                     {renderRow(item, index)}
                     <TableCell align="right" sx={{ width: '200px' }}>
                       <Stack direction="row" gap={2} sx={{ display: 'inline-flex' }}>
-                        <IconButton onClick={() => openHandler(item.id)}>
+                        <IconButton color="primary" onClick={() => openHandler(item.id)}>
                           <EditIcon />
                         </IconButton>
-                        <IconButton onClick={() => deleteRowConfirmHandler(item.id)}>
+                        <IconButton color="error" onClick={() => deleteRowConfirmHandler(item.id)}>
                           <DeleteIcon />
                         </IconButton>
                       </Stack>

@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { tagsColorKeys, TagsFormData } from '@model';
 import config from '../../../../config';
-import { useTagsMutations, useTagsQuery } from '../../../hooks';
+import { useToastsStore, useTagsMutations, useTagsQuery } from '../../../hooks';
 
 export const useTagsDetail = () => {
   const [isLoading, setLoading] = useState(false);
@@ -13,9 +13,10 @@ export const useTagsDetail = () => {
   const form = useForm<TagsFormData>({});
   const navigate = useNavigate();
   const { id } = useParams();
-  const colorKeys = Object.keys(tagsColorKeys);
   const { createMutation, updateMutation } = useTagsMutations();
   const { query } = useTagsQuery();
+  const { createToast } = useToastsStore();
+  const colorKeys = Object.keys(tagsColorKeys);
 
   const options = {
     color: colorKeys.map((color) => ({
@@ -39,12 +40,12 @@ export const useTagsDetail = () => {
             },
             {
               onSuccess: () => {
-                navigate(config.routes.tags.path);
-                console.log('on success');
                 query.refetch();
+                navigate(config.routes.tags.path);
+                createToast({ message: 'Tag was successfully created', severity: 'success', autoclose: 2500 });
               },
               onError: () => {
-                console.log('on error');
+                createToast({ message: 'There is an error...', severity: 'error' });
               },
             }
           );
@@ -61,12 +62,12 @@ export const useTagsDetail = () => {
             },
             {
               onSuccess: () => {
-                navigate(config.routes.tags.path);
-                console.log('on success update');
                 query.refetch();
+                navigate(config.routes.tags.path);
+                createToast({ message: 'Tag was successfully updated', severity: 'success', autoclose: 2500 });
               },
               onError: () => {
-                console.log('on error update');
+                createToast({ message: 'There is an error...', severity: 'error' });
               },
             }
           );

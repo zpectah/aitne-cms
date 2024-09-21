@@ -11,7 +11,6 @@ const TagsList = () => {
     query: { isError },
     onRowDelete,
     onSelectedDelete,
-    onSelectedExport,
   } = useTagsList();
 
   const renderRow = ({ id, name, color }: TagsModel) => (
@@ -29,7 +28,6 @@ const TagsList = () => {
       items={items}
       onRowDelete={onRowDelete}
       onSelectedDelete={onSelectedDelete}
-      onSelectedExport={onSelectedExport}
       perPage={5}
       renderRow={renderRow}
       rootPath={config.routes.tags.path}

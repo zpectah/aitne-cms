@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { TagsModel } from '@model';
-import { useTagsQuery, useTagsMutations } from '../../../hooks';
+import { useToastsStore, useTagsQuery, useTagsMutations } from '../../../hooks';
 
 export const useTagsList = () => {
   const {
@@ -9,6 +9,7 @@ export const useTagsList = () => {
   } = useTagsQuery();
 
   const { deleteMutation, deleteSelectedMutation } = useTagsMutations();
+  const { createToast } = useToastsStore();
 
   const heading = [
     {
@@ -39,11 +40,11 @@ export const useTagsList = () => {
         },
         {
           onSuccess: () => {
-            console.log('delete success');
             refetch();
+            createToast({ message: 'Tag was successfully deleted', severity: 'success', autoclose: 2500 });
           },
           onError: () => {
-            console.log('on delete error');
+            createToast({ message: 'There is an error...', severity: 'error' });
           },
         }
       );
@@ -64,11 +65,11 @@ export const useTagsList = () => {
         },
         {
           onSuccess: () => {
-            console.log('delete selected success');
             refetch();
+            createToast({ message: 'Selected tags was successfully deleted', severity: 'success', autoclose: 2500 });
           },
           onError: () => {
-            console.log('on delete selected error');
+            createToast({ message: 'There is an error...', severity: 'error' });
           },
         }
       );

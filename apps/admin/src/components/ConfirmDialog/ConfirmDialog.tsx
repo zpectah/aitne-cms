@@ -17,7 +17,7 @@ const ConfirmDialog = () => {
 
   return (
     <Dialog fullWidth maxWidth="xs" onClose={onClose} open={dialogOpen}>
-      <DialogTitle sx={{ textAlign: 'center' }}>DialogTitle...{dialogTitle}</DialogTitle>
+      <DialogTitle sx={{ textAlign: 'center' }}>{dialogTitle}</DialogTitle>
       {dialogDescription && <DialogContent sx={{ textAlign: 'center' }}>{dialogDescription}</DialogContent>}
       <DialogActions>
         <Stack alignItems="center" direction="row" gap={1} justifyContent="center" sx={{ width: '100%' }}>
