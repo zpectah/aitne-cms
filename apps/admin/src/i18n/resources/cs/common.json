@@ -11,5 +11,6 @@
   "page.settings.panel.locales": "Locales",
   "page.settings.panel.maintenance": "Údržba",
   "page.users": "Uživatelé",
-  "page.tags": "Tagy"
+  "page.tags": "Tagy",
+  "page.categories": "Kategorie"
 }

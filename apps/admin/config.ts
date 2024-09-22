@@ -60,5 +60,9 @@ export default {
       path: '/tags',
       label: 'page.tags',
     },
+    categories: {
+      path: '/categories',
+      label: 'page.categories',
+    },
   },
 };

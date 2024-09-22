@@ -11,7 +11,7 @@ export interface CategoriesLangProps {
 export interface CategoriesModel {
   active: number;
   created: string;
-  deleted: string;
+  deleted: number;
   id: number;
   lang: CategoriesLangProps;
   name: string;

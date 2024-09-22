@@ -5,6 +5,7 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import HomeIcon from '@mui/icons-material/Home';
 import ArticleIcon from '@mui/icons-material/Article';
 import TagIcon from '@mui/icons-material/Tag';
+import CategoryIcon from '@mui/icons-material/Category';
 
 import config from '../../../../config';
 import SidebarNavigationItem from './SidebarNavigationItem';
@@ -35,6 +36,12 @@ const SidebarNavigationPrimary = () => {
       path: routes.tags.path,
       label: 'Tags',
       icon: <TagIcon />,
+    },
+    {
+      key: 3,
+      path: routes.categories.path,
+      label: 'Categories',
+      icon: <CategoryIcon />,
     },
     {
       key: 100,

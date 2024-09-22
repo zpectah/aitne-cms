@@ -11,5 +11,6 @@
   "page.settings.panel.locales": "Locales",
   "page.settings.panel.maintenance": "Maintenance",
   "page.users": "Users",
-  "page.tags": "Tags"
+  "page.tags": "Tags",
+  "page.categories": "Categories"
 }
