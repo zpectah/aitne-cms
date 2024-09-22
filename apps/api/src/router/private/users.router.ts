@@ -9,6 +9,6 @@ router.get('/:id', users.getById);
 router.put('/', users.create);
 router.patch('/:id', users.update);
 router.delete('/:id', users.delete);
-// TODO #delete-multiple ids
+router.patch('/delete', users.deleteSelected);
 
 export default router;

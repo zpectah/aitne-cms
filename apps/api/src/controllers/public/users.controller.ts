@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { users as usersService } from '../../services';
+import { users as service } from '../../services';
 
 const getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const users = await usersService.get();
+    const items = await service.get();
 
-    res.status(200).json(users);
+    res.status(200).json(items);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching users' });
+    res.status(500).json({ message: 'Error fetching items' });
   }
 };
 
@@ -16,15 +16,15 @@ const getUserById = async (req: Request, res: Response, next: NextFunction): Pro
   const id = parseInt(req.params.id, 10);
 
   try {
-    const user = await usersService.getById(id);
+    const item = await service.getById(id);
 
-    if (user) {
-      res.status(200).json(user);
+    if (item) {
+      res.status(200).json(item);
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: 'Item not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching user' });
+    res.status(500).json({ message: 'Error fetching item' });
   }
 };
 

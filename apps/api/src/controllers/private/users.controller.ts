@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { users as usersService } from '../../services';
+import { users as service } from '../../services';
 
 const getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const users = await usersService.get();
+    const items = await service.get();
 
-    res.status(200).json(users);
+    res.status(200).json(items);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching users' });
+    res.status(500).json({ message: 'Error fetching items' });
   }
 };
 
@@ -16,25 +16,25 @@ const getUserById = async (req: Request, res: Response, next: NextFunction): Pro
   const id = parseInt(req.params.id, 10);
 
   try {
-    const user = await usersService.getById(id);
+    const item = await service.getById(id);
 
-    if (user) {
-      res.status(200).json(user);
+    if (item) {
+      res.status(200).json(item);
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: 'Item not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching user' });
+    res.status(500).json({ message: 'Error fetching item' });
   }
 };
 
 const createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const newUser = await usersService.create(req.body);
+    const newItem = await service.create(req.body);
 
-    res.status(201).json(newUser);
+    res.status(201).json(newItem);
   } catch (error) {
-    res.status(500).json({ message: 'Error creating user' });
+    res.status(500).json({ message: 'Error creating item' });
   }
 };
 
@@ -42,15 +42,15 @@ const updateUser = async (req: Request, res: Response, next: NextFunction): Prom
   const id = parseInt(req.params.id, 10);
 
   try {
-    const { affectedRows } = await usersService.update(id, req.body);
+    const { affectedRows } = await service.update(id, req.body);
 
     if (affectedRows) {
       res.status(200).json({ affectedRows });
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: 'Item not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Error updating user' });
+    res.status(500).json({ message: 'Error updating item' });
   }
 };
 
@@ -58,15 +58,32 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction): Prom
   const id = parseInt(req.params.id, 10);
 
   try {
-    const { affectedRows } = await usersService.delete(id);
+    const { affectedRows } = await service.delete(id);
 
     if (affectedRows) {
       res.status(204).send();
     } else {
-      res.status(404).json({ message: 'User not found' });
+      res.status(404).json({ message: 'Item not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting user' });
+    res.status(500).json({ message: 'Error deleting item' });
+  }
+};
+
+const deleteSelectedUsers = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { ids } = req.body;
+
+    // eslint-disable-next-line no-restricted-globals
+    if (!Array.isArray(ids) || ids.some(isNaN)) {
+      return res.status(400).json({ message: 'Invalid request. Provide an array of numeric IDs.' });
+    }
+
+    const result = await service.deleteSelected(ids);
+
+    res.status(200).json({ message: `${result.affectedRows} items marked as deleted.` });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to update items.' });
   }
 };
 
@@ -76,4 +93,5 @@ export default {
   create: createUser,
   update: updateUser,
   delete: deleteUser,
+  deleteSelected: deleteSelectedUsers,
 };

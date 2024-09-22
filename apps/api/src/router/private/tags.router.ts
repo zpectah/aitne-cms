@@ -9,6 +9,6 @@ router.get('/:id', tags.getById);
 router.put('/', tags.create);
 router.patch('/:id', tags.update);
 router.delete('/:id', tags.delete);
-router.patch('/delete', tags.deleteSelected);
+router.patch('/selected/delete', tags.deleteSelected);
 
 export default router;
