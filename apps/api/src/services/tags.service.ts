@@ -9,7 +9,7 @@ const getTags = async (): Promise<TagsModelData[]> => {
   const query = `SELECT * FROM ${TABLE} WHERE deleted = 0`;
   const [rows] = await pool.query<TagsModelData[]>(query);
 
-  return rows ?? [];
+  return rows;
 };
 
 const getTagById = async (id: number): Promise<TagsModelData> => {
@@ -19,12 +19,12 @@ const getTagById = async (id: number): Promise<TagsModelData> => {
   return rows[0];
 };
 
-const createTag = async (data: TagsFormData): Promise<Pick<TagsModelData, 'id'>> => {
+const createTag = async (data: TagsFormData): Promise<{ insertId: number }> => {
   const { name, color } = data;
   const query = `INSERT INTO ${TABLE} (name, color, active, deleted) VALUES (?, ?, 1, 0)`;
   const [result] = await pool.execute<ResultSetHeader>(query, [name, color]);
 
-  return { id: result.insertId };
+  return { insertId: result.insertId };
 };
 
 const updateTag = async (id: number, data: Partial<TagsModel>): Promise<{ affectedRows: number }> => {

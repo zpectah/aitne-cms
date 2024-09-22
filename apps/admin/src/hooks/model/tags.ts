@@ -44,7 +44,7 @@ export const useTagsMutations = () => {
 
   const deleteSelectedMutation = useMutation<unknown, unknown, { ids: readonly number[] }>({
     mutationKey: ['tags', 'tags-delete-selected'],
-    mutationFn: (payload) => axios.patch(`${process.env.API_BASE}/api/private/tags/selected/delete`, payload),
+    mutationFn: (payload) => axios.patch(`${process.env.API_BASE}/api/private/tags/delete`, payload),
   });
 
   return {

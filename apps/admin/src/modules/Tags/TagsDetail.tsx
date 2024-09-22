@@ -18,8 +18,8 @@ const TagsDetail = () => {
   const {
     options,
     onSubmit,
-    form: { handleSubmit, reset, control },
     isLoading,
+    form: { handleSubmit, reset, control },
   } = useTagsDetail();
 
   const {
@@ -88,6 +88,7 @@ const TagsDetail = () => {
                   }
                 }}
                 ref={field.ref}
+                switchProps={{ color: 'error' }}
               />
             )}
           />

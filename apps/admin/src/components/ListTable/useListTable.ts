@@ -92,6 +92,7 @@ export const useListTable = <T extends ListTableItemProps>({ items = [], perPage
     onSelect: clickSelectHandler,
     onPageChange: changePageHandler,
     onRowsPerPageChange: changeRowsPerPageHandler,
+    setSelected,
     emptyRows,
     order,
     orderBy,

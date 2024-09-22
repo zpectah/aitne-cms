@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { tags as tagsService } from '../../services';
+import { tags as service } from '../../services';
 
 const getTags = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const users = await tagsService.get();
+    const items = await service.get();
 
-    res.status(200).json(users);
+    res.status(200).json(items);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching tags' });
+    res.status(500).json({ message: 'Error fetching items' });
   }
 };
 
@@ -16,15 +16,15 @@ const getTagById = async (req: Request, res: Response, next: NextFunction): Prom
   const id = parseInt(req.params.id, 10);
 
   try {
-    const user = await tagsService.getById(id);
+    const item = await service.getById(id);
 
-    if (user) {
-      res.status(200).json(user);
+    if (item) {
+      res.status(200).json(item);
     } else {
-      res.status(404).json({ message: 'Tag not found' });
+      res.status(404).json({ message: 'Item not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching tag' });
+    res.status(500).json({ message: 'Error fetching item' });
   }
 };
 

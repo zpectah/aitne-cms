@@ -1,5 +1,6 @@
-import { useMemo, ChangeEvent, MouseEvent } from 'react';
+import { useMemo, ChangeEvent, MouseEvent, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -20,6 +21,14 @@ import Stack from '@mui/material/Stack';
 import { useConfirmSore } from '../../hooks';
 import { ListTableProps, ListTableItemProps } from './types';
 import { useListTable } from './useListTable';
+
+const RowDeleteButton = styled(IconButton)({
+  filter: 'grayscale(1)',
+
+  '&:hover': {
+    filter: 'grayscale(0)',
+  },
+});
 
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 30];
 
@@ -48,6 +57,7 @@ const ListTable = <T extends ListTableItemProps>({
     isIndeterminate,
     isChecked,
     emptyRows,
+    setSelected,
     // TODO
     // onSort,
     // order,
@@ -59,20 +69,31 @@ const ListTable = <T extends ListTableItemProps>({
 
   const { onConfirm } = useConfirmSore();
   const navigate = useNavigate();
+
+  const checkLastPage = useCallback(() => {
+    if (rows.length <= selected.length) {
+      const newPage = page > 0 ? page - 1 : page;
+
+      onPageChange(null, newPage);
+    }
+  }, [selected, rows, page, onPageChange]);
+
   const openHandler = (id: number) => navigate(`${rootPath}/${id}`);
 
   const deleteRowHandler = (id: number) => {
     onRowDelete(id);
-    // Redirect to first page to prevent non-existing page when only one item on page is deleted
-    // TODO
-    // Maybe create some control for this case?
-    onPageChange(null, 0);
+    checkLastPage();
+    setSelected([]);
   };
 
   const deleteRowConfirmHandler = (id: number) =>
     onConfirm(() => deleteRowHandler(id), 'Do you want to delete this item?');
 
-  const deleteSelectedHandler = () => onSelectedDelete(selected);
+  const deleteSelectedHandler = () => {
+    onSelectedDelete(selected);
+    checkLastPage();
+    setSelected([]);
+  };
 
   const deleteSelectedConfirmHandler = () =>
     onConfirm(() => deleteSelectedHandler(), 'Do you want to delete these items?');
@@ -164,9 +185,9 @@ const ListTable = <T extends ListTableItemProps>({
                         <IconButton color="primary" onClick={() => openHandler(item.id)}>
                           <EditIcon />
                         </IconButton>
-                        <IconButton color="error" onClick={() => deleteRowConfirmHandler(item.id)}>
+                        <RowDeleteButton color="error" onClick={() => deleteRowConfirmHandler(item.id)}>
                           <DeleteIcon />
-                        </IconButton>
+                        </RowDeleteButton>
                       </Stack>
                     </TableCell>
                   </TableRow>

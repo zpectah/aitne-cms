@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { tags as tagsService } from '../../services';
+import { tags as service } from '../../services';
 
 const getTags = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const users = await tagsService.get();
+    const items = await service.get();
 
-    res.status(200).json(users);
+    res.status(200).json(items);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching tags' });
+    res.status(500).json({ message: 'Error fetching items' });
   }
 };
 
@@ -16,25 +16,25 @@ const getTagById = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10);
 
   try {
-    const user = await tagsService.getById(id);
+    const item = await service.getById(id);
 
-    if (user) {
-      res.status(200).json(user);
+    if (item) {
+      res.status(200).json(item);
     } else {
-      res.status(404).json({ message: 'Tag not found' });
+      res.status(404).json({ message: 'Item not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching tag' });
+    res.status(500).json({ message: 'Error fetching item' });
   }
 };
 
 const createTag = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const newUser = await tagsService.create(req.body);
+    const newItem = await service.create(req.body);
 
-    res.status(201).json(newUser);
+    res.status(201).json(newItem);
   } catch (error) {
-    res.status(500).json({ message: 'Error creating tag' });
+    res.status(500).json({ message: 'Error creating item' });
   }
 };
 
@@ -42,15 +42,15 @@ const updateTag = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10);
 
   try {
-    const { affectedRows } = await tagsService.update(id, req.body);
+    const { affectedRows } = await service.update(id, req.body);
 
     if (affectedRows) {
       res.status(200).json({ affectedRows });
     } else {
-      res.status(404).json({ message: 'Tag not found' });
+      res.status(404).json({ message: 'Item not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Error updating tag' });
+    res.status(500).json({ message: 'Error updating item' });
   }
 };
 
@@ -58,15 +58,15 @@ const deleteTag = async (req: Request, res: Response, next: NextFunction) => {
   const id = parseInt(req.params.id, 10);
 
   try {
-    const { affectedRows } = await tagsService.delete(id);
+    const { affectedRows } = await service.delete(id);
 
     if (affectedRows) {
       res.status(204).send();
     } else {
-      res.status(404).json({ message: 'Tag not found' });
+      res.status(404).json({ message: 'Item not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting tag' });
+    res.status(500).json({ message: 'Error deleting item' });
   }
 };
 
@@ -79,7 +79,7 @@ const deleteSelectedTags = async (req: Request, res: Response, next: NextFunctio
       return res.status(400).json({ message: 'Invalid request. Provide an array of numeric IDs.' });
     }
 
-    const result = await tagsService.deleteSelected(ids);
+    const result = await service.deleteSelected(ids);
 
     res.status(200).json({ message: `${result.affectedRows} items marked as deleted.` });
   } catch (error) {
