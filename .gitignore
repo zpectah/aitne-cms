@@ -45,3 +45,5 @@ Thumbs.db
 .env
 .env.production
 https:/github.com/zpectah/aitne-cms.git/
+/migrations/backup.sql
+/migrations/dump.sql
