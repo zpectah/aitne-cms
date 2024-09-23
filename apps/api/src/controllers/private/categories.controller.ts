@@ -73,12 +73,6 @@ const deleteCategory = async (req: Request, res: Response, next: NextFunction) =
 const deleteSelectedCategories = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { ids } = req.body;
-
-    // eslint-disable-next-line no-restricted-globals
-    if (!Array.isArray(ids) || ids.some(isNaN)) {
-      return res.status(400).json({ message: 'Invalid request. Provide an array of numeric IDs.' });
-    }
-
     const result = await service.deleteSelected(ids);
 
     res.status(200).json({ message: `${result.affectedRows} items marked as deleted.` });
