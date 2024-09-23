@@ -23,7 +23,7 @@ const TagsList = () => {
   );
 
   return (
-    <ListTable<TagsModel>
+    <ListTable<TagsModel, NonNullable<unknown>>
       headingCells={heading}
       items={items}
       onRowDelete={onRowDelete}

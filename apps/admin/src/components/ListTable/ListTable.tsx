@@ -1,4 +1,4 @@
-import { useMemo, ChangeEvent, MouseEvent, useCallback, useState } from 'react';
+import { useMemo, ChangeEvent, MouseEvent, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -17,11 +17,13 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
 
 import { useConfirmSore } from '../../hooks';
-import { ListTableProps, ListTableItemProps } from './types';
+import { SearchInput } from '../input';
+import { ListTableProps, ListTableItemProps, ListTableItemLang } from './types';
+import { ROWS_PER_PAGE_OPTIONS, SEARCH_MIN_LENGTH } from './constants';
 import { useListTable } from './useListTable';
+import { useListTableSearch } from './useListTableSearch';
 
 const RowDeleteButton = styled(IconButton)({
   filter: 'grayscale(1)',
@@ -31,10 +33,7 @@ const RowDeleteButton = styled(IconButton)({
   },
 });
 
-const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 30];
-const SEARCH_MIN_LENGTH = 3;
-
-const ListTable = <T extends ListTableItemProps>({
+const ListTable = <T extends ListTableItemProps, TL extends ListTableItemLang>({
   items = [],
   renderRow,
   headingCells = [],
@@ -47,31 +46,9 @@ const ListTable = <T extends ListTableItemProps>({
   checkboxProps,
   showEmptyRows,
   searchAttrs = [],
-  searchLangAttrs = [], // TODO #lang object
-}: ListTableProps<T>) => {
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const searchResults = useMemo(() => {
-    let results: T[] = [];
-
-    if (searchQuery.length >= SEARCH_MIN_LENGTH) {
-      items.forEach((item) => {
-        const queryClean = searchQuery.toLowerCase();
-
-        searchAttrs.forEach((attr) => {
-          const stringClean = (item[attr] as string).toLowerCase();
-
-          if (stringClean.search(queryClean) > -1) {
-            results.push(item);
-          }
-        });
-      });
-    } else {
-      results = [...items];
-    }
-
-    return results;
-  }, [items, searchAttrs, searchQuery]);
+  searchLangAttrs = [],
+}: ListTableProps<T, TL>) => {
+  const { results, searchQuery, setSearchQuery } = useListTableSearch<T, TL>({ items, searchAttrs, searchLangAttrs });
 
   const {
     rows,
@@ -91,7 +68,7 @@ const ListTable = <T extends ListTableItemProps>({
     // order,
     // orderBy,
   } = useListTable<T>({
-    items: searchResults,
+    items: results,
     perPage,
   });
 
@@ -159,18 +136,18 @@ const ListTable = <T extends ListTableItemProps>({
   const renderSearchNoResultsRow = useMemo(() => {
     const cols = headingCells.length + 2;
 
-    if (searchQuery.length >= SEARCH_MIN_LENGTH && searchResults.length === 0) {
+    if (searchQuery.length >= SEARCH_MIN_LENGTH && results.length === 0) {
       return (
         <TableRow sx={{ textAlign: 'center' }}>
           <TableCell colSpan={cols}>For {`"${searchQuery}"`} was nothing found</TableCell>
         </TableRow>
       );
     }
-  }, [headingCells, searchQuery, searchResults]);
+  }, [headingCells, searchQuery, results]);
 
-  return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%' }}>
+  const renderToolbar = useMemo(
+    () => (
+      <>
         <Stack
           sx={({ spacing }) => ({
             padding: spacing(2),
@@ -180,8 +157,7 @@ const ListTable = <T extends ListTableItemProps>({
           })}
         >
           <Box>
-            <TextField
-              fullWidth
+            <SearchInput
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search in table"
               size="small"
@@ -189,14 +165,25 @@ const ListTable = <T extends ListTableItemProps>({
             />
           </Box>
           <Stack direction="row" gap={1}>
+            {/* TODO #conditions for display this */}
             <Button disabled={selected.length === 0} onClick={deleteSelectedConfirmHandler} variant="outlined">
               Delete selected
             </Button>
           </Stack>
         </Stack>
         <Divider />
+      </>
+    ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [searchQuery, selected.length, setSearchQuery]
+  );
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Paper sx={{ width: '100%' }}>
+        {renderToolbar}
         <TableContainer>
-          <Table aria-labelledby="listTable.title" sx={{ minWidth: 750 }}>
+          <Table sx={{ minWidth: 750 }}>
             <TableHead>
               <TableRow>
                 <TableCell padding="checkbox" sx={{ width: '50px', textAlign: 'center' }}>
@@ -248,7 +235,7 @@ const ListTable = <T extends ListTableItemProps>({
         </TableContainer>
         <TablePagination
           component="div"
-          count={searchResults.length}
+          count={results.length}
           onPageChange={onPageChange}
           onRowsPerPageChange={onRowsPerPageChange}
           page={page}

@@ -8,12 +8,22 @@ export const listTableOrderKeys = {
 } as const;
 
 export type ListTableOrder = keyof typeof listTableOrderKeys;
+export type ListTableItemLang = { [p: string]: unknown };
 
 export interface ListTableItemProps {
   id: number;
+  lang?: {
+    [p: string]: ListTableItemLang;
+  };
 }
 
-export interface ListTableProps<T extends ListTableItemProps> {
+interface ListTableSearch<T extends ListTableItemProps, TL extends ListTableItemLang> {
+  searchAttrs: (keyof T)[];
+  searchLangAttrs?: (keyof TL)[];
+}
+
+export interface ListTableProps<T extends ListTableItemProps, TL extends ListTableItemLang = ListTableItemLang>
+  extends ListTableSearch<T, TL> {
   items: T[];
   renderRow: (props: T, index: number) => ReactNode;
   headingCells: TableCellProps[];
@@ -26,11 +36,14 @@ export interface ListTableProps<T extends ListTableItemProps> {
   onRowSelect?: (id: number) => void;
   onSelectAllRows?: () => void;
   showEmptyRows?: boolean;
-  searchAttrs: (keyof T)[];
-  searchLangAttrs?: string[]; // TODO #lang object
 }
 
 export interface UseListTable<T extends ListTableItemProps> {
   items: T[];
   perPage?: number;
+}
+
+export interface UseListTableSearch<T extends ListTableItemProps, TL extends ListTableItemLang>
+  extends ListTableSearch<T, TL> {
+  items: T[];
 }

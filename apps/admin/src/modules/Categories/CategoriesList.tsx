@@ -1,6 +1,6 @@
 import TableCell from '@mui/material/TableCell';
 
-import { CategoriesModel } from '@model';
+import { CategoriesModel, CategoriesLangModel } from '@model';
 import config from '../../../config';
 import { ListTable, ButtonLink } from '../../components';
 import { useCategoriesList } from './hooks';
@@ -23,7 +23,7 @@ const CategoriesList = () => {
   );
 
   return (
-    <ListTable<CategoriesModel>
+    <ListTable<CategoriesModel, CategoriesLangModel>
       headingCells={heading}
       items={items}
       onRowDelete={onRowDelete}
@@ -31,7 +31,8 @@ const CategoriesList = () => {
       perPage={5}
       renderRow={renderRow}
       rootPath={config.routes.categories.path}
-      searchAttrs={['name', 'lang']} // TODO #lang object
+      searchAttrs={['name']}
+      searchLangAttrs={['title']}
     />
   );
 };
