@@ -31,6 +31,7 @@ const CategoriesList = () => {
       perPage={5}
       renderRow={renderRow}
       rootPath={config.routes.categories.path}
+      searchAttrs={['name', 'lang']} // TODO #lang object
     />
   );
 };

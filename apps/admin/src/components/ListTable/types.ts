@@ -26,6 +26,8 @@ export interface ListTableProps<T extends ListTableItemProps> {
   onRowSelect?: (id: number) => void;
   onSelectAllRows?: () => void;
   showEmptyRows?: boolean;
+  searchAttrs: (keyof T)[];
+  searchLangAttrs?: string[]; // TODO #lang object
 }
 
 export interface UseListTable<T extends ListTableItemProps> {

@@ -1,4 +1,4 @@
-import { useMemo, ChangeEvent, MouseEvent, useCallback } from 'react';
+import { useMemo, ChangeEvent, MouseEvent, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -17,6 +17,7 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 
 import { useConfirmSore } from '../../hooks';
 import { ListTableProps, ListTableItemProps } from './types';
@@ -31,6 +32,7 @@ const RowDeleteButton = styled(IconButton)({
 });
 
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 30];
+const SEARCH_MIN_LENGTH = 3;
 
 const ListTable = <T extends ListTableItemProps>({
   items = [],
@@ -44,7 +46,33 @@ const ListTable = <T extends ListTableItemProps>({
   onSelectedDelete,
   checkboxProps,
   showEmptyRows,
+  searchAttrs = [],
+  searchLangAttrs = [], // TODO #lang object
 }: ListTableProps<T>) => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const searchResults = useMemo(() => {
+    let results: T[] = [];
+
+    if (searchQuery.length >= SEARCH_MIN_LENGTH) {
+      items.forEach((item) => {
+        const queryClean = searchQuery.toLowerCase();
+
+        searchAttrs.forEach((attr) => {
+          const stringClean = (item[attr] as string).toLowerCase();
+
+          if (stringClean.search(queryClean) > -1) {
+            results.push(item);
+          }
+        });
+      });
+    } else {
+      results = [...items];
+    }
+
+    return results;
+  }, [items, searchAttrs, searchQuery]);
+
   const {
     rows,
     onSelectAll,
@@ -63,7 +91,7 @@ const ListTable = <T extends ListTableItemProps>({
     // order,
     // orderBy,
   } = useListTable<T>({
-    items,
+    items: searchResults,
     perPage,
   });
 
@@ -71,7 +99,7 @@ const ListTable = <T extends ListTableItemProps>({
   const navigate = useNavigate();
 
   const checkLastPage = useCallback(() => {
-    if (rows.length <= selected.length) {
+    if (rows.length <= selected.length || rows.length <= 1) {
       const newPage = page > 0 ? page - 1 : page;
 
       onPageChange(null, newPage);
@@ -128,6 +156,18 @@ const ListTable = <T extends ListTableItemProps>({
     return empties;
   }, [showEmptyRows, emptyRows, headingCells]);
 
+  const renderSearchNoResultsRow = useMemo(() => {
+    const cols = headingCells.length + 2;
+
+    if (searchQuery.length >= SEARCH_MIN_LENGTH && searchResults.length === 0) {
+      return (
+        <TableRow sx={{ textAlign: 'center' }}>
+          <TableCell colSpan={cols}>For {`"${searchQuery}"`} was nothing found</TableCell>
+        </TableRow>
+      );
+    }
+  }, [headingCells, searchQuery, searchResults]);
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%' }}>
@@ -139,7 +179,15 @@ const ListTable = <T extends ListTableItemProps>({
             justifyContent: 'space-between',
           })}
         >
-          <Box>searchbar</Box>
+          <Box>
+            <TextField
+              fullWidth
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search in table"
+              size="small"
+              value={searchQuery}
+            />
+          </Box>
           <Stack direction="row" gap={1}>
             <Button disabled={selected.length === 0} onClick={deleteSelectedConfirmHandler} variant="outlined">
               Delete selected
@@ -194,12 +242,13 @@ const ListTable = <T extends ListTableItemProps>({
                 );
               })}
               {renderEmptyRows}
+              {renderSearchNoResultsRow}
             </TableBody>
           </Table>
         </TableContainer>
         <TablePagination
           component="div"
-          count={items.length}
+          count={searchResults.length}
           onPageChange={onPageChange}
           onRowsPerPageChange={onRowsPerPageChange}
           page={page}

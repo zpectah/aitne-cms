@@ -31,6 +31,7 @@ const TagsList = () => {
       perPage={5}
       renderRow={renderRow}
       rootPath={config.routes.tags.path}
+      searchAttrs={['name', 'color']}
     />
   );
 };
