@@ -14,6 +14,7 @@ export const useCategoriesDetail = () => {
   const { createMutation, updateMutation } = useCategoriesMutations();
   const { query } = useCategoriesQuery();
   const { createToast } = useToastsStore();
+  const languages = ['en', 'cs']; // TODO #handle-globally
 
   const submitHandler: SubmitHandler<CategoriesFormData> = (data, event) => {
     if (data && id) {
@@ -74,5 +75,6 @@ export const useCategoriesDetail = () => {
     onSubmit: submitHandler,
     form,
     isLoading,
+    languages,
   };
 };

@@ -2,15 +2,15 @@ import { useMemo, useState } from 'react';
 import { ListTableItemLang, ListTableItemProps, UseListTableSearch } from './types';
 import { SEARCH_MIN_LENGTH } from './constants';
 
-export const useListTableSearch = <T extends ListTableItemProps, TL extends ListTableItemLang>({
+export const useListTableSearch = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>({
   items = [],
   searchAttrs,
   searchLangAttrs,
-}: UseListTableSearch<T, TL>) => {
+}: UseListTableSearch<T1, T2>) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const searchResults = useMemo(() => {
-    let results: T[] = [];
+    let results: T1[] = [];
 
     if (searchQuery.length >= SEARCH_MIN_LENGTH) {
       items.forEach((item) => {

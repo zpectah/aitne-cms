@@ -112,11 +112,17 @@ const createCategory = async (data: CategoriesFormData): Promise<{ insertId: num
 
   try {
     const insertCategoryQuery = `
-      INSERT INTO ${TABLE} (name, active, deleted)
-      VALUES (?, ?, ?);
+      INSERT INTO ${TABLE} (name, parent_id, active, deleted)
+      VALUES (?, ?, ?, ?);
     `;
 
-    const [result] = await pool.execute<ResultSetHeader>(insertCategoryQuery, [data.name, data.active, data.deleted]);
+    const [result] = await pool.execute<ResultSetHeader>(insertCategoryQuery, [
+      data.name,
+      data.parent_id,
+      data.active,
+      data.deleted,
+    ]);
+
     const categoryId = result.insertId;
     const languages = Object.keys(data.lang);
 
@@ -126,7 +132,7 @@ const createCategory = async (data: CategoriesFormData): Promise<{ insertId: num
         INSERT INTO ${TABLE}__${lang} (category_id, title)
         VALUES (?, ?);
       `,
-        [categoryId, data.lang[lang]]
+        [categoryId, data.lang[lang].title]
       )
     );
 
@@ -147,7 +153,7 @@ const updateCategory = async (
   try {
     const updateCategoryQuery = `
       UPDATE ${TABLE}
-      SET name = ?, active = ?, deleted = ?
+      SET name = ?, parent_id = ?, active = ?, deleted = ?
       WHERE id = ?;
     `;
 
@@ -156,24 +162,24 @@ const updateCategory = async (
 
     const [result] = await connection.execute<ResultSetHeader>(updateCategoryQuery, [
       data.name,
+      data.parent_id,
       data.active,
       data.deleted,
       id,
     ]);
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (const lng of languages) {
-      const updateTitleQuery = `
-        INSERT INTO ${TABLE}__${lng} (category_id, title)
-        VALUES (?, ?)
-        ON DUPLICATE KEY UPDATE title = ?;
-      `;
+    const insertTitleQueries = languages.map((lang) =>
+      connection.execute<ResultSetHeader>(
+        `
+          UPDATE ${TABLE}__${lang}
+          SET title = ?
+          WHERE category_id = ?;
+      `,
+        [data.lang[lang].title, id]
+      )
+    );
 
-      // eslint-disable-next-line no-await-in-loop
-      await connection.execute<ResultSetHeader>(updateTitleQuery, [id, data.lang[lng], data.lang[lng]]);
-
-      affectedLangRows.push(lng);
-    }
+    await Promise.all(insertTitleQueries);
 
     return {
       affectedRows: result.affectedRows,

@@ -17,15 +17,15 @@ export interface ListTableItemProps {
   };
 }
 
-interface ListTableSearch<T extends ListTableItemProps, TL extends ListTableItemLang> {
-  searchAttrs: (keyof T)[];
-  searchLangAttrs?: (keyof TL)[];
+interface ListTableSearch<T1 extends ListTableItemProps, T2 extends ListTableItemLang> {
+  searchAttrs: (keyof T1)[];
+  searchLangAttrs?: (keyof T2)[];
 }
 
-export interface ListTableProps<T extends ListTableItemProps, TL extends ListTableItemLang = ListTableItemLang>
-  extends ListTableSearch<T, TL> {
-  items: T[];
-  renderRow: (props: T, index: number) => ReactNode;
+export interface ListTableProps<T1 extends ListTableItemProps, T2 extends ListTableItemLang = ListTableItemLang>
+  extends ListTableSearch<T1, T2> {
+  items: T1[];
+  renderRow: (props: T1, index: number) => ReactNode;
   headingCells: TableCellProps[];
   rootPath: string;
   perPage?: number;
@@ -43,7 +43,7 @@ export interface UseListTable<T extends ListTableItemProps> {
   perPage?: number;
 }
 
-export interface UseListTableSearch<T extends ListTableItemProps, TL extends ListTableItemLang>
-  extends ListTableSearch<T, TL> {
-  items: T[];
+export interface UseListTableSearch<T1 extends ListTableItemProps, T2 extends ListTableItemLang>
+  extends ListTableSearch<T1, T2> {
+  items: T1[];
 }

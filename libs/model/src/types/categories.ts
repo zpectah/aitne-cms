@@ -15,7 +15,7 @@ export interface CategoriesModel {
   id: number;
   lang: CategoriesLangProps;
   name: string;
-  parent_id?: number;
+  parent_id?: number | '';
   updated: string;
 }
 

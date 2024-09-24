@@ -33,7 +33,7 @@ const RowDeleteButton = styled(IconButton)({
   },
 });
 
-const ListTable = <T extends ListTableItemProps, TL extends ListTableItemLang>({
+const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>({
   items = [],
   renderRow,
   headingCells = [],
@@ -47,8 +47,8 @@ const ListTable = <T extends ListTableItemProps, TL extends ListTableItemLang>({
   showEmptyRows,
   searchAttrs = [],
   searchLangAttrs = [],
-}: ListTableProps<T, TL>) => {
-  const { results, searchQuery, setSearchQuery } = useListTableSearch<T, TL>({ items, searchAttrs, searchLangAttrs });
+}: ListTableProps<T1, T2>) => {
+  const { results, searchQuery, setSearchQuery } = useListTableSearch<T1, T2>({ items, searchAttrs, searchLangAttrs });
 
   const {
     rows,
@@ -67,7 +67,7 @@ const ListTable = <T extends ListTableItemProps, TL extends ListTableItemLang>({
     // onSort,
     // order,
     // orderBy,
-  } = useListTable<T>({
+  } = useListTable<T1>({
     items: results,
     perPage,
   });
@@ -206,7 +206,7 @@ const ListTable = <T extends ListTableItemProps, TL extends ListTableItemLang>({
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((item: T, index) => {
+              {rows.map((item: T1, index) => {
                 const isSelected = selected.includes(item.id);
 
                 return (

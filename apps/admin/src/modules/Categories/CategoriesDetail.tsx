@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 import config from '../../../config';
-import { DetailDrawerLayout, FormField, SwitchControlled } from '../../components';
+import { DetailDrawerLayout, FormField, SwitchControlled, CategoriesDataPicker, Select } from '../../components';
 import { categoriesBlankModel } from '../../constants';
 import { useConfirmSore, useCategoriesDetailQuery } from '../../hooks';
 import { useCategoriesDetail } from './hooks';
@@ -19,6 +19,7 @@ const CategoriesDetail = () => {
     onSubmit,
     isLoading,
     form: { handleSubmit, reset, control },
+    languages,
   } = useCategoriesDetail();
 
   const {
@@ -105,8 +106,27 @@ const CategoriesDetail = () => {
             render={({ field }) => <TextField placeholder="Category name" {...field} />}
           />
         </FormField>
-        <div>TODO - parent category & check cycles</div>
-        <div>TODO - languages ...</div>
+        <div>
+          {/* TODO language switcher wrapper */}
+          {languages.map((lng) => (
+            <FormField key={lng} label={`Title (${lng})`}>
+              <Controller
+                control={control}
+                defaultValue=""
+                name={`lang.${lng}.title`}
+                render={({ field }) => <TextField placeholder="Category title" {...field} />}
+              />
+            </FormField>
+          ))}
+        </div>
+        <FormField label="Parent category">
+          <Controller
+            control={control}
+            defaultValue=""
+            name="parent_id"
+            render={({ field }) => <CategoriesDataPicker ignoredId={[data?.id]} {...field} />}
+          />
+        </FormField>
       </Stack>
     </DetailDrawerLayout>
   );
