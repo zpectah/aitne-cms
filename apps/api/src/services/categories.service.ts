@@ -27,7 +27,8 @@ const getCategories = async (): Promise<CategoriesModel[]> => {
         c.deleted,
         ${languageSelects}
       FROM ${TABLE} c
-        ${languageJoins};
+        ${languageJoins}
+      WHERE deleted = 0;
     `;
 
     const [rows] = await pool.query<CategoriesModelData[]>(query);
@@ -79,7 +80,7 @@ const getCategoryById = async (id: number): Promise<CategoriesModel> => {
         ${languageSelects}
       FROM ${TABLE} c
       ${languageJoins}
-      WHERE c.id = ?;
+      WHERE deleted = 0 AND c.id = ?;
     `;
 
     const [rows] = await pool.query<CategoriesModelData[]>(query, [id]);
