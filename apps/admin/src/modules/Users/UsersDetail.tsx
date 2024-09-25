@@ -33,7 +33,7 @@ const UsersDetail = () => {
     }
 
     if (data) {
-      return data.name;
+      return data.email;
     }
   }, [id, data]);
 
@@ -98,6 +98,14 @@ const UsersDetail = () => {
       title={detailTitle}
     >
       <Stack component="section" gap={2}>
+        <FormField label="Email">
+          <Controller
+            control={control}
+            defaultValue=""
+            name="email"
+            render={({ field }) => <TextField placeholder="Email" type="email" {...field} />}
+          />
+        </FormField>
         <FormField label="Firstname">
           <Controller
             control={control}
