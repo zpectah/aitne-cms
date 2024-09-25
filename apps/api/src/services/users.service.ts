@@ -9,7 +9,7 @@ export const getUsers = async (): Promise<UsersModelData[]> => {
   const connection = await pool.getConnection();
 
   try {
-    const query = `SELECT * FROM ${TABLE} WHERE deleted = 0`;
+    const query = `SELECT id, firstname, lastname, email, type, role, created, updated, active, deleted FROM ${TABLE} WHERE deleted = 0`;
     const [rows] = await pool.query<UsersModelData[]>(query);
 
     return rows;
@@ -35,8 +35,8 @@ const createUser = async (data: UsersFormData): Promise<{ insertId: number }> =>
   const connection = await pool.getConnection();
 
   try {
-    const { firstname, lastname, email, password, type, role, salt } = data;
-    const query = `INSERT INTO ${TABLE} (firstname, lastname, email, password, type, role, salt, active, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, 1, 0)`;
+    const { firstname, lastname, email, password, type, role, salt, active, deleted } = data;
+    const query = `INSERT INTO ${TABLE} (firstname, lastname, email, password, type, role, salt, active, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
     const [result] = await pool.execute<ResultSetHeader>(query, [
       firstname,
@@ -46,6 +46,8 @@ const createUser = async (data: UsersFormData): Promise<{ insertId: number }> =>
       type,
       role,
       salt,
+      active,
+      deleted,
     ]);
 
     return { insertId: result.insertId };
@@ -59,19 +61,18 @@ const updateUser = async (id: number, data: Partial<UsersModel>): Promise<{ affe
 
   try {
     const { firstname, lastname, email, password, type, role, salt, active } = data;
-    const query = `UPDATE ${TABLE} SET firstname = ?, lastname = ?, email = ?, password = ?, type = ?, role = ?, salt = ?, active = ? WHERE id = ? AND deleted = 0`;
+    const query = `UPDATE ${TABLE} SET firstname = ?, lastname = ?, email = ?, type = ?, role = ?, active = ? WHERE id = ? AND deleted = 0`;
+    const queryWithPassword = `UPDATE ${TABLE} SET firstname = ?, lastname = ?, email = ?, password = ?, type = ?, role = ?, salt = ?, active = ? WHERE id = ? AND deleted = 0`;
+    const values = [firstname, lastname, email, type, role, active, id];
+    const valuesWithPassword = [firstname, lastname, email, password, type, role, salt, active, id];
 
-    const [result] = await pool.execute<ResultSetHeader>(query, [
-      firstname,
-      lastname,
-      email,
-      password,
-      type,
-      role,
-      salt,
-      active,
-      id,
-    ]);
+    if (password !== '' && salt !== '') {
+      const [result] = await pool.execute<ResultSetHeader>(queryWithPassword, valuesWithPassword);
+
+      return { affectedRows: result.affectedRows };
+    }
+
+    const [result] = await pool.execute<ResultSetHeader>(query, values);
 
     return { affectedRows: result.affectedRows };
   } finally {

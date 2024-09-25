@@ -1,4 +1,5 @@
-import { ViewLayout, DetailDrawerWrapper } from '../../components';
+import config from '../../../config';
+import { ViewLayout, DetailDrawerWrapper, NewButtonLink } from '../../components';
 import UsersList from './UsersList';
 import UsersDetail from './UsersDetail';
 
@@ -6,9 +7,13 @@ const Users = () => {
   console.log('page view: Users');
 
   return (
-    <ViewLayout meta={{ title: 'Users' }} title="Users">
+    <ViewLayout
+      meta={{ title: 'Users' }}
+      title="Users"
+      titleSlot={<NewButtonLink to={`${config.routes.users.path}/new`}>New user</NewButtonLink>}
+    >
       <UsersList />
-      <DetailDrawerWrapper rootPath="/users">
+      <DetailDrawerWrapper rootPath={config.routes.users.path}>
         <UsersDetail />
       </DetailDrawerWrapper>
     </ViewLayout>

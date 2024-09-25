@@ -22,6 +22,8 @@ export interface UsersModel {
 
 export type UsersModelData = RowDataPacket & UsersModel;
 
-export interface UsersFormData extends Omit<UsersModel, 'id' | 'created' | 'updated'> {
+export interface UsersFormData extends Omit<UsersModel, 'id' | 'created' | 'updated' | 'password' | 'salt'> {
   id?: number | 'new';
+  password?: string;
+  salt?: string;
 }

@@ -1,84 +1,137 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useMemo } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { Controller } from 'react-hook-form';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 
-import { DetailDrawerLayout } from '../../components';
+import config from '../../../config';
+import { DetailDrawerLayout, FormField, SwitchControlled, Select } from '../../components';
+import { usersBlankModel } from '../../constants';
+import { useConfirmSore, useUsersDetailQuery } from '../../hooks';
+import { useUsersDetail } from './hooks';
 
-export const UsersDetail = () => {
+const UsersDetail = () => {
+  const { id } = useParams();
+  const { onConfirm } = useConfirmSore();
+
+  const {
+    options,
+    onSubmit,
+    isLoading,
+    form: { handleSubmit, reset, control },
+  } = useUsersDetail();
+
+  const {
+    query: { data },
+  } = useUsersDetailQuery(id ? parseInt(id, 10) : undefined);
+
+  const detailTitle = useMemo(() => {
+    if (id === 'new') {
+      return 'New user';
+    }
+
+    if (data) {
+      return data.name;
+    }
+  }, [id, data]);
+
+  useEffect(() => {
+    if (id === 'new') {
+      reset(usersBlankModel);
+    } else if (data) reset(data);
+  }, [reset, data, id]);
+
   return (
     <DetailDrawerLayout
       footer={
         <>
-          <button>button</button>
-          <button>button</button>
+          <Stack direction="row" gap={2}>
+            <Button type="submit">Submit</Button>
+          </Stack>
+          <Button component={Link} to={config.routes.users.path} variant="outlined">
+            Close
+          </Button>
         </>
       }
       formProps={{
-        onSubmit: (e) => {
-          e.preventDefault();
-        },
+        onSubmit: handleSubmit(onSubmit),
       }}
-      rootPath="/users"
+      isLoading={isLoading}
+      rootPath={config.routes.users.path}
       sidebar={
-        <>
-          Some sort of sidebar
-          <p>
-            Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod.
-            Metus mi orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed
-            elementum luctus aliquet. Magna et elit, sodales duis id vestibulum odio bibendum erat id adipiscing, varius
-            at lacinia scelerisque. Mauris eu sed vitae, sit amet vivamus fusce nulla facilisis accumsan at sem,
-            imperdiet suspendisse nisl porttitor. Arcu vitae, nisi commodo libero convallis eget fusce ante augue
-            iaculis, felis dignissim tempus a lorem fringilla.
-          </p>
-        </>
+        <Stack>
+          <Controller
+            control={control}
+            name="active"
+            render={({ field }) => (
+              <SwitchControlled
+                checked={field.value === 1}
+                label="Active"
+                onChange={(_, checked) => field.onChange(checked ? 1 : 0)}
+                ref={field.ref}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="deleted"
+            render={({ field }) => (
+              <SwitchControlled
+                checked={field.value === 1}
+                label="Deleted"
+                onChange={(_, checked) => {
+                  if (checked) {
+                    onConfirm(() => field.onChange(checked ? 1 : 0), 'This item will be deleted');
+                  } else {
+                    field.onChange(checked ? 1 : 0);
+                  }
+                }}
+                ref={field.ref}
+                switchProps={{ color: 'error' }}
+              />
+            )}
+          />
+        </Stack>
       }
-      title="Detail title"
+      title={detailTitle}
     >
-      ...UsersDetail...
-      <p>
-        Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
-        orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus
-        aliquet. Magna et elit, sodales duis id vestibulum odio bibendum erat id adipiscing, varius at lacinia
-        scelerisque. Mauris eu sed vitae, sit amet vivamus fusce nulla facilisis accumsan at sem, imperdiet suspendisse
-        nisl porttitor. Arcu vitae, nisi commodo libero convallis eget fusce ante augue iaculis, felis dignissim tempus
-        a lorem fringilla.
-      </p>
-      <br />
-      <p>
-        Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
-        orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus
-        aliquet. Magna et elit, sodales duis id vestibulum odio bibendum erat id adipiscing, varius at lacinia
-        scelerisque. Mauris eu sed vitae, sit amet vivamus fusce nulla facilisis accumsan at sem, imperdiet suspendisse
-        nisl porttitor. Arcu vitae, nisi commodo libero convallis eget fusce ante augue iaculis, felis dignissim tempus
-        a lorem fringilla.
-      </p>
-      <br />
-      <Link to="/users">Link to list</Link>
-      <p>
-        Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
-        orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus
-        aliquet. Magna et elit, sodales duis id vestibulum odio bibendum erat id adipiscing, varius at lacinia
-        scelerisque. Mauris eu sed vitae, sit amet vivamus fusce nulla facilisis accumsan at sem, imperdiet suspendisse
-        nisl porttitor. Arcu vitae, nisi commodo libero convallis eget fusce ante augue iaculis, felis dignissim tempus
-        a lorem fringilla.
-      </p>
-      <br />
-      <p>
-        Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
-        orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus
-        aliquet. Magna et elit, sodales duis id vestibulum odio bibendum erat id adipiscing, varius at lacinia
-        scelerisque. Mauris eu sed vitae, sit amet vivamus fusce nulla facilisis accumsan at sem, imperdiet suspendisse
-        nisl porttitor. Arcu vitae, nisi commodo libero convallis eget fusce ante augue iaculis, felis dignissim tempus
-        a lorem fringilla.
-      </p>
-      <br />
-      <p>
-        Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
-        orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus
-        aliquet. Magna et elit, sodales duis id vestibulum odio bibendum erat id adipiscing, varius at lacinia
-        scelerisque. Mauris eu sed vitae, sit amet vivamus fusce nulla facilisis accumsan at sem, imperdiet suspendisse
-        nisl porttitor. Arcu vitae, nisi commodo libero convallis eget fusce ante augue iaculis, felis dignissim tempus
-        a lorem fringilla.
-      </p>
-      <br />
+      <Stack component="section" gap={2}>
+        <FormField label="Firstname">
+          <Controller
+            control={control}
+            defaultValue=""
+            name="firstname"
+            render={({ field }) => <TextField placeholder="Firstname" {...field} />}
+          />
+        </FormField>
+        <FormField label="Lastname">
+          <Controller
+            control={control}
+            defaultValue=""
+            name="lastname"
+            render={({ field }) => <TextField placeholder="Lastname" {...field} />}
+          />
+        </FormField>
+        <Divider />
+        <FormField label="Type">
+          <Controller
+            control={control}
+            defaultValue="default"
+            name="type"
+            render={({ field }) => <Select items={options.type} placeholder="Select type" {...field} />}
+          />
+        </FormField>
+        <FormField label="Role">
+          <Controller
+            control={control}
+            defaultValue="demo"
+            name="role"
+            render={({ field }) => <Select items={options.role} placeholder="Select role" {...field} />}
+          />
+        </FormField>
+      </Stack>
     </DetailDrawerLayout>
   );
 };
