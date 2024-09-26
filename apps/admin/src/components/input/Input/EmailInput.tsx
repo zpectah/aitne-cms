@@ -1,13 +1,13 @@
 import { forwardRef } from 'react';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
-import SearchIcon from '@mui/icons-material/Search';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 
-export type SearchInputProps = TextFieldProps & {
+export type EmailInputProps = TextFieldProps & {
   disableIcon?: boolean;
 };
 
-const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(({ disableIcon, ...props }, ref) => (
+const EmailInput = forwardRef<HTMLInputElement, EmailInputProps>(({ disableIcon, ...props }, ref) => (
   <TextField
     fullWidth
     ref={ref}
@@ -15,14 +15,14 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(({ disableIco
       input: {
         startAdornment: !disableIcon && (
           <InputAdornment position="start">
-            <SearchIcon />
+            <AlternateEmailIcon />
           </InputAdornment>
         ),
       },
     }}
-    type="search"
+    type="email"
     {...props}
   />
 ));
 
-export default SearchInput;
+export default EmailInput;

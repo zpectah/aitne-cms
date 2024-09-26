@@ -18,7 +18,7 @@ const ViewLayoutWrapper = styled('div', {
   justifyContent: isCentered ? 'center' : 'initial',
 }));
 
-const ViewLayoutContent = styled('main')(() => ({}));
+const ViewLayoutContent = styled('div')(() => ({}));
 
 interface ViewLayoutProps extends WithChildren {
   isCentered?: boolean;

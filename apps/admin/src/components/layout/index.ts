@@ -1,4 +1,4 @@
+export * from './Footer';
 export * from './PageLayout';
 export * from './ViewLayout';
-export * from './MiniFooter';
 export * from './DetailDrawer';

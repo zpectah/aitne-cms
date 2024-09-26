@@ -1,18 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 
-import { PageLayoutPreloader, DetailDrawerLayout } from '../../components';
+import { DetailDrawerLayout } from '../../components';
 
 export const ArticlesDetail = () => {
-  const { isLoading, error, data } = useQuery({
-    queryKey: ['repoData'],
-    queryFn: () => fetch('https://api.github.com/repos/zpectah/aitne-cms').then((res) => res.json()),
-  });
-
-  if (isLoading) return <PageLayoutPreloader />;
-
-  if (error) return `An error has occurred: ${error.message}`;
-
   console.log('articles loaded');
 
   return (
@@ -44,15 +34,6 @@ export const ArticlesDetail = () => {
       <br />
       <Link to="/articles">Link to list</Link>
       <br />
-      <div>
-        <div>
-          <span>isLoading: {isLoading ? 'y' : 'n'}</span>
-        </div>
-        <h1>{data.name}</h1>
-        <p>{data.description}</p>
-        <strong>👀 {data.subscribers_count}</strong> <strong>✨ {data.stargazers_count}</strong>{' '}
-        <strong>🍴 {data.forks_count}</strong>
-      </div>
     </DetailDrawerLayout>
   );
 };

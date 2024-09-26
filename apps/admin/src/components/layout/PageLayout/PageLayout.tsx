@@ -14,7 +14,7 @@ const PageLayoutWrapper = styled('div')({
   position: 'relative',
 });
 
-const PageLayoutContent = styled('div', {
+const PageLayoutContent = styled('main', {
   shouldForwardProp: (propName) => propName !== 'isMinimal' && propName !== 'isOpen' && propName !== 'isMobile',
 })<{ readonly isMinimal?: boolean; readonly isOpen?: boolean; readonly isMobile?: boolean }>(
   ({ isMinimal, isOpen, isMobile }) => {

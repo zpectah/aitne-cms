@@ -1,15 +1,11 @@
-import Container from '@mui/material/Container';
-import { styled } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 
-const PreloaderWrapper = styled('div')(() => ({}));
-const PreloaderContainer = styled('div')(() => ({}));
+import { PreloaderBase } from '../../Preloader';
 
 const PageLayoutPreloader = () => (
-  <PreloaderWrapper>
-    <Container>
-      <PreloaderContainer>...preloader...</PreloaderContainer>
-    </Container>
-  </PreloaderWrapper>
+  <PreloaderBase>
+    <CircularProgress disableShrink />
+  </PreloaderBase>
 );
 
 export default PageLayoutPreloader;

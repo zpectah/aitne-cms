@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 
 import config from '../../../config';
-import { DetailDrawerLayout, FormField, SwitchControlled, Select } from '../../components';
+import { DetailDrawerLayout, FormField, SwitchControlled, Select, EmailInput, PasswordInput } from '../../components';
 import { usersBlankModel } from '../../constants';
 import { useConfirmSore, useUsersDetailQuery } from '../../hooks';
 import { useUsersDetail } from './hooks';
@@ -110,7 +110,7 @@ const UsersDetail = () => {
             control={control}
             defaultValue=""
             name="email"
-            render={({ field }) => <TextField placeholder="Email" type="email" {...field} />}
+            render={({ field }) => <EmailInput disableIcon placeholder="Email" {...field} />}
           />
         </FormField>
         <FormField label="Firstname">
@@ -135,7 +135,7 @@ const UsersDetail = () => {
             control={control}
             defaultValue=""
             name="password"
-            render={({ field }) => <TextField placeholder="Password" {...field} />}
+            render={({ field }) => <PasswordInput disableIcon placeholder="Password" {...field} />}
           />
         </FormField>
         <Divider />
