@@ -19,8 +19,9 @@ export const useListTableSearch = <T1 extends ListTableItemProps, T2 extends Lis
         // Iterate item picked attributes
         searchAttrs.forEach((attr) => {
           const stringClean = (item[attr] as string).toLowerCase();
+          const index = results.findIndex((m) => m.id === item.id);
 
-          if (stringClean.search(queryClean) > -1) {
+          if (stringClean.search(queryClean) > -1 && !(index > -1)) {
             results.push(item);
           }
         });
@@ -34,13 +35,10 @@ export const useListTableSearch = <T1 extends ListTableItemProps, T2 extends Lis
               const lang = item.lang?.[lng];
               const string = lang?.[attr as string];
               const stringClean = (string as string)?.toLowerCase();
+              const index = results.findIndex((m) => m.id === item.id);
 
-              if (stringClean.search(queryClean) > -1) {
-                const index = results.findIndex((m) => m.id === item.id);
-
-                if (!(index > -1)) {
-                  results.push(item);
-                }
+              if (stringClean.search(queryClean) > -1 && !(index > -1)) {
+                results.push(item);
               }
             });
           });

@@ -40,7 +40,14 @@ const UsersDetail = () => {
   useEffect(() => {
     if (id === 'new') {
       reset(usersBlankModel);
-    } else if (data) reset(data);
+    } else if (data) {
+      const updatedObject = Object.assign(data);
+
+      delete updatedObject.password;
+      delete updatedObject.salt;
+
+      reset(updatedObject);
+    }
   }, [reset, data, id]);
 
   return (
@@ -120,6 +127,15 @@ const UsersDetail = () => {
             defaultValue=""
             name="lastname"
             render={({ field }) => <TextField placeholder="Lastname" {...field} />}
+          />
+        </FormField>
+        <Divider />
+        <FormField label="Password">
+          <Controller
+            control={control}
+            defaultValue=""
+            name="password"
+            render={({ field }) => <TextField placeholder="Password" {...field} />}
           />
         </FormField>
         <Divider />

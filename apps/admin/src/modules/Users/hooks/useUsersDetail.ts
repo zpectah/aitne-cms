@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { usersTypeKeys, usersRoleKeys, UsersFormData } from '@model';
+import { crypto } from '@common';
 import config from '../../../../config';
 import { useToastsStore, useUsersMutations, useUsersQuery } from '../../../hooks';
 
@@ -23,20 +24,29 @@ export const useUsersDetail = () => {
     type: typeKeys.map((type) => ({
       id: type,
       value: type,
-      label: type,
+      label: type, // TODO
     })),
     role: roleKeys.map((role) => ({
       id: role,
       value: role,
-      label: role,
+      label: role, // TODO
     })),
   };
 
-  const submitHandler: SubmitHandler<UsersFormData> = (data, event) => {
+  const submitHandler: SubmitHandler<UsersFormData> = async (data, event) => {
     if (data && id) {
-      const master = Object.assign(data);
+      let master: UsersFormData;
 
       setLoading(true);
+
+      if (data.password) {
+        const salt = crypto.getSalt();
+        const password = await crypto.hashPassword(data.password, salt);
+
+        master = { ...data, password, salt };
+      } else {
+        master = Object.assign(data);
+      }
 
       if (id === 'new') {
         try {

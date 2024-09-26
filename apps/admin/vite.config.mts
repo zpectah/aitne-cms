@@ -20,7 +20,10 @@ export default defineConfig(({ mode }) => {
       host: 'localhost',
     },
 
-    plugins: [react(), nxViteTsPaths()],
+    plugins: [
+      react(),
+      nxViteTsPaths(),
+    ],
 
     // Uncomment this if you are using workers.
     // worker: {

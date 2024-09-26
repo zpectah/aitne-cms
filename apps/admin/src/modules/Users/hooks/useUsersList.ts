@@ -17,8 +17,8 @@ export const useUsersList = () => {
       children: 'Name',
     },
     {
-      id: 'color',
-      children: 'Color',
+      id: 'email',
+      children: 'Email',
     },
   ];
 
