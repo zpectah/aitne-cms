@@ -1,26 +1,33 @@
 import { ResultSetHeader } from 'mysql2/promise';
 
-import { CategoriesModelData, CategoriesFormData, CategoriesLangProps, CategoriesModel } from '@model';
+import { ArticlesModelData, ArticlesFormData, ArticlesLangProps, ArticlesModel } from '@model';
 import { pool } from '../utils';
 
-const TABLE = 'cms_categories';
+const TABLE = 'cms_articles';
 const LANGUAGES = ['en', 'cs']; // TODO
 
-const getCategories = async (): Promise<CategoriesModel[]> => {
+const getArticles = async (): Promise<ArticlesModel[]> => {
   const connection = await pool.getConnection();
 
   try {
-    const languageSelects = LANGUAGES.map((lang) => `${lang}.title AS ${lang}_title`).join(', ');
+    const languageSelects = LANGUAGES.map(
+      (lang) =>
+        `${lang}.title AS ${lang}_title, ${lang}.description AS ${lang}_description, ${lang}.content AS ${lang}_content`
+    ).join(', ');
 
     const languageJoins = LANGUAGES.map(
-      (lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.category_id`
+      (lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.article_id`
     ).join(' ');
 
     const query = `
       SELECT
         c.id,
         c.name,
-        c.parent_id,
+        c.type,
+        c.tags,
+        c.categories,
+        c.publish_start,
+        c.publish_end,
         c.updated,
         c.created,
         c.active,
@@ -31,21 +38,28 @@ const getCategories = async (): Promise<CategoriesModel[]> => {
       WHERE deleted = 0;
     `;
 
-    const [rows] = await pool.query<CategoriesModelData[]>(query);
+    const [rows] = await pool.query<ArticlesModelData[]>(query);
 
     return rows.map((row) => {
-      const langData: CategoriesLangProps = {};
+      const langData: ArticlesLangProps = {};
 
       LANGUAGES.forEach((lang) => {
         langData[lang] = {
           title: row[`${lang}_title`],
+          description: row[`${lang}_description`],
+          content: row[`${lang}_content`],
         };
       });
 
       return {
         id: row.id,
         name: row.name,
-        parent_id: row.parent_id,
+        type: row.type,
+        tags: row.tags,
+        categories: row.categories,
+        custom_fields: '', // TODO
+        publish_start: row.publish_start,
+        publish_end: row.publish_end,
         updated: row.updated,
         created: row.created,
         active: row.active,
@@ -58,21 +72,28 @@ const getCategories = async (): Promise<CategoriesModel[]> => {
   }
 };
 
-const getCategoryById = async (id: number): Promise<CategoriesModel> => {
+const getArticleById = async (id: number): Promise<ArticlesModel> => {
   const connection = await pool.getConnection();
 
   try {
-    const languageSelects = LANGUAGES.map((lang) => `${lang}.title AS ${lang}_title`).join(', ');
+    const languageSelects = LANGUAGES.map(
+      (lang) =>
+        `${lang}.title AS ${lang}_title, ${lang}.description AS ${lang}_description, ${lang}.content AS ${lang}_content`
+    ).join(', ');
 
     const languageJoins = LANGUAGES.map(
-      (lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.category_id`
+      (lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.article_id`
     ).join(' ');
 
     const query = `
       SELECT
         c.id,
         c.name,
-        c.parent_id,
+        c.type,
+        c.tags,
+        c.categories,
+        c.publish_start,
+        c.publish_end,
         c.updated,
         c.created,
         c.active,
@@ -83,20 +104,27 @@ const getCategoryById = async (id: number): Promise<CategoriesModel> => {
       WHERE deleted = 0 AND c.id = ?;
     `;
 
-    const [rows] = await pool.query<CategoriesModelData[]>(query, [id]);
+    const [rows] = await pool.query<ArticlesModelData[]>(query, [id]);
     const row = rows[0];
-    const langData: CategoriesLangProps = {};
+    const langData: ArticlesLangProps = {};
 
     LANGUAGES.forEach((lang) => {
       langData[lang] = {
         title: row[`${lang}_title`],
+        description: row[`${lang}_description`],
+        content: row[`${lang}_content`],
       };
     });
 
     return {
       id: row.id,
       name: row.name,
-      parent_id: row.parent_id,
+      type: row.type,
+      tags: row.tags,
+      categories: row.categories,
+      custom_fields: '', // TODO
+      publish_start: row.publish_start,
+      publish_end: row.publish_end,
       updated: row.updated,
       created: row.created,
       active: row.active,
@@ -108,18 +136,22 @@ const getCategoryById = async (id: number): Promise<CategoriesModel> => {
   }
 };
 
-const createCategory = async (data: CategoriesFormData): Promise<{ insertId: number }> => {
+const createArticle = async (data: ArticlesFormData): Promise<{ insertId: number }> => {
   const connection = await pool.getConnection();
 
   try {
     const insertQuery = `
-      INSERT INTO ${TABLE} (name, parent_id, active, deleted)
-      VALUES (?, ?, ?, ?);
+      INSERT INTO ${TABLE} (name, type, tags, categories, publish_start, publish_end, active, deleted)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?);
     `;
 
     const [result] = await pool.execute<ResultSetHeader>(insertQuery, [
       data.name,
-      data.parent_id,
+      data.type,
+      data.tags,
+      data.categories,
+      data.publish_start,
+      data.publish_end,
       data.active,
       data.deleted,
     ]);
@@ -130,10 +162,10 @@ const createCategory = async (data: CategoriesFormData): Promise<{ insertId: num
     const insertTitleQueries = languages.map((lang) =>
       connection.query(
         `
-        INSERT INTO ${TABLE}__${lang} (category_id, title)
-        VALUES (?, ?);
+        INSERT INTO ${TABLE}__${lang} (article_id, title, description, content)
+        VALUES (?, ?, ?, ?);
       `,
-        [rootId, data.lang[lang].title]
+        [rootId, data.lang[lang].title, data.lang[lang].description, data.lang[lang].content]
       )
     );
 
@@ -145,16 +177,16 @@ const createCategory = async (data: CategoriesFormData): Promise<{ insertId: num
   }
 };
 
-const updateCategory = async (
+const updateArticle = async (
   id: number,
-  data: CategoriesFormData
+  data: ArticlesFormData
 ): Promise<{ affectedRows: number; affectedLangRows: string[] }> => {
   const connection = await pool.getConnection();
 
   try {
     const updateQuery = `
       UPDATE ${TABLE}
-      SET name = ?, parent_id = ?, active = ?, deleted = ?
+      SET name = ?, type = ?, tags = ?, categories = ?, publish_start = ?, publish_end = ?, active = ?, deleted = ?
       WHERE id = ?;
     `;
 
@@ -163,7 +195,11 @@ const updateCategory = async (
 
     const [result] = await connection.execute<ResultSetHeader>(updateQuery, [
       data.name,
-      data.parent_id,
+      data.type,
+      data.tags,
+      data.categories,
+      data.publish_start,
+      data.publish_end,
       data.active,
       data.deleted,
       id,
@@ -173,8 +209,8 @@ const updateCategory = async (
       connection.execute<ResultSetHeader>(
         `
           UPDATE ${TABLE}__${lang}
-          SET title = ?
-          WHERE category_id = ?;
+          SET title = ?, description = ?, content = ?
+          WHERE article_id = ?;
       `,
         [data.lang[lang].title, id]
       )
@@ -191,7 +227,7 @@ const updateCategory = async (
   }
 };
 
-const deleteCategory = async (id: number): Promise<{ affectedRows: number }> => {
+const deleteArticle = async (id: number): Promise<{ affectedRows: number }> => {
   const connection = await pool.getConnection();
 
   try {
@@ -204,7 +240,7 @@ const deleteCategory = async (id: number): Promise<{ affectedRows: number }> => 
   }
 };
 
-const deleteSelectedCategories = async (ids: number[]): Promise<{ affectedRows: number }> => {
+const deleteSelectedArticles = async (ids: number[]): Promise<{ affectedRows: number }> => {
   const connection = await pool.getConnection();
 
   try {
@@ -219,10 +255,10 @@ const deleteSelectedCategories = async (ids: number[]): Promise<{ affectedRows: 
 };
 
 export default {
-  get: getCategories,
-  getById: getCategoryById,
-  create: createCategory,
-  update: updateCategory,
-  delete: deleteCategory,
-  deleteSelected: deleteSelectedCategories,
+  get: getArticles,
+  getById: getArticleById,
+  create: createArticle,
+  update: updateArticle,
+  delete: deleteArticle,
+  deleteSelected: deleteSelectedArticles,
 };

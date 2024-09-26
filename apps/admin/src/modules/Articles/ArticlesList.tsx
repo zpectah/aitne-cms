@@ -1,20 +1,39 @@
-import { Link } from 'react-router-dom';
+import TableCell from '@mui/material/TableCell';
+
+import { ArticlesModel, ArticlesLangModel } from '@model';
+import config from '../../../config';
+import { ListTable, ButtonLink } from '../../components';
+import { useArticlesList } from './hooks';
 
 const ArticlesList = () => {
-  return (
+  const {
+    table: { heading, items },
+    query: { isError },
+    onRowDelete,
+    onSelectedDelete,
+  } = useArticlesList();
+
+  const renderRow = ({ id, name, type }: ArticlesModel) => (
     <>
-      ...ArticlesList...
-      <p>
-        Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
-        orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus
-        aliquet. Magna et elit, sodales duis id vestibulum odio bibendum erat id adipiscing, varius at lacinia
-        scelerisque. Mauris eu sed vitae, sit amet vivamus fusce nulla facilisis accumsan at sem, imperdiet suspendisse
-        nisl porttitor. Arcu vitae, nisi commodo libero convallis eget fusce ante augue iaculis, felis dignissim tempus
-        a lorem fringilla.
-      </p>
-      <br />
-      <Link to="/articles/100">Link to detail</Link>
+      <TableCell>
+        <ButtonLink path={`${config.routes.articles.path}/${id}`}>{name}</ButtonLink>
+      </TableCell>
+      <TableCell>{type}</TableCell>
     </>
+  );
+
+  return (
+    <ListTable<ArticlesModel, ArticlesLangModel>
+      headingCells={heading}
+      items={items}
+      onRowDelete={onRowDelete}
+      onSelectedDelete={onSelectedDelete}
+      perPage={5}
+      renderRow={renderRow}
+      rootPath={config.routes.articles.path}
+      searchAttrs={['name', 'type']}
+      searchLangAttrs={['title', 'description']}
+    />
   );
 };
 
