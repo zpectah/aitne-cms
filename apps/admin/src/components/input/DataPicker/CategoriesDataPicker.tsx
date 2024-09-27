@@ -6,10 +6,11 @@ import { useCategoriesQuery } from '../../../hooks';
 
 export type CategoriesDataPickerProps = Omit<SelectProps, 'items' | 'children'> & {
   ignoredId?: number[];
+  withParent?: boolean;
 };
 
 const CategoriesDataPicker = forwardRef<HTMLInputElement, CategoriesDataPickerProps>(
-  ({ ignoredId = [], ...rest }, ref) => {
+  ({ ignoredId = [], withParent, placeholder, ...rest }, ref) => {
     const { query } = useCategoriesQuery();
 
     const items = useMemo(() => {
@@ -35,7 +36,12 @@ const CategoriesDataPicker = forwardRef<HTMLInputElement, CategoriesDataPickerPr
 
     return (
       <Select ref={ref} {...rest}>
-        <MenuItem value="">No parent</MenuItem>
+        {placeholder && (
+          <MenuItem disabled value="">
+            {placeholder}
+          </MenuItem>
+        )}
+        {withParent && <MenuItem value="">No parent</MenuItem>}
         {items.map(({ key, ...item }) => (
           <MenuItem key={key} {...item} />
         ))}

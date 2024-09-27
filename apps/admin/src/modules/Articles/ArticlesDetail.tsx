@@ -4,6 +4,8 @@ import { Controller } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import { DateTimeField } from '@mui/x-date-pickers/DateTimeField';
 
 import config from '../../../config';
 import {
@@ -46,7 +48,6 @@ const ArticlesDetail = () => {
   useEffect(() => {
     if (id === 'new') {
       reset(articlesBlankModel);
-      // TODO #languages
     } else if (data) reset(data);
   }, [reset, data, id]);
 
@@ -100,6 +101,12 @@ const ArticlesDetail = () => {
               />
             )}
           />
+          <div>
+            <DateTimeField slotProps={{}} />
+          </div>
+          <div>
+            <DateTimeField slotProps={{}} />
+          </div>
         </Stack>
       }
       title={detailTitle}
@@ -113,6 +120,23 @@ const ArticlesDetail = () => {
             render={({ field }) => <TextField placeholder="Article name" {...field} />}
           />
         </FormField>
+        <FormField label="Categories">
+          <Controller
+            control={control}
+            defaultValue={[]}
+            name="categories"
+            render={({ field }) => <CategoriesDataPicker multiple placeholder="Select categories" {...field} />}
+          />
+        </FormField>
+        <FormField label="Tags">
+          <Controller
+            control={control}
+            defaultValue={[]}
+            name="tags"
+            render={({ field }) => <TagsDataPicker multiple placeholder="Select tags" {...field} />}
+          />
+        </FormField>
+        <Divider />
         <LanguageTabs
           languages={languages}
           renderContent={(lng) => (
@@ -130,28 +154,20 @@ const ArticlesDetail = () => {
                   control={control}
                   defaultValue=""
                   name={`lang.${lng}.description`}
-                  render={({ field }) => <TextField placeholder="Article description" {...field} />}
+                  render={({ field }) => <TextField multiline placeholder="Article description" rows={5} {...field} />}
+                />
+              </FormField>
+              <FormField key={`${lng}_content`} label={`Content (${lng})`}>
+                <Controller
+                  control={control}
+                  defaultValue=""
+                  name={`lang.${lng}.content`}
+                  render={({ field }) => <TextField multiline placeholder="Article content" rows={10} {...field} />}
                 />
               </FormField>
             </>
           )}
         />
-        <FormField label="Categories">
-          <Controller
-            control={control}
-            defaultValue={[]}
-            name="categories"
-            render={({ field }) => <CategoriesDataPicker multiple {...field} />}
-          />
-        </FormField>
-        <FormField label="Tags">
-          <Controller
-            control={control}
-            defaultValue={[]}
-            name="tags"
-            render={({ field }) => <TagsDataPicker multiple {...field} />}
-          />
-        </FormField>
       </Stack>
     </DetailDrawerLayout>
   );

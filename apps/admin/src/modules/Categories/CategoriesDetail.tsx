@@ -131,7 +131,7 @@ const CategoriesDetail = () => {
             control={control}
             defaultValue=""
             name="parent_id"
-            render={({ field }) => <CategoriesDataPicker ignoredId={[data?.id]} {...field} />}
+            render={({ field }) => <CategoriesDataPicker withParent ignoredId={[data?.id]} {...field} />}
           />
         </FormField>
       </Stack>

@@ -21,10 +21,8 @@ export interface ArticlesModel {
   name: string;
   type: ArticlesType;
   lang: ArticlesLangProps;
-
   tags: number[];
   categories: number[];
-
   custom_fields: ArticlesCustomFieldsProps;
   created: string;
   updated: string;
@@ -34,7 +32,11 @@ export interface ArticlesModel {
   deleted: number;
 }
 
-export type ArticlesModelData = RowDataPacket & ArticlesModel;
+export type ArticlesModelData = RowDataPacket &
+  Omit<ArticlesModel, 'tags' | 'categories'> & {
+    tags: string;
+    categories: string;
+  };
 
 export interface ArticlesFormData extends Omit<ArticlesModel, 'id' | 'created' | 'updated'> {
   id?: number | 'new';

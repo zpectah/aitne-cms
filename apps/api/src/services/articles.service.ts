@@ -55,8 +55,8 @@ const getArticles = async (): Promise<ArticlesModel[]> => {
         id: row.id,
         name: row.name,
         type: row.type,
-        tags: row.tags,
-        categories: row.categories,
+        tags: row.tags.split(',').map(Number),
+        categories: row.categories.split(',').map(Number),
         custom_fields: '', // TODO
         publish_start: row.publish_start,
         publish_end: row.publish_end,
@@ -120,8 +120,8 @@ const getArticleById = async (id: number): Promise<ArticlesModel> => {
       id: row.id,
       name: row.name,
       type: row.type,
-      tags: row.tags,
-      categories: row.categories,
+      tags: row.tags.split(',').map(Number),
+      categories: row.categories.split(',').map(Number),
       custom_fields: '', // TODO
       publish_start: row.publish_start,
       publish_end: row.publish_end,
@@ -148,8 +148,8 @@ const createArticle = async (data: ArticlesFormData): Promise<{ insertId: number
     const [result] = await pool.execute<ResultSetHeader>(insertQuery, [
       data.name,
       data.type,
-      data.tags,
-      data.categories,
+      data.tags.toString(),
+      data.categories.toString(),
       data.publish_start,
       data.publish_end,
       data.active,
@@ -196,8 +196,8 @@ const updateArticle = async (
     const [result] = await connection.execute<ResultSetHeader>(updateQuery, [
       data.name,
       data.type,
-      data.tags,
-      data.categories,
+      data.tags.toString(),
+      data.categories.toString(),
       data.publish_start,
       data.publish_end,
       data.active,

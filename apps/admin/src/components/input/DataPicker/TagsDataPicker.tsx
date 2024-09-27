@@ -8,38 +8,44 @@ export type TagsDataPickerProps = Omit<SelectProps, 'items' | 'children'> & {
   ignoredId?: number[];
 };
 
-const TagsDataPicker = forwardRef<HTMLInputElement, TagsDataPickerProps>(({ ignoredId = [], ...rest }, ref) => {
-  const { query } = useTagsQuery();
+const TagsDataPicker = forwardRef<HTMLInputElement, TagsDataPickerProps>(
+  ({ ignoredId = [], placeholder, ...rest }, ref) => {
+    const { query } = useTagsQuery();
 
-  const items = useMemo(() => {
-    if (query.data) {
-      const rows: MenuItemProps[] = [];
+    const items = useMemo(() => {
+      if (query.data) {
+        const rows: MenuItemProps[] = [];
 
-      query.data.forEach((item) => {
-        const isAllowed = !ignoredId.includes(item.id);
+        query.data.forEach((item) => {
+          const isAllowed = !ignoredId.includes(item.id);
 
-        if (isAllowed)
-          rows.push({
-            key: `tag.picker_${item.id}`,
-            children: item.name,
-            value: item.id,
-          });
-      });
+          if (isAllowed)
+            rows.push({
+              key: `tag.picker_${item.id}`,
+              children: item.name,
+              value: item.id,
+            });
+        });
 
-      return rows;
-    }
+        return rows;
+      }
 
-    return [];
-  }, [query, ignoredId]);
+      return [];
+    }, [query, ignoredId]);
 
-  return (
-    <Select ref={ref} {...rest}>
-      <MenuItem value="">No parent</MenuItem>
-      {items.map(({ key, ...item }) => (
-        <MenuItem key={key} {...item} />
-      ))}
-    </Select>
-  );
-});
+    return (
+      <Select ref={ref} {...rest}>
+        {placeholder && (
+          <MenuItem disabled value="">
+            {placeholder}
+          </MenuItem>
+        )}
+        {items.map(({ key, ...item }) => (
+          <MenuItem key={key} {...item} />
+        ))}
+      </Select>
+    );
+  }
+);
 
 export default TagsDataPicker;

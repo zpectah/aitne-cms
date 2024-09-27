@@ -1,28 +1,38 @@
-import { useState, ReactNode } from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Divider from '@mui/material/Divider';
+import { ReactNode } from 'react';
+import Stack from '@mui/material/Stack';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Typography from '@mui/material/Typography';
+
+import { locales } from '../../constants';
 
 export interface LanguageTabsProps {
   languages: string[];
   renderContent: (lang: string) => ReactNode;
 }
 
-const LanguageTabs = ({ languages = [], renderContent }: LanguageTabsProps) => {
-  const [activeLang, setActiveLang] = useState(0);
-
-  return (
-    <>
-      <Tabs onChange={(__, value) => setActiveLang(value)} value={activeLang}>
-        {languages.map((lang, index) => (
-          <Tab key={lang} label={lang} value={index} />
-        ))}
-      </Tabs>
-      {/* TODO: vypsat jazyky všechny kvůli datům ve formuláři */}
-      {renderContent(languages[activeLang])}
-      <Divider />
-    </>
-  );
-};
+const LanguageTabs = ({ languages = [], renderContent }: LanguageTabsProps) => (
+  <Stack direction="column" gap={1}>
+    {languages.map((lang, index) => (
+      <Accordion disableGutters defaultExpanded={index === 0} elevation={0} key={lang}>
+        <AccordionSummary
+          aria-controls={`lang-panel.${lang}.content`}
+          expandIcon={<ExpandMoreIcon />}
+          id={`lang-panel.${lang}.header`}
+          sx={{ px: 0 }}
+        >
+          <Typography variant="h5">{locales[lang]}</Typography>
+        </AccordionSummary>
+        <AccordionDetails sx={{ px: 0 }}>
+          <Stack direction="column" gap={2}>
+            {renderContent(lang)}
+          </Stack>
+        </AccordionDetails>
+      </Accordion>
+    ))}
+  </Stack>
+);
 
 export default LanguageTabs;
