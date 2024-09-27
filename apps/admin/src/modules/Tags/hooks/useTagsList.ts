@@ -1,24 +1,27 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { TagsModel } from '@model';
 import { useToastsStore, useTagsQuery, useTagsMutations } from '../../../hooks';
+import { TOAST_AUTOCLOSE_DELAY_DEFAULT } from '../../../constants';
 
 export const useTagsList = () => {
   const {
     query: { data, isLoading, refetch, ...query },
   } = useTagsQuery();
 
+  const { t } = useTranslation(['table']);
   const { deleteMutation, deleteSelectedMutation } = useTagsMutations();
   const { createToast } = useToastsStore();
 
   const heading = [
     {
       id: 'name',
-      children: 'Name',
+      children: t('table:title.name'),
     },
     {
       id: 'color',
-      children: 'Color',
+      children: t('table:title.color'),
     },
   ];
 
@@ -41,7 +44,11 @@ export const useTagsList = () => {
         {
           onSuccess: () => {
             refetch();
-            createToast({ message: 'Tag was successfully deleted', severity: 'success', autoclose: 2500 });
+            createToast({
+              message: 'Item was successfully deleted',
+              severity: 'success',
+              autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
+            });
           },
           onError: () => {
             createToast({ message: 'There is an error...', severity: 'error' });
@@ -54,10 +61,6 @@ export const useTagsList = () => {
   };
 
   const selectedDeleteHandler = (selected: readonly number[]) => {
-    // TODO
-    // TOD --- confirm dialog
-    console.log('onSelectedDelete handler', selected);
-
     try {
       deleteSelectedMutation.mutate(
         {
@@ -66,7 +69,11 @@ export const useTagsList = () => {
         {
           onSuccess: () => {
             refetch();
-            createToast({ message: 'Selected tags was successfully deleted', severity: 'success', autoclose: 2500 });
+            createToast({
+              message: 'Selected items was successfully deleted',
+              severity: 'success',
+              autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
+            });
           },
           onError: () => {
             createToast({ message: 'There is an error...', severity: 'error' });

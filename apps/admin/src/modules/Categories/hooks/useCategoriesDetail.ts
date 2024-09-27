@@ -5,6 +5,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { CategoriesFormData } from '@model';
 import config from '../../../../config';
 import { useToastsStore, useCategoriesMutations, useCategoriesQuery } from '../../../hooks';
+import { TOAST_AUTOCLOSE_DELAY_DEFAULT } from '../../../constants';
 
 export const useCategoriesDetail = () => {
   const [isLoading, setLoading] = useState(false);
@@ -32,7 +33,11 @@ export const useCategoriesDetail = () => {
               onSuccess: () => {
                 query.refetch();
                 navigate(config.routes.categories.path);
-                createToast({ message: 'Category was successfully created', severity: 'success', autoclose: 2500 });
+                createToast({
+                  message: 'New item was successfully created',
+                  severity: 'success',
+                  autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
+                });
               },
               onError: () => {
                 createToast({ message: 'There is an error...', severity: 'error' });
@@ -54,7 +59,11 @@ export const useCategoriesDetail = () => {
               onSuccess: () => {
                 query.refetch();
                 navigate(config.routes.categories.path);
-                createToast({ message: 'Category was successfully updated', severity: 'success', autoclose: 2500 });
+                createToast({
+                  message: 'Item was successfully updated',
+                  severity: 'success',
+                  autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
+                });
               },
               onError: () => {
                 createToast({ message: 'There is an error...', severity: 'error' });

@@ -1,0 +1,18 @@
+{
+  "title.actions": "Akce",
+  "title.name": "Název",
+  "title.username": "Jméno",
+  "title.email": "Email",
+  "title.type": "Typ",
+  "title.color": "Barva",
+  "title.parent": "Rodič",
+
+  "label.search": "Hledat v tabulce",
+  "label.rowsPerPage": "Řádků na stránku",
+  "label.displayRows": "{{from}}-{{to}} z {{count}}",
+
+  "btn.toggleSelected": "Přepnout vybrané",
+  "btn.deleteSelected": "Smazat vybrané",
+
+  "msg.notFound": "Pro výraz '{{query}}' nebyly nalezeny žádné výsledky"
+}

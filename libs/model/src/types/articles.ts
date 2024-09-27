@@ -27,8 +27,8 @@ export interface ArticlesModel {
   custom_fields: ArticlesCustomFieldsProps;
   created: string;
   updated: string;
-  publish_start: Dayjs | '';
-  publish_end: Dayjs | '';
+  publish_start: Dayjs | string;
+  publish_end: Dayjs | string;
   active: number;
   deleted: number;
 }

@@ -1,24 +1,27 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { CategoriesModel } from '@model';
 import { useToastsStore, useCategoriesMutations, useCategoriesQuery } from '../../../hooks';
+import { TOAST_AUTOCLOSE_DELAY_DEFAULT } from '../../../constants';
 
 export const useCategoriesList = () => {
   const {
     query: { data, isLoading, refetch, ...query },
   } = useCategoriesQuery();
 
+  const { t } = useTranslation(['table']);
   const { deleteMutation, deleteSelectedMutation } = useCategoriesMutations();
   const { createToast } = useToastsStore();
 
   const heading = [
     {
       id: 'name',
-      children: 'Name',
+      children: t('table:title.name'),
     },
     {
       id: 'parent_id',
-      children: 'Parent',
+      children: t('table:title.parent'),
     },
   ];
 
@@ -41,7 +44,11 @@ export const useCategoriesList = () => {
         {
           onSuccess: () => {
             refetch();
-            createToast({ message: 'Category was successfully deleted', severity: 'success', autoclose: 2500 });
+            createToast({
+              message: 'Item was successfully deleted',
+              severity: 'success',
+              autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
+            });
           },
           onError: () => {
             createToast({ message: 'There is an error...', severity: 'error' });
@@ -63,9 +70,9 @@ export const useCategoriesList = () => {
           onSuccess: () => {
             refetch();
             createToast({
-              message: 'Selected categories was successfully deleted',
+              message: 'Selected items was successfully deleted',
               severity: 'success',
-              autoclose: 2500,
+              autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
             });
           },
           onError: () => {

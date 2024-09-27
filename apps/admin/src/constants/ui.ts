@@ -1,0 +1,1 @@
+export const TOAST_AUTOCLOSE_DELAY_DEFAULT = 2500;

@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { tagsColorKeys, TagsFormData } from '@model';
 import config from '../../../../config';
 import { useToastsStore, useTagsMutations, useTagsQuery } from '../../../hooks';
+import { TOAST_AUTOCLOSE_DELAY_DEFAULT } from '../../../constants';
 
 export const useTagsDetail = () => {
   const [isLoading, setLoading] = useState(false);
@@ -42,7 +43,11 @@ export const useTagsDetail = () => {
               onSuccess: () => {
                 query.refetch();
                 navigate(config.routes.tags.path);
-                createToast({ message: 'Tag was successfully created', severity: 'success', autoclose: 2500 });
+                createToast({
+                  message: 'New item was successfully created',
+                  severity: 'success',
+                  autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
+                });
               },
               onError: () => {
                 createToast({ message: 'There is an error...', severity: 'error' });
@@ -64,7 +69,11 @@ export const useTagsDetail = () => {
               onSuccess: () => {
                 query.refetch();
                 navigate(config.routes.tags.path);
-                createToast({ message: 'Tag was successfully updated', severity: 'success', autoclose: 2500 });
+                createToast({
+                  message: 'Item was successfully updated',
+                  severity: 'success',
+                  autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
+                });
               },
               onError: () => {
                 createToast({ message: 'There is an error...', severity: 'error' });

@@ -7,6 +7,7 @@ import { usersTypeKeys, usersRoleKeys, UsersFormData } from '@model';
 import { crypto } from '@common';
 import config from '../../../../config';
 import { useToastsStore, useUsersMutations, useUsersQuery } from '../../../hooks';
+import { TOAST_AUTOCLOSE_DELAY_DEFAULT } from '../../../constants';
 
 export const useUsersDetail = () => {
   const [isLoading, setLoading] = useState(false);
@@ -58,7 +59,11 @@ export const useUsersDetail = () => {
               onSuccess: () => {
                 query.refetch();
                 navigate(config.routes.users.path);
-                createToast({ message: 'User was successfully created', severity: 'success', autoclose: 2500 });
+                createToast({
+                  message: 'New item was successfully created',
+                  severity: 'success',
+                  autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
+                });
               },
               onError: () => {
                 createToast({ message: 'There is an error...', severity: 'error' });
@@ -80,7 +85,11 @@ export const useUsersDetail = () => {
               onSuccess: () => {
                 query.refetch();
                 navigate(config.routes.users.path);
-                createToast({ message: 'User was successfully updated', severity: 'success', autoclose: 2500 });
+                createToast({
+                  message: 'Item was successfully updated',
+                  severity: 'success',
+                  autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
+                });
               },
               onError: () => {
                 createToast({ message: 'There is an error...', severity: 'error' });

@@ -1,5 +1,6 @@
 import { useMemo, ChangeEvent, MouseEvent, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -72,6 +73,7 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
     perPage,
   });
 
+  const { t } = useTranslation(['common', 'table']);
   const { onConfirm } = useConfirmSore();
   const navigate = useNavigate();
 
@@ -139,10 +141,11 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
     if (searchQuery.length >= SEARCH_MIN_LENGTH && results.length === 0) {
       return (
         <TableRow sx={{ textAlign: 'center' }}>
-          <TableCell colSpan={cols}>For {`"${searchQuery}"`} was nothing found</TableCell>
+          <TableCell colSpan={cols}>{t('table:msg.notFound', { query: searchQuery })}</TableCell>
         </TableRow>
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headingCells, searchQuery, results]);
 
   const renderToolbar = useMemo(
@@ -159,15 +162,15 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
           <Box>
             <SearchInput
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search in table"
+              placeholder={t('table:label.search')}
               size="small"
               value={searchQuery}
             />
           </Box>
           <Stack direction="row" gap={1}>
-            {/* TODO #conditions for display this */}
+            {/* TODO #refactor as dropdown menu */}
             <Button disabled={selected.length === 0} onClick={deleteSelectedConfirmHandler} variant="outlined">
-              Delete selected
+              {t('table:btn.deleteSelected')}
             </Button>
           </Stack>
         </Stack>
@@ -201,7 +204,7 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
                   <TableCell key={id} {...rest} />
                 ))}
                 <TableCell align="right" sx={{ width: '200px' }}>
-                  Actions
+                  {t('table:title.actions')}
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -234,8 +237,10 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
           </Table>
         </TableContainer>
         <TablePagination
-          component="div"
+          component="footer"
           count={results.length}
+          labelDisplayedRows={({ from, to, count }) => t('table:label.displayRows', { from, to, count })}
+          labelRowsPerPage={t('table:label.rowsPerPage')}
           onPageChange={onPageChange}
           onRowsPerPageChange={onRowsPerPageChange}
           page={page}

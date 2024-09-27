@@ -1,24 +1,27 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ArticlesModel } from '@model';
 import { useToastsStore, useArticlesMutations, useArticlesQuery } from '../../../hooks';
+import { TOAST_AUTOCLOSE_DELAY_DEFAULT } from '../../../constants';
 
 export const useArticlesList = () => {
   const {
     query: { data, isLoading, refetch, ...query },
   } = useArticlesQuery();
 
+  const { t } = useTranslation(['table']);
   const { deleteMutation, deleteSelectedMutation } = useArticlesMutations();
   const { createToast } = useToastsStore();
 
   const heading = [
     {
       id: 'name',
-      children: 'Name',
+      children: t('table:title.name'),
     },
     {
       id: 'type',
-      children: 'Type',
+      children: t('table:title.ype'),
     },
   ];
 
@@ -41,7 +44,11 @@ export const useArticlesList = () => {
         {
           onSuccess: () => {
             refetch();
-            createToast({ message: 'Article was successfully deleted', severity: 'success', autoclose: 2500 });
+            createToast({
+              message: 'Item was successfully deleted',
+              severity: 'success',
+              autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
+            });
           },
           onError: () => {
             createToast({ message: 'There is an error...', severity: 'error' });
@@ -63,9 +70,9 @@ export const useArticlesList = () => {
           onSuccess: () => {
             refetch();
             createToast({
-              message: 'Selected articles was successfully deleted',
+              message: 'Selected items was successfully deleted',
               severity: 'success',
-              autoclose: 2500,
+              autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
             });
           },
           onError: () => {

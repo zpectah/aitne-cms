@@ -1,0 +1,18 @@
+{
+  "title.actions": "Actions",
+  "title.name": "Name",
+  "title.username": "Username",
+  "title.email": "Email",
+  "title.type": "Type",
+  "title.color": "Color",
+  "title.parent": "Parent",
+
+  "label.search": "Search in table",
+  "label.rowsPerPage": "Rows per page",
+  "label.displayRows": "{{from}}-{{to}} of {{count}}",
+
+  "btn.toggleSelected": "Toggle selected",
+  "btn.deleteSelected": "Delete selected",
+
+  "msg.notFound": "No results were found for the term '{{query}}'"
+}

@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { articlesTypeKeys, ArticlesFormData } from '@model';
 import config from '../../../../config';
 import { useToastsStore, useArticlesMutations, useArticlesQuery } from '../../../hooks';
+import { TOAST_AUTOCLOSE_DELAY_DEFAULT } from '../../../constants';
 
 export const useArticlesDetail = () => {
   const [isLoading, setLoading] = useState(false);
@@ -43,7 +44,11 @@ export const useArticlesDetail = () => {
               onSuccess: () => {
                 query.refetch();
                 navigate(config.routes.articles.path);
-                createToast({ message: 'Article was successfully created', severity: 'success', autoclose: 2500 });
+                createToast({
+                  message: 'New item was successfully created',
+                  severity: 'success',
+                  autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
+                });
               },
               onError: () => {
                 createToast({ message: 'There is an error...', severity: 'error' });
@@ -65,7 +70,11 @@ export const useArticlesDetail = () => {
               onSuccess: () => {
                 query.refetch();
                 navigate(config.routes.articles.path);
-                createToast({ message: 'Article was successfully updated', severity: 'success', autoclose: 2500 });
+                createToast({
+                  message: 'Item was successfully updated',
+                  severity: 'success',
+                  autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
+                });
               },
               onError: () => {
                 createToast({ message: 'There is an error...', severity: 'error' });
