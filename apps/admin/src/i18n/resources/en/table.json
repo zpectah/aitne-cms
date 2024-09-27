@@ -7,6 +7,7 @@
   "title.color": "Color",
   "title.parent": "Parent",
 
+  "label.selected": "Selected ({{selected}})",
   "label.search": "Search in table",
   "label.rowsPerPage": "Rows per page",
   "label.displayRows": "{{from}}-{{to}} of {{count}}",

@@ -1,4 +1,4 @@
-import { useMemo, ChangeEvent, MouseEvent, useCallback } from 'react';
+import { useMemo, useCallback, useState, ChangeEvent, MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material';
@@ -18,6 +18,8 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Stack from '@mui/material/Stack';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 import { useConfirmSore } from '../../hooks';
 import { SearchInput } from '../input';
@@ -34,6 +36,60 @@ const RowDeleteButton = styled(IconButton)({
   },
 });
 
+const SelectedItemsMenu = ({
+  selected,
+  onDelete,
+  onToggle,
+}: {
+  selected: number;
+  onDelete?: () => void;
+  onToggle?: () => void;
+}) => {
+  const { t } = useTranslation(['table']);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const openHandler = (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
+  const closeHandler = () => setAnchorEl(null);
+
+  const deleteSelectedHandler = () => {
+    onDelete?.();
+    closeHandler();
+  };
+
+  const toggleSelectedHandler = () => {
+    onToggle?.();
+    closeHandler();
+  };
+
+  return (
+    <div>
+      <Button
+        aria-controls={open ? 'selected-items-menu' : undefined}
+        aria-expanded={open ? 'true' : undefined}
+        aria-haspopup="true"
+        disabled={selected === 0}
+        id="selected-items-button"
+        onClick={openHandler}
+        variant="outlined"
+      >
+        {t('label.selected', { selected })}
+      </Button>
+      <Menu
+        MenuListProps={{
+          'aria-labelledby': 'selected-items-button',
+        }}
+        anchorEl={anchorEl}
+        id="selected-items-menu"
+        onClose={closeHandler}
+        open={open}
+      >
+        {onDelete && <MenuItem onClick={deleteSelectedHandler}>{t('btn.deleteSelected')}</MenuItem>}
+        {onToggle && <MenuItem onClick={toggleSelectedHandler}>{t('btn.toggleSelected')}</MenuItem>}
+      </Menu>
+    </div>
+  );
+};
+
 const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>({
   items = [],
   renderRow,
@@ -48,6 +104,7 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
   showEmptyRows,
   searchAttrs = [],
   searchLangAttrs = [],
+  toolbarSlot,
 }: ListTableProps<T1, T2>) => {
   const { results, searchQuery, setSearchQuery } = useListTableSearch<T1, T2>({ items, searchAttrs, searchLangAttrs });
 
@@ -152,6 +209,7 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
     () => (
       <>
         <Stack
+          gap={2}
           sx={({ spacing }) => ({
             padding: spacing(2),
             flexDirection: { xs: 'column', md: 'row' },
@@ -167,11 +225,9 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
               value={searchQuery}
             />
           </Box>
-          <Stack direction="row" gap={1}>
-            {/* TODO #refactor as dropdown menu */}
-            <Button disabled={selected.length === 0} onClick={deleteSelectedConfirmHandler} variant="outlined">
-              {t('table:btn.deleteSelected')}
-            </Button>
+          <Stack direction="row" gap={2}>
+            {toolbarSlot}
+            <SelectedItemsMenu onDelete={deleteSelectedConfirmHandler} selected={selected.length} />
           </Stack>
         </Stack>
         <Divider />

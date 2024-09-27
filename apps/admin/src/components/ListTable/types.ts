@@ -36,6 +36,7 @@ export interface ListTableProps<T1 extends ListTableItemProps, T2 extends ListTa
   onRowSelect?: (id: number) => void;
   onSelectAllRows?: () => void;
   showEmptyRows?: boolean;
+  toolbarSlot?: ReactNode;
 }
 
 export interface UseListTable<T extends ListTableItemProps> {
