@@ -6,7 +6,14 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 import config from '../../../config';
-import { DetailDrawerLayout, FormField, SwitchControlled, CategoriesDataPicker, Select } from '../../components';
+import {
+  DetailDrawerLayout,
+  FormField,
+  SwitchControlled,
+  CategoriesDataPicker,
+  TagsDataPicker,
+  LanguageTabs,
+} from '../../components';
 import { articlesBlankModel } from '../../constants';
 import { useConfirmSore, useArticlesDetailQuery } from '../../hooks';
 import { useArticlesDetail } from './hooks';
@@ -106,33 +113,43 @@ const ArticlesDetail = () => {
             render={({ field }) => <TextField placeholder="Article name" {...field} />}
           />
         </FormField>
-        <div>
-          {/* TODO language switcher wrapper */}
-          {languages.map((lng) => (
-            <FormField key={lng} label={`Title (${lng})`}>
-              <Controller
-                control={control}
-                defaultValue=""
-                name={`lang.${lng}.title`}
-                render={({ field }) => <TextField placeholder="Article title" {...field} />}
-              />
-            </FormField>
-          ))}
-        </div>
+        <LanguageTabs
+          languages={languages}
+          renderContent={(lng) => (
+            <>
+              <FormField key={`${lng}_title`} label={`Title (${lng})`}>
+                <Controller
+                  control={control}
+                  defaultValue=""
+                  name={`lang.${lng}.title`}
+                  render={({ field }) => <TextField placeholder="Article title" {...field} />}
+                />
+              </FormField>
+              <FormField key={`${lng}_description`} label={`Description (${lng})`}>
+                <Controller
+                  control={control}
+                  defaultValue=""
+                  name={`lang.${lng}.description`}
+                  render={({ field }) => <TextField placeholder="Article description" {...field} />}
+                />
+              </FormField>
+            </>
+          )}
+        />
         <FormField label="Categories">
           <Controller
             control={control}
-            defaultValue=""
-            name="categories" // TODO
-            render={({ field }) => <CategoriesDataPicker {...field} />}
+            defaultValue={[]}
+            name="categories"
+            render={({ field }) => <CategoriesDataPicker multiple {...field} />}
           />
         </FormField>
         <FormField label="Tags">
           <Controller
             control={control}
-            defaultValue=""
-            name="tags" // TODO
-            render={({ field }) => <CategoriesDataPicker {...field} />}
+            defaultValue={[]}
+            name="tags"
+            render={({ field }) => <TagsDataPicker multiple {...field} />}
           />
         </FormField>
       </Stack>

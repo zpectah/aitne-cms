@@ -9,6 +9,6 @@ export const articlesBlankModel: ArticlesFormData = {
   publish_end: '',
   lang: {},
   custom_fields: '', // TODO
-  tags: '', // TODO
-  categories: '', // TODO
+  tags: [],
+  categories: [],
 };

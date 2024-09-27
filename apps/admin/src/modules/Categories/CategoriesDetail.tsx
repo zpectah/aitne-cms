@@ -6,7 +6,14 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 import config from '../../../config';
-import { DetailDrawerLayout, FormField, SwitchControlled, CategoriesDataPicker, Select } from '../../components';
+import {
+  DetailDrawerLayout,
+  FormField,
+  SwitchControlled,
+  CategoriesDataPicker,
+  Select,
+  LanguageTabs,
+} from '../../components';
 import { categoriesBlankModel } from '../../constants';
 import { useConfirmSore, useCategoriesDetailQuery } from '../../hooks';
 import { useCategoriesDetail } from './hooks';
@@ -106,19 +113,19 @@ const CategoriesDetail = () => {
             render={({ field }) => <TextField placeholder="Category name" {...field} />}
           />
         </FormField>
-        <div>
-          {/* TODO language switcher wrapper */}
-          {languages.map((lng) => (
-            <FormField key={lng} label={`Title (${lng})`}>
+        <LanguageTabs
+          languages={languages}
+          renderContent={(lng) => (
+            <FormField key={`${lng}_title`} label={`Title (${lng})`}>
               <Controller
                 control={control}
                 defaultValue=""
                 name={`lang.${lng}.title`}
-                render={({ field }) => <TextField placeholder="Category title" {...field} />}
+                render={({ field }) => <TextField placeholder="Article title" {...field} />}
               />
             </FormField>
-          ))}
-        </div>
+          )}
+        />
         <FormField label="Parent category">
           <Controller
             control={control}

@@ -7,3 +7,4 @@ export * from './Preloader';
 export * from './ConfirmDialog';
 export * from './ListTable';
 export * from './Toasts';
+export * from './LanguageTabs';

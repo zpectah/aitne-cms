@@ -22,8 +22,8 @@ export interface ArticlesModel {
   type: ArticlesType;
   lang: ArticlesLangProps;
 
-  tags: string; // TODO string[];
-  categories: string; // TODO string[];
+  tags: number[];
+  categories: number[];
 
   custom_fields: ArticlesCustomFieldsProps;
   created: string;
