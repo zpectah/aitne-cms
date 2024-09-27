@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import TableCell from '@mui/material/TableCell';
 
 import { ArticlesModel, ArticlesLangModel } from '@model';
@@ -6,9 +7,11 @@ import { ListTable, ButtonLink } from '../../components';
 import { useArticlesList } from './hooks';
 
 const ArticlesList = () => {
+  const { t } = useTranslation(['options']);
+
   const {
     table: { heading, items },
-    query: { isError },
+    query: { isError }, // TODO #error handler
     onRowDelete,
     onSelectedDelete,
   } = useArticlesList();
@@ -18,7 +21,7 @@ const ArticlesList = () => {
       <TableCell>
         <ButtonLink path={`${config.routes.articles.path}/${id}`}>{name}</ButtonLink>
       </TableCell>
-      <TableCell>{type}</TableCell>
+      <TableCell>{t(`options:articles.type.${type}`)}</TableCell>
     </>
   );
 
@@ -28,11 +31,11 @@ const ArticlesList = () => {
       items={items}
       onRowDelete={onRowDelete}
       onSelectedDelete={onSelectedDelete}
-      perPage={5}
       renderRow={renderRow}
       rootPath={config.routes.articles.path}
       searchAttrs={['name', 'type']}
       searchLangAttrs={['title', 'description']}
+      sortColumns={['id', 'name', 'updated']}
     />
   );
 };

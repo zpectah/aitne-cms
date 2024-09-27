@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState, ChangeEvent, MouseEvent } from 'react';
+import { useMemo, useCallback, ChangeEvent, MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material';
@@ -14,19 +14,22 @@ import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Stack from '@mui/material/Stack';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
+import { capitalizeString } from '@common';
 import { useConfirmSore } from '../../hooks';
 import { SearchInput } from '../input';
-import { ListTableProps, ListTableItemProps, ListTableItemLang } from './types';
+import { ListTableProps, ListTableItemProps, ListTableItemLang, listTableOrderKeys } from './types';
 import { ROWS_PER_PAGE_OPTIONS, SEARCH_MIN_LENGTH } from './constants';
 import { useListTable } from './useListTable';
 import { useListTableSearch } from './useListTableSearch';
+import ListTableSelectedMenu from './ListTableSelectedMenu';
 
 const RowDeleteButton = styled(IconButton)({
   filter: 'grayscale(1)',
@@ -35,60 +38,6 @@ const RowDeleteButton = styled(IconButton)({
     filter: 'grayscale(0)',
   },
 });
-
-const SelectedItemsMenu = ({
-  selected,
-  onDelete,
-  onToggle,
-}: {
-  selected: number;
-  onDelete?: () => void;
-  onToggle?: () => void;
-}) => {
-  const { t } = useTranslation(['table']);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const openHandler = (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
-  const closeHandler = () => setAnchorEl(null);
-
-  const deleteSelectedHandler = () => {
-    onDelete?.();
-    closeHandler();
-  };
-
-  const toggleSelectedHandler = () => {
-    onToggle?.();
-    closeHandler();
-  };
-
-  return (
-    <div>
-      <Button
-        aria-controls={open ? 'selected-items-menu' : undefined}
-        aria-expanded={open ? 'true' : undefined}
-        aria-haspopup="true"
-        disabled={selected === 0}
-        id="selected-items-button"
-        onClick={openHandler}
-        variant="outlined"
-      >
-        {t('label.selected', { selected })}
-      </Button>
-      <Menu
-        MenuListProps={{
-          'aria-labelledby': 'selected-items-button',
-        }}
-        anchorEl={anchorEl}
-        id="selected-items-menu"
-        onClose={closeHandler}
-        open={open}
-      >
-        {onDelete && <MenuItem onClick={deleteSelectedHandler}>{t('btn.deleteSelected')}</MenuItem>}
-        {onToggle && <MenuItem onClick={toggleSelectedHandler}>{t('btn.toggleSelected')}</MenuItem>}
-      </Menu>
-    </div>
-  );
-};
 
 const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>({
   items = [],
@@ -105,6 +54,7 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
   searchAttrs = [],
   searchLangAttrs = [],
   toolbarSlot,
+  sortColumns = [],
 }: ListTableProps<T1, T2>) => {
   const { results, searchQuery, setSearchQuery } = useListTableSearch<T1, T2>({ items, searchAttrs, searchLangAttrs });
 
@@ -121,10 +71,9 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
     isChecked,
     emptyRows,
     setSelected,
-    // TODO
-    // onSort,
-    // order,
-    // orderBy,
+    onSort,
+    order,
+    orderBy,
   } = useListTable<T1>({
     items: results,
     perPage,
@@ -217,24 +166,51 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
             justifyContent: 'space-between',
           })}
         >
-          <Box>
+          <Stack direction="row" gap={2}>
             <SearchInput
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={t('table:label.search')}
               size="small"
               value={searchQuery}
             />
-          </Box>
+          </Stack>
+          <Stack direction="row" gap={2}>
+            <ToggleButtonGroup value={orderBy}>
+              {sortColumns.map(String).map((item) => (
+                <ToggleButton
+                  aria-label={`sort table by: ${item}`}
+                  key={item}
+                  onClick={() => onSort(item as keyof T1)}
+                  size="small"
+                  sx={{ px: 1.75, gap: 1 }}
+                  value={item}
+                >
+                  {capitalizeString(item)}
+                  {orderBy === item ? (
+                    // eslint-disable-next-line react/jsx-no-useless-fragment
+                    <>
+                      {order === listTableOrderKeys.asc ? (
+                        <ArrowDownwardIcon fontSize="inherit" />
+                      ) : (
+                        <ArrowUpwardIcon fontSize="inherit" />
+                      )}
+                    </>
+                  ) : null}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
+          </Stack>
           <Stack direction="row" gap={2}>
             {toolbarSlot}
-            <SelectedItemsMenu onDelete={deleteSelectedConfirmHandler} selected={selected.length} />
+
+            <ListTableSelectedMenu onDelete={deleteSelectedConfirmHandler} selected={selected.length} />
           </Stack>
         </Stack>
         <Divider />
       </>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [searchQuery, selected.length, setSearchQuery]
+    [searchQuery, selected, setSearchQuery, toolbarSlot, onSort, sortColumns]
   );
 
   return (

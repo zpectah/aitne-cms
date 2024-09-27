@@ -1,4 +1,4 @@
-import { useState, useMemo, MouseEvent, ChangeEvent } from 'react';
+import { useState, useMemo, MouseEvent, ChangeEvent, useCallback } from 'react';
 
 import { listTableOrderKeys, ListTableItemProps, UseListTable, ListTableOrder } from './types';
 
@@ -30,7 +30,7 @@ export const useListTable = <T extends ListTableItemProps>({ items = [], perPage
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(perPage);
 
-  const sortRequestHandler = (event: MouseEvent<unknown>, property: keyof T) => {
+  const sortRequestHandler = (property: keyof T) => {
     const isAsc = orderBy === property && order === listTableOrderKeys.asc;
 
     setOrder(isAsc ? listTableOrderKeys.desc : listTableOrderKeys.asc);

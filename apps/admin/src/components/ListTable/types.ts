@@ -37,6 +37,7 @@ export interface ListTableProps<T1 extends ListTableItemProps, T2 extends ListTa
   onSelectAllRows?: () => void;
   showEmptyRows?: boolean;
   toolbarSlot?: ReactNode;
+  sortColumns: (keyof T1)[];
 }
 
 export interface UseListTable<T extends ListTableItemProps> {

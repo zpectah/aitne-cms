@@ -8,7 +8,7 @@ import { useUsersList } from './hooks';
 export const UsersList = () => {
   const {
     table: { heading, items },
-    query: { isError },
+    query: { isError }, // TODO #error handler
     onRowDelete,
     onSelectedDelete,
   } = useUsersList();
@@ -30,10 +30,10 @@ export const UsersList = () => {
       items={items}
       onRowDelete={onRowDelete}
       onSelectedDelete={onSelectedDelete}
-      perPage={5}
       renderRow={renderRow}
       rootPath={config.routes.users.path}
       searchAttrs={['firstname', 'lastname', 'email']}
+      sortColumns={['id', 'lastname', 'updated']}
     />
   );
 };

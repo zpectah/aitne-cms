@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import TableCell from '@mui/material/TableCell';
 
 import { TagsModel } from '@model';
@@ -6,9 +7,11 @@ import { ListTable, ButtonLink } from '../../components';
 import { useTagsList } from './hooks';
 
 const TagsList = () => {
+  const { t } = useTranslation(['options']);
+
   const {
     table: { heading, items },
-    query: { isError },
+    query: { isError }, // TODO #error handler
     onRowDelete,
     onSelectedDelete,
   } = useTagsList();
@@ -18,7 +21,7 @@ const TagsList = () => {
       <TableCell>
         <ButtonLink path={`${config.routes.tags.path}/${id}`}>{name}</ButtonLink>
       </TableCell>
-      <TableCell>{color}</TableCell>
+      <TableCell>{t(`options:tags.color.${color}`)} #todo</TableCell>
     </>
   );
 
@@ -28,10 +31,10 @@ const TagsList = () => {
       items={items}
       onRowDelete={onRowDelete}
       onSelectedDelete={onSelectedDelete}
-      perPage={5}
       renderRow={renderRow}
       rootPath={config.routes.tags.path}
       searchAttrs={['name', 'color']}
+      sortColumns={['id', 'name', 'updated']}
     />
   );
 };

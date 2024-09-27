@@ -21,7 +21,7 @@ export const useArticlesList = () => {
     },
     {
       id: 'type',
-      children: t('table:title.ype'),
+      children: t('table:title.type'),
     },
   ];
 

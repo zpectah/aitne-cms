@@ -8,7 +8,7 @@ import { useCategoriesList } from './hooks';
 const CategoriesList = () => {
   const {
     table: { heading, items },
-    query: { isError },
+    query: { isError }, // TODO #error handler
     onRowDelete,
     onSelectedDelete,
   } = useCategoriesList();
@@ -28,11 +28,11 @@ const CategoriesList = () => {
       items={items}
       onRowDelete={onRowDelete}
       onSelectedDelete={onSelectedDelete}
-      perPage={5}
       renderRow={renderRow}
       rootPath={config.routes.categories.path}
       searchAttrs={['name']}
       searchLangAttrs={['title']}
+      sortColumns={['id', 'name', 'updated']}
     />
   );
 };
