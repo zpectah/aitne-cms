@@ -1,5 +1,6 @@
 export const usersTypeKeys = {
   default: 'default',
+  external: 'external',
 } as const;
 
 export const usersRoleKeys = {
@@ -7,4 +8,5 @@ export const usersRoleKeys = {
   redactor: 'redactor',
   chiefRedactor: 'chiefRedactor',
   admin: 'admin',
+  developer: 'developer',
 } as const;

@@ -1,11 +1,13 @@
 import { useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import { DateTimeField } from '@mui/x-date-pickers/DateTimeField';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 import config from '../../../config';
 import {
@@ -15,16 +17,20 @@ import {
   CategoriesDataPicker,
   TagsDataPicker,
   LanguageTabs,
+  Select,
 } from '../../components';
-import { articlesBlankModel } from '../../constants';
+import { articlesBlankModel, locales } from '../../constants';
 import { useConfirmSore, useArticlesDetailQuery } from '../../hooks';
 import { useArticlesDetail } from './hooks';
 
 const ArticlesDetail = () => {
   const { id } = useParams();
   const { onConfirm } = useConfirmSore();
+  const { t, i18n } = useTranslation(['common']);
+  const isNew = useMemo(() => id === 'new', [id]);
 
   const {
+    options,
     onSubmit,
     isLoading,
     form: { handleSubmit, reset, control },
@@ -36,30 +42,32 @@ const ArticlesDetail = () => {
   } = useArticlesDetailQuery(id ? parseInt(id, 10) : undefined);
 
   const detailTitle = useMemo(() => {
-    if (id === 'new') {
+    if (isNew) {
       return 'New article';
     }
 
     if (data) {
       return data.name;
     }
-  }, [id, data]);
+  }, [isNew, data]);
 
   useEffect(() => {
-    if (id === 'new') {
+    if (isNew) {
       reset(articlesBlankModel);
     } else if (data) reset(data);
-  }, [reset, data, id]);
+  }, [reset, data, isNew]);
 
   return (
     <DetailDrawerLayout
       footer={
         <>
           <Stack direction="row" gap={2}>
-            <Button type="submit">Submit</Button>
+            <Button color={isNew ? 'success' : 'primary'} type="submit">
+              {t(`btn.${isNew ? 'create' : 'update'}`)}
+            </Button>
           </Stack>
           <Button component={Link} to={config.routes.articles.path} variant="outlined">
-            Close
+            {t('btn.cancel')}
           </Button>
         </>
       }
@@ -69,7 +77,7 @@ const ArticlesDetail = () => {
       isLoading={isLoading}
       rootPath={config.routes.articles.path}
       sidebar={
-        <Stack>
+        <Stack gap={2}>
           <Controller
             control={control}
             name="active"
@@ -102,10 +110,46 @@ const ArticlesDetail = () => {
             )}
           />
           <div>
-            <DateTimeField slotProps={{}} />
+            <Controller
+              control={control}
+              defaultValue={dayjs()}
+              name="publish_start"
+              render={({ field: { value, onChange, ref } }) => (
+                <DateTimePicker
+                  defaultValue={null}
+                  format={locales[i18n.language].format.datetime}
+                  onChange={onChange}
+                  ref={ref}
+                  slotProps={{
+                    textField: {
+                      placeholder: 'Published from',
+                    },
+                  }}
+                  value={value ? dayjs(value) : null}
+                />
+              )}
+            />
           </div>
           <div>
-            <DateTimeField slotProps={{}} />
+            <Controller
+              control={control}
+              defaultValue={dayjs()}
+              name="publish_end"
+              render={({ field: { value, onChange, ref } }) => (
+                <DateTimePicker
+                  defaultValue={null}
+                  format={locales[i18n.language].format.datetime}
+                  onChange={onChange}
+                  ref={ref}
+                  slotProps={{
+                    textField: {
+                      placeholder: 'Published to',
+                    },
+                  }}
+                  value={value ? dayjs(value) : null}
+                />
+              )}
+            />
           </div>
         </Stack>
       }
@@ -120,10 +164,19 @@ const ArticlesDetail = () => {
             render={({ field }) => <TextField placeholder="Article name" {...field} />}
           />
         </FormField>
+        <Divider />
+        <FormField label="Type">
+          <Controller
+            control={control}
+            defaultValue={articlesBlankModel.type}
+            name="type"
+            render={({ field }) => <Select items={options.type} placeholder="Select type" {...field} />}
+          />
+        </FormField>
         <FormField label="Categories">
           <Controller
             control={control}
-            defaultValue={[]}
+            defaultValue={articlesBlankModel.categories}
             name="categories"
             render={({ field }) => <CategoriesDataPicker multiple placeholder="Select categories" {...field} />}
           />
@@ -131,7 +184,7 @@ const ArticlesDetail = () => {
         <FormField label="Tags">
           <Controller
             control={control}
-            defaultValue={[]}
+            defaultValue={articlesBlankModel.tags}
             name="tags"
             render={({ field }) => <TagsDataPicker multiple placeholder="Select tags" {...field} />}
           />

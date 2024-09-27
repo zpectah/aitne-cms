@@ -5,5 +5,16 @@
   "tags.color.green": "Green",
   "tags.color.yellow": "Yellow",
   "tags.color.red": "Red",
-  "tags.color.purple": "Purple"
+  "tags.color.purple": "Purple",
+
+  "users.type.default": "Default",
+  "users.type.external": "External",
+
+  "users.role.demo": "Demo",
+  "users.role.redactor": "Redactor",
+  "users.role.chiefRedactor": "Chief Redactor",
+  "users.role.admin": "Admin",
+  "users.role.developer": "Developer",
+
+  "articles.type.default": "Default"
 }

@@ -1,20 +1,31 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import { ArticlesFormData } from '@model';
+import { articlesTypeKeys, ArticlesFormData } from '@model';
 import config from '../../../../config';
 import { useToastsStore, useArticlesMutations, useArticlesQuery } from '../../../hooks';
 
 export const useArticlesDetail = () => {
   const [isLoading, setLoading] = useState(false);
+  const { t } = useTranslation('options');
   const form = useForm<ArticlesFormData>({});
   const navigate = useNavigate();
   const { id } = useParams();
   const { createMutation, updateMutation } = useArticlesMutations();
   const { query } = useArticlesQuery();
   const { createToast } = useToastsStore();
+  const typeKeys = Object.keys(articlesTypeKeys);
   const languages = ['en', 'cs']; // TODO #handle-globally
+
+  const options = {
+    type: typeKeys.map((type) => ({
+      id: type,
+      value: type,
+      label: t(`users.type.${type}`),
+    })),
+  };
 
   const submitHandler: SubmitHandler<ArticlesFormData> = (data, event) => {
     if (data && id) {
@@ -71,7 +82,7 @@ export const useArticlesDetail = () => {
   };
 
   return {
-    options: [],
+    options,
     onSubmit: submitHandler,
     form,
     isLoading,

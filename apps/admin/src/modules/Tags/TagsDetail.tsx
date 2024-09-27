@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -14,6 +15,8 @@ import { useTagsDetail } from './hooks';
 const TagsDetail = () => {
   const { id } = useParams();
   const { onConfirm } = useConfirmSore();
+  const { t } = useTranslation(['common']);
+  const isNew = useMemo(() => id === 'new', [id]);
 
   const {
     options,
@@ -27,30 +30,32 @@ const TagsDetail = () => {
   } = useTagsDetailQuery(id ? parseInt(id, 10) : undefined);
 
   const detailTitle = useMemo(() => {
-    if (id === 'new') {
+    if (isNew) {
       return 'New tag';
     }
 
     if (data) {
       return data.name;
     }
-  }, [id, data]);
+  }, [isNew, data]);
 
   useEffect(() => {
-    if (id === 'new') {
+    if (isNew) {
       reset(tagsBlankModel);
     } else if (data) reset(data);
-  }, [reset, data, id]);
+  }, [reset, data, isNew]);
 
   return (
     <DetailDrawerLayout
       footer={
         <>
           <Stack direction="row" gap={2}>
-            <Button type="submit">Submit</Button>
+            <Button color={isNew ? 'success' : 'primary'} type="submit">
+              {t(`btn.${isNew ? 'create' : 'update'}`)}
+            </Button>
           </Stack>
           <Button component={Link} to={config.routes.tags.path} variant="outlined">
-            Close
+            {t('btn.cancel')}
           </Button>
         </>
       }
@@ -60,7 +65,7 @@ const TagsDetail = () => {
       isLoading={isLoading}
       rootPath={config.routes.tags.path}
       sidebar={
-        <Stack>
+        <Stack gap={2}>
           <Controller
             control={control}
             name="active"
@@ -108,7 +113,7 @@ const TagsDetail = () => {
         <FormField label="Color">
           <Controller
             control={control}
-            defaultValue="none"
+            defaultValue={tagsBlankModel.color}
             name="color"
             render={({ field }) => <Select items={options.color} placeholder="Select tag color" {...field} />}
           />

@@ -1,4 +1,5 @@
 import { RowDataPacket } from 'mysql2';
+import { Dayjs } from 'dayjs';
 
 import { articlesTypeKeys } from '../enums';
 
@@ -26,16 +27,18 @@ export interface ArticlesModel {
   custom_fields: ArticlesCustomFieldsProps;
   created: string;
   updated: string;
-  publish_start: string;
-  publish_end: string;
+  publish_start: Dayjs | '';
+  publish_end: Dayjs | '';
   active: number;
   deleted: number;
 }
 
 export type ArticlesModelData = RowDataPacket &
-  Omit<ArticlesModel, 'tags' | 'categories'> & {
+  Omit<ArticlesModel, 'tags' | 'categories' | 'publish_start' | 'publish_end'> & {
     tags: string;
     categories: string;
+    publish_start: string;
+    publish_end: string;
   };
 
 export interface ArticlesFormData extends Omit<ArticlesModel, 'id' | 'created' | 'updated'> {

@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -15,6 +16,8 @@ import { useUsersDetail } from './hooks';
 const UsersDetail = () => {
   const { id } = useParams();
   const { onConfirm } = useConfirmSore();
+  const { t } = useTranslation(['common']);
+  const isNew = useMemo(() => id === 'new', [id]);
 
   const {
     options,
@@ -28,17 +31,17 @@ const UsersDetail = () => {
   } = useUsersDetailQuery(id ? parseInt(id, 10) : undefined);
 
   const detailTitle = useMemo(() => {
-    if (id === 'new') {
+    if (isNew) {
       return 'New user';
     }
 
     if (data) {
       return data.email;
     }
-  }, [id, data]);
+  }, [isNew, data]);
 
   useEffect(() => {
-    if (id === 'new') {
+    if (isNew) {
       reset(usersBlankModel);
     } else if (data) {
       const updatedObject = Object.assign(data);
@@ -48,17 +51,19 @@ const UsersDetail = () => {
 
       reset(updatedObject);
     }
-  }, [reset, data, id]);
+  }, [reset, data, isNew]);
 
   return (
     <DetailDrawerLayout
       footer={
         <>
           <Stack direction="row" gap={2}>
-            <Button type="submit">Submit</Button>
+            <Button color={isNew ? 'success' : 'primary'} type="submit">
+              {t(`btn.${isNew ? 'create' : 'update'}`)}
+            </Button>
           </Stack>
           <Button component={Link} to={config.routes.users.path} variant="outlined">
-            Close
+            {t('btn.cancel')}
           </Button>
         </>
       }
@@ -68,7 +73,7 @@ const UsersDetail = () => {
       isLoading={isLoading}
       rootPath={config.routes.users.path}
       sidebar={
-        <Stack>
+        <Stack gap={2}>
           <Controller
             control={control}
             name="active"
@@ -142,7 +147,7 @@ const UsersDetail = () => {
         <FormField label="Type">
           <Controller
             control={control}
-            defaultValue="default"
+            defaultValue={usersBlankModel.type}
             name="type"
             render={({ field }) => <Select items={options.type} placeholder="Select type" {...field} />}
           />
@@ -150,7 +155,7 @@ const UsersDetail = () => {
         <FormField label="Role">
           <Controller
             control={control}
-            defaultValue="demo"
+            defaultValue={usersBlankModel.role}
             name="role"
             render={({ field }) => <Select items={options.role} placeholder="Select role" {...field} />}
           />

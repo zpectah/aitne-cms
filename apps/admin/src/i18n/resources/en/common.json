@@ -1,5 +1,14 @@
 {
   "btn.ok": "OK",
+  "btn.open": "Open",
+  "btn.close": "Close",
+  "btn.cancel": "Cancel",
+  "btn.dismiss": "Dismiss",
+  "btn.submit": "Submit",
+  "btn.create": "Create",
+  "btn.update": "Update",
+  "btn.delete": "Delete",
+  "btn.toggle": "Toggle",
 
   "page.login": "Login",
   "page.password-recovery": "Password Recovery",

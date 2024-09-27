@@ -1,5 +1,14 @@
 {
   "btn.ok": "Jasně",
+  "btn.open": "Otevřít",
+  "btn.close": "Zavřít",
+  "btn.cancel": "Zrušit",
+  "btn.dismiss": "Pustit z hlavy",
+  "btn.submit": "Odeslat",
+  "btn.create": "Vytvořit",
+  "btn.update": "Aktualizovat",
+  "btn.delete": "Smazat",
+  "btn.toggle": "Přepnout",
 
   "page.login": "Přihlášení",
   "page.password-recovery": "Obnova ztraceného hesla",

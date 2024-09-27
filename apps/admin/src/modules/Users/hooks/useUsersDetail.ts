@@ -24,12 +24,12 @@ export const useUsersDetail = () => {
     type: typeKeys.map((type) => ({
       id: type,
       value: type,
-      label: type, // TODO
+      label: t(`users.type.${type}`),
     })),
     role: roleKeys.map((role) => ({
       id: role,
       value: role,
-      label: role, // TODO
+      label: t(`users.role.${role}`),
     })),
   };
 

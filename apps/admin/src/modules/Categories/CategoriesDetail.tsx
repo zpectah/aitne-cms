@@ -1,19 +1,14 @@
 import { useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 
 import config from '../../../config';
-import {
-  DetailDrawerLayout,
-  FormField,
-  SwitchControlled,
-  CategoriesDataPicker,
-  Select,
-  LanguageTabs,
-} from '../../components';
+import { DetailDrawerLayout, FormField, SwitchControlled, CategoriesDataPicker, LanguageTabs } from '../../components';
 import { categoriesBlankModel } from '../../constants';
 import { useConfirmSore, useCategoriesDetailQuery } from '../../hooks';
 import { useCategoriesDetail } from './hooks';
@@ -21,6 +16,8 @@ import { useCategoriesDetail } from './hooks';
 const CategoriesDetail = () => {
   const { id } = useParams();
   const { onConfirm } = useConfirmSore();
+  const { t } = useTranslation(['common']);
+  const isNew = useMemo(() => id === 'new', [id]);
 
   const {
     onSubmit,
@@ -34,31 +31,32 @@ const CategoriesDetail = () => {
   } = useCategoriesDetailQuery(id ? parseInt(id, 10) : undefined);
 
   const detailTitle = useMemo(() => {
-    if (id === 'new') {
+    if (isNew) {
       return 'New category';
     }
 
     if (data) {
       return data.name;
     }
-  }, [id, data]);
+  }, [isNew, data]);
 
   useEffect(() => {
-    if (id === 'new') {
+    if (isNew) {
       reset(categoriesBlankModel);
-      // TODO #languages
     } else if (data) reset(data);
-  }, [reset, data, id]);
+  }, [reset, data, isNew]);
 
   return (
     <DetailDrawerLayout
       footer={
         <>
           <Stack direction="row" gap={2}>
-            <Button type="submit">Submit</Button>
+            <Button color={isNew ? 'success' : 'primary'} type="submit">
+              {t(`btn.${isNew ? 'create' : 'update'}`)}
+            </Button>
           </Stack>
           <Button component={Link} to={config.routes.categories.path} variant="outlined">
-            Close
+            {t('btn.cancel')}
           </Button>
         </>
       }
@@ -68,7 +66,7 @@ const CategoriesDetail = () => {
       isLoading={isLoading}
       rootPath={config.routes.categories.path}
       sidebar={
-        <Stack>
+        <Stack gap={2}>
           <Controller
             control={control}
             name="active"
@@ -113,6 +111,15 @@ const CategoriesDetail = () => {
             render={({ field }) => <TextField placeholder="Category name" {...field} />}
           />
         </FormField>
+        <FormField label="Parent category">
+          <Controller
+            control={control}
+            defaultValue=""
+            name="parent_id"
+            render={({ field }) => <CategoriesDataPicker withParent ignoredId={[data?.id]} {...field} />}
+          />
+        </FormField>
+        <Divider />
         <LanguageTabs
           languages={languages}
           renderContent={(lng) => (
@@ -126,14 +133,6 @@ const CategoriesDetail = () => {
             </FormField>
           )}
         />
-        <FormField label="Parent category">
-          <Controller
-            control={control}
-            defaultValue=""
-            name="parent_id"
-            render={({ field }) => <CategoriesDataPicker withParent ignoredId={[data?.id]} {...field} />}
-          />
-        </FormField>
       </Stack>
     </DetailDrawerLayout>
   );

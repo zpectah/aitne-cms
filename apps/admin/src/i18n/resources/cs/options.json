@@ -1,9 +1,20 @@
 {
-  "tags.color.none": "None",
-  "tags.color.black": "Black",
-  "tags.color.white": "White",
-  "tags.color.green": "Green",
-  "tags.color.yellow": "Yellow",
-  "tags.color.red": "Red",
-  "tags.color.purple": "Purple"
+  "tags.color.none": "Žádná",
+  "tags.color.black": "Černá",
+  "tags.color.white": "Bílá",
+  "tags.color.green": "Zelená",
+  "tags.color.yellow": "Žlutá",
+  "tags.color.red": "Červená",
+  "tags.color.purple": "Fialová",
+
+  "users.type.default": "Výchozí",
+  "users.type.external": "Externí",
+
+  "users.role.demo": "Demo",
+  "users.role.redactor": "Redaktor",
+  "users.role.chiefRedactor": "Šéfredaktor",
+  "users.role.admin": "Admin",
+  "users.role.developer": "Vývojář",
+
+  "articles.type.default": "Výchozí"
 }

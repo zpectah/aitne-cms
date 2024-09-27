@@ -23,7 +23,7 @@ const LanguageTabs = ({ languages = [], renderContent }: LanguageTabsProps) => (
           id={`lang-panel.${lang}.header`}
           sx={{ px: 0 }}
         >
-          <Typography variant="h5">{locales[lang]}</Typography>
+          <Typography variant="h5">{locales[lang].label}</Typography>
         </AccordionSummary>
         <AccordionDetails sx={{ px: 0 }}>
           <Stack direction="column" gap={2}>
