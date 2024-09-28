@@ -184,6 +184,33 @@ LOCK TABLES `cms_categories__en` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `cms_settings`
+--
+
+DROP TABLE IF EXISTS `cms_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cms_settings` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` text COLLATE utf8mb4_general_ci NOT NULL,
+  `value` text COLLATE utf8mb4_general_ci NOT NULL,
+  `value_format` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
+  `section` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cms_settings`
+--
+
+LOCK TABLES `cms_settings` WRITE;
+/*!40000 ALTER TABLE `cms_settings` DISABLE KEYS */;
+INSERT INTO `cms_settings` VALUES (1,'app.language_default','en','string','base'),(2,'app.language_active','en,cs','array.string','base'),(3,'app.language_available','en,cs,sk,de','array.string','base'),(4,'app.meta_title','Project name','string','base'),(5,'app.meta_description','Project description','string','base');
+/*!40000 ALTER TABLE `cms_settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `cms_tags`
 --
 
@@ -333,4 +360,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-28  9:09:08
+-- Dump completed on 2024-09-28 16:33:11
