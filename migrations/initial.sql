@@ -35,7 +35,7 @@ CREATE TABLE `cms_articles` (
   `active` int NOT NULL,
   `deleted` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,7 +63,7 @@ CREATE TABLE `cms_articles__cs` (
   PRIMARY KEY (`id`),
   KEY `article_id` (`article_id`),
   CONSTRAINT `cms_articles__cs_ibfk_1` FOREIGN KEY (`article_id`) REFERENCES `cms_articles` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,7 +91,7 @@ CREATE TABLE `cms_articles__en` (
   PRIMARY KEY (`id`),
   KEY `article_id` (`article_id`),
   CONSTRAINT `cms_articles__en_ibfk_1` FOREIGN KEY (`article_id`) REFERENCES `cms_articles` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -119,7 +119,7 @@ CREATE TABLE `cms_categories` (
   `active` int NOT NULL,
   `deleted` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -145,7 +145,7 @@ CREATE TABLE `cms_categories__cs` (
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `cms_categories__cs_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `cms_categories` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -171,7 +171,7 @@ CREATE TABLE `cms_categories__en` (
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `cms_categories__en_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `cms_categories` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -199,7 +199,7 @@ CREATE TABLE `cms_tags` (
   `active` int NOT NULL,
   `deleted` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,6 +209,86 @@ CREATE TABLE `cms_tags` (
 LOCK TABLES `cms_tags` WRITE;
 /*!40000 ALTER TABLE `cms_tags` DISABLE KEYS */;
 /*!40000 ALTER TABLE `cms_tags` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cms_translations`
+--
+
+DROP TABLE IF EXISTS `cms_translations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cms_translations` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` text COLLATE utf8mb4_general_ci NOT NULL,
+  `type` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `active` int NOT NULL,
+  `deleted` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cms_translations`
+--
+
+LOCK TABLES `cms_translations` WRITE;
+/*!40000 ALTER TABLE `cms_translations` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cms_translations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cms_translations__cs`
+--
+
+DROP TABLE IF EXISTS `cms_translations__cs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cms_translations__cs` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `translation_id` int NOT NULL,
+  `value` text COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `translation_id` (`translation_id`),
+  CONSTRAINT `cms_translations__cs_ibfk_1` FOREIGN KEY (`translation_id`) REFERENCES `cms_translations` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cms_translations__cs`
+--
+
+LOCK TABLES `cms_translations__cs` WRITE;
+/*!40000 ALTER TABLE `cms_translations__cs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cms_translations__cs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cms_translations__en`
+--
+
+DROP TABLE IF EXISTS `cms_translations__en`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cms_translations__en` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `translation_id` int NOT NULL,
+  `value` text COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `translation_id` (`translation_id`),
+  CONSTRAINT `cms_translations__en_ibfk_1` FOREIGN KEY (`translation_id`) REFERENCES `cms_translations` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cms_translations__en`
+--
+
+LOCK TABLES `cms_translations__en` WRITE;
+/*!40000 ALTER TABLE `cms_translations__en` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cms_translations__en` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -232,7 +312,7 @@ CREATE TABLE `cms_users` (
   `active` int NOT NULL,
   `deleted` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -253,4 +333,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-26 13:20:02
+-- Dump completed on 2024-09-28  9:09:08

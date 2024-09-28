@@ -6,6 +6,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import ArticleIcon from '@mui/icons-material/Article';
 import TagIcon from '@mui/icons-material/Tag';
 import CategoryIcon from '@mui/icons-material/Category';
+import TranslateIcon from '@mui/icons-material/Translate';
 
 import config from '../../../../config';
 import SidebarNavigationItem from './SidebarNavigationItem';
@@ -42,6 +43,12 @@ const SidebarNavigationPrimary = () => {
       path: routes.categories.path,
       label: 'Categories',
       icon: <CategoryIcon />,
+    },
+    {
+      key: 4,
+      path: routes.translations.path,
+      label: 'Translations',
+      icon: <TranslateIcon />,
     },
     {
       key: 100,

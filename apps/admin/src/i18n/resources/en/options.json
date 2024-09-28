@@ -16,5 +16,8 @@
   "users.role.admin": "Admin",
   "users.role.developer": "Developer",
 
-  "articles.type.default": "Default"
+  "articles.type.default": "Default",
+
+  "translations.type.default": "Default",
+  "translations.type.system": "System"
 }

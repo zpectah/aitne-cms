@@ -13,6 +13,7 @@ const Users = lazy(() => import('../modules/Users/Users'));
 const Settings = lazy(() => import('../modules/Settings/Settings'));
 const Tags = lazy(() => import('../modules/Tags/Tags'));
 const Categories = lazy(() => import('../modules/Categories/Categories'));
+const Translations = lazy(() => import('../modules/Translations/Translations'));
 
 const AppRouter = () => {
   const { routes } = config;
@@ -108,6 +109,16 @@ const AppRouter = () => {
               {
                 path: `${routes.categories.path}/:id`,
                 element: <Categories />,
+              },
+            ],
+          },
+          {
+            path: routes.translations.path,
+            element: <Translations />,
+            children: [
+              {
+                path: `${routes.translations.path}/:id`,
+                element: <Translations />,
               },
             ],
           },

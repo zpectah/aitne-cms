@@ -64,5 +64,9 @@ export default {
       path: '/categories',
       label: 'page.categories',
     },
+    translations: {
+      path: '/translations',
+      label: 'page.translations',
+    },
   },
 };

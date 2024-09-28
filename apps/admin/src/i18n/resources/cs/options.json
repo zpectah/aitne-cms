@@ -16,5 +16,8 @@
   "users.role.admin": "Admin",
   "users.role.developer": "Vývojář",
 
-  "articles.type.default": "Výchozí"
+  "articles.type.default": "Výchozí",
+
+  "translations.type.default": "Výchozí",
+  "translations.type.system": "System"
 }
