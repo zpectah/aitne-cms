@@ -81,6 +81,33 @@ const deleteSelectedArticles = async (req: Request, res: Response, next: NextFun
   }
 };
 
+const toggleArticle = async (req: Request, res: Response, next: NextFunction) => {
+  const id = parseInt(req.params.id, 10);
+
+  try {
+    const { affectedRows } = await service.toggle(id);
+
+    if (affectedRows) {
+      res.status(204).send();
+    } else {
+      res.status(404).json({ message: 'Item not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error toggle item' });
+  }
+};
+
+const toggleSelectedArticles = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { ids } = req.body;
+    const result = await service.toggleSelected(ids);
+
+    res.status(200).json({ message: `${result.affectedRows} items toggled` });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to update items.' });
+  }
+};
+
 export default {
   get: getArticles,
   getById: getArticleById,
@@ -88,4 +115,6 @@ export default {
   update: updateArticle,
   delete: deleteArticle,
   deleteSelected: deleteSelectedArticles,
+  toggle: toggleArticle,
+  toggleSelected: toggleSelectedArticles,
 };

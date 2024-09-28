@@ -2,6 +2,8 @@ import { ResultSetHeader } from 'mysql2/promise';
 
 import { ArticlesModelData, ArticlesFormData, ArticlesLangProps, ArticlesModel } from '@model';
 import { pool } from '../utils';
+import { deleteRow, deleteRows, toggleRow, toggleRows } from './common';
+import { AffectedRowsResponse, AffectedRowsWithLangResponse, InsertedIdResponse } from '../types';
 
 const TABLE = 'cms_articles';
 const LANGUAGES = ['en', 'cs']; // TODO
@@ -136,7 +138,7 @@ const getArticleById = async (id: number): Promise<ArticlesModel> => {
   }
 };
 
-const createArticle = async (data: ArticlesFormData): Promise<{ insertId: number }> => {
+const createArticle = async (data: ArticlesFormData): Promise<InsertedIdResponse> => {
   const connection = await pool.getConnection();
 
   try {
@@ -177,10 +179,7 @@ const createArticle = async (data: ArticlesFormData): Promise<{ insertId: number
   }
 };
 
-const updateArticle = async (
-  id: number,
-  data: ArticlesFormData
-): Promise<{ affectedRows: number; affectedLangRows: string[] }> => {
+const updateArticle = async (id: number, data: ArticlesFormData): Promise<AffectedRowsWithLangResponse> => {
   const connection = await pool.getConnection();
 
   try {
@@ -227,32 +226,10 @@ const updateArticle = async (
   }
 };
 
-const deleteArticle = async (id: number): Promise<{ affectedRows: number }> => {
-  const connection = await pool.getConnection();
-
-  try {
-    const query = `UPDATE ${TABLE} SET deleted = 1 WHERE id = ?`;
-    const [result] = await pool.execute<ResultSetHeader>(query, [id]);
-
-    return { affectedRows: result.affectedRows };
-  } finally {
-    connection.release();
-  }
-};
-
-const deleteSelectedArticles = async (ids: number[]): Promise<{ affectedRows: number }> => {
-  const connection = await pool.getConnection();
-
-  try {
-    const placeholders = ids.map(() => '?').join(',');
-    const query = `UPDATE ${TABLE} SET deleted = 1 WHERE id IN (${placeholders})`;
-    const [result] = await pool.execute<ResultSetHeader>(query, ids);
-
-    return { affectedRows: result.affectedRows };
-  } finally {
-    connection.release();
-  }
-};
+const deleteArticle = async (id: number): Promise<AffectedRowsResponse> => deleteRow(id, pool, TABLE);
+const deleteSelectedArticles = async (ids: number[]): Promise<AffectedRowsResponse> => deleteRows(ids, pool, TABLE);
+const toggleArticle = async (id: number): Promise<AffectedRowsResponse> => toggleRow(id, pool, TABLE);
+const toggleSelectedArticles = async (ids: number[]): Promise<AffectedRowsResponse> => toggleRows(ids, pool, TABLE);
 
 export default {
   get: getArticles,
@@ -261,4 +238,6 @@ export default {
   update: updateArticle,
   delete: deleteArticle,
   deleteSelected: deleteSelectedArticles,
+  toggle: toggleArticle,
+  toggleSelected: toggleSelectedArticles,
 };

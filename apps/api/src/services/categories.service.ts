@@ -2,6 +2,8 @@ import { ResultSetHeader } from 'mysql2/promise';
 
 import { CategoriesModelData, CategoriesFormData, CategoriesLangProps, CategoriesModel } from '@model';
 import { pool } from '../utils';
+import { deleteRow, deleteRows, toggleRow, toggleRows } from './common';
+import { AffectedRowsResponse, AffectedRowsWithLangResponse, InsertedIdResponse } from '../types';
 
 const TABLE = 'cms_categories';
 const LANGUAGES = ['en', 'cs']; // TODO
@@ -108,7 +110,7 @@ const getCategoryById = async (id: number): Promise<CategoriesModel> => {
   }
 };
 
-const createCategory = async (data: CategoriesFormData): Promise<{ insertId: number }> => {
+const createCategory = async (data: CategoriesFormData): Promise<InsertedIdResponse> => {
   const connection = await pool.getConnection();
 
   try {
@@ -145,10 +147,7 @@ const createCategory = async (data: CategoriesFormData): Promise<{ insertId: num
   }
 };
 
-const updateCategory = async (
-  id: number,
-  data: CategoriesFormData
-): Promise<{ affectedRows: number; affectedLangRows: string[] }> => {
+const updateCategory = async (id: number, data: CategoriesFormData): Promise<AffectedRowsWithLangResponse> => {
   const connection = await pool.getConnection();
 
   try {
@@ -191,32 +190,10 @@ const updateCategory = async (
   }
 };
 
-const deleteCategory = async (id: number): Promise<{ affectedRows: number }> => {
-  const connection = await pool.getConnection();
-
-  try {
-    const query = `UPDATE ${TABLE} SET deleted = 1 WHERE id = ?`;
-    const [result] = await pool.execute<ResultSetHeader>(query, [id]);
-
-    return { affectedRows: result.affectedRows };
-  } finally {
-    connection.release();
-  }
-};
-
-const deleteSelectedCategories = async (ids: number[]): Promise<{ affectedRows: number }> => {
-  const connection = await pool.getConnection();
-
-  try {
-    const placeholders = ids.map(() => '?').join(',');
-    const query = `UPDATE ${TABLE} SET deleted = 1 WHERE id IN (${placeholders})`;
-    const [result] = await pool.execute<ResultSetHeader>(query, ids);
-
-    return { affectedRows: result.affectedRows };
-  } finally {
-    connection.release();
-  }
-};
+const deleteCategory = async (id: number): Promise<AffectedRowsResponse> => deleteRow(id, pool, TABLE);
+const deleteSelectedCategories = async (ids: number[]): Promise<AffectedRowsResponse> => deleteRows(ids, pool, TABLE);
+const toggleCategory = async (id: number): Promise<AffectedRowsResponse> => toggleRow(id, pool, TABLE);
+const toggleSelectedCategories = async (ids: number[]): Promise<AffectedRowsResponse> => toggleRows(ids, pool, TABLE);
 
 export default {
   get: getCategories,
@@ -225,4 +202,6 @@ export default {
   update: updateCategory,
   delete: deleteCategory,
   deleteSelected: deleteSelectedCategories,
+  toggle: toggleCategory,
+  toggleSelected: toggleSelectedCategories,
 };

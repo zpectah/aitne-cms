@@ -2,6 +2,8 @@ import { ResultSetHeader } from 'mysql2/promise';
 
 import { TagsModel, TagsFormData, TagsModelData } from '@model';
 import { pool } from '../utils';
+import { deleteRow, deleteRows, toggleRow, toggleRows } from './common';
+import { AffectedRowsResponse, InsertedIdResponse } from '../types';
 
 const TABLE = 'cms_tags';
 
@@ -31,7 +33,7 @@ const getTagById = async (id: number): Promise<TagsModelData> => {
   }
 };
 
-const createTag = async (data: TagsFormData): Promise<{ insertId: number }> => {
+const createTag = async (data: TagsFormData): Promise<InsertedIdResponse> => {
   const connection = await pool.getConnection();
 
   try {
@@ -45,7 +47,7 @@ const createTag = async (data: TagsFormData): Promise<{ insertId: number }> => {
   }
 };
 
-const updateTag = async (id: number, data: Partial<TagsModel>): Promise<{ affectedRows: number }> => {
+const updateTag = async (id: number, data: Partial<TagsModel>): Promise<AffectedRowsResponse> => {
   const connection = await pool.getConnection();
 
   try {
@@ -59,32 +61,10 @@ const updateTag = async (id: number, data: Partial<TagsModel>): Promise<{ affect
   }
 };
 
-const deleteTag = async (id: number): Promise<{ affectedRows: number }> => {
-  const connection = await pool.getConnection();
-
-  try {
-    const query = `UPDATE ${TABLE} SET deleted = 1 WHERE id = ?`;
-    const [result] = await pool.execute<ResultSetHeader>(query, [id]);
-
-    return { affectedRows: result.affectedRows };
-  } finally {
-    connection.release();
-  }
-};
-
-const deleteSelectedTags = async (ids: number[]): Promise<{ affectedRows: number }> => {
-  const connection = await pool.getConnection();
-
-  try {
-    const placeholders = ids.map(() => '?').join(',');
-    const query = `UPDATE ${TABLE} SET deleted = 1 WHERE id IN (${placeholders})`;
-    const [result] = await pool.execute<ResultSetHeader>(query, ids);
-
-    return { affectedRows: result.affectedRows };
-  } finally {
-    connection.release();
-  }
-};
+const deleteTag = async (id: number): Promise<AffectedRowsResponse> => deleteRow(id, pool, TABLE);
+const deleteSelectedTags = async (ids: number[]): Promise<AffectedRowsResponse> => deleteRows(ids, pool, TABLE);
+const toggleTag = async (id: number): Promise<AffectedRowsResponse> => toggleRow(id, pool, TABLE);
+const toggleSelectedTags = async (ids: number[]): Promise<AffectedRowsResponse> => toggleRows(ids, pool, TABLE);
 
 export default {
   get: getTags,
@@ -93,4 +73,6 @@ export default {
   update: updateTag,
   delete: deleteTag,
   deleteSelected: deleteSelectedTags,
+  toggle: toggleTag,
+  toggleSelected: toggleSelectedTags,
 };

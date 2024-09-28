@@ -81,6 +81,33 @@ const deleteSelectedUsers = async (req: Request, res: Response, next: NextFuncti
   }
 };
 
+const toggleUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const id = parseInt(req.params.id, 10);
+
+  try {
+    const { affectedRows } = await service.toggle(id);
+
+    if (affectedRows) {
+      res.status(204).send();
+    } else {
+      res.status(404).json({ message: 'Item not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error toggle item' });
+  }
+};
+
+const toggleSelectedUsers = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { ids } = req.body;
+    const result = await service.toggleSelected(ids);
+
+    res.status(200).json({ message: `${result.affectedRows} items toggled` });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to update items.' });
+  }
+};
+
 export default {
   get: getUsers,
   getById: getUserById,
@@ -88,4 +115,6 @@ export default {
   update: updateUser,
   delete: deleteUser,
   deleteSelected: deleteSelectedUsers,
+  toggle: toggleUser,
+  toggleSelected: toggleSelectedUsers,
 };
