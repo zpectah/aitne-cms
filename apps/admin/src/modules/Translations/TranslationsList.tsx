@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import TableCell from '@mui/material/TableCell';
 
 import { TranslationsModel, TranslationsLangModel } from '@model';
@@ -6,6 +7,8 @@ import { ListTable, ButtonLink } from '../../components';
 import { useTranslationsList } from './hooks';
 
 const TranslationsList = () => {
+  const { t } = useTranslation(['options']);
+
   const {
     table: { heading, items },
     query: { isError }, // TODO #error handler
@@ -18,7 +21,7 @@ const TranslationsList = () => {
       <TableCell>
         <ButtonLink path={`${config.routes.translations.path}/${id}`}>{name}</ButtonLink>
       </TableCell>
-      <TableCell>{type}</TableCell>
+      <TableCell>{t(`options:translations.type.${type}`)}</TableCell>
     </>
   );
 
@@ -32,7 +35,7 @@ const TranslationsList = () => {
       rootPath={config.routes.translations.path}
       searchAttrs={['name']}
       searchLangAttrs={['value']}
-      sortColumns={['id', 'name', 'updated']}
+      sortColumns={['id', 'name', 'type', 'updated']}
     />
   );
 };

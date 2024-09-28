@@ -33,7 +33,7 @@ const TranslationsDetail = () => {
 
   const detailTitle = useMemo(() => {
     if (isNew) {
-      return 'New category';
+      return 'New translation';
     }
 
     if (data) {

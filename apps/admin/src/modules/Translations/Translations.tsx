@@ -10,7 +10,7 @@ const Translations = () => {
     <ViewLayout
       meta={{ title: 'Translations' }}
       title="Translations"
-      titleSlot={<NewButtonLink to={`${config.routes.translations.path}/new`}>New category</NewButtonLink>}
+      titleSlot={<NewButtonLink to={`${config.routes.translations.path}/new`}>New translation</NewButtonLink>}
     >
       <TranslationsList />
       <DetailDrawerWrapper rootPath={config.routes.translations.path}>
