@@ -21,6 +21,9 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Tooltip from '@mui/material/Tooltip';
 
 import { capitalizeString } from '@common';
 import { useConfirmSore } from '../../hooks';
@@ -55,6 +58,8 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
   searchLangAttrs = [],
   toolbarSlot,
   sortColumns = [],
+  onRowToggle,
+  onSelectedToggle,
 }: ListTableProps<T1, T2>) => {
   const { results, searchQuery, setSearchQuery } = useListTableSearch<T1, T2>({ items, searchAttrs, searchLangAttrs });
 
@@ -92,6 +97,12 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
   }, [selected, rows, page, onPageChange]);
 
   const openHandler = (id: number) => navigate(`${rootPath}/${id}`);
+  const toggleRowHandler = (id: number) => onRowToggle?.(id);
+
+  const toggleSelectedHandler = () => {
+    onSelectedToggle?.(selected);
+    setSelected([]);
+  };
 
   const deleteRowHandler = (id: number) => {
     onRowDelete(id);
@@ -203,7 +214,12 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
           <Stack direction="row" gap={2}>
             {toolbarSlot}
 
-            <ListTableSelectedMenu onDelete={deleteSelectedConfirmHandler} selected={selected.length} />
+            <ListTableSelectedMenu
+              onDelete={deleteSelectedConfirmHandler}
+              onToggle={toggleSelectedHandler}
+              selected={selected.length}
+              withToggle={!!onSelectedToggle}
+            />
           </Stack>
         </Stack>
         <Divider />
@@ -251,13 +267,27 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
                     </TableCell>
                     {renderRow(item, index)}
                     <TableCell align="right" sx={{ width: '200px' }}>
-                      <Stack direction="row" gap={2} sx={{ display: 'inline-flex' }}>
-                        <IconButton color="primary" onClick={() => openHandler(item.id)}>
-                          <EditIcon />
-                        </IconButton>
-                        <RowDeleteButton color="error" onClick={() => deleteRowConfirmHandler(item.id)}>
-                          <DeleteIcon />
-                        </RowDeleteButton>
+                      <Stack direction="row" gap={1} sx={{ display: 'inline-flex' }}>
+                        {!!onRowToggle && (
+                          <Tooltip enterDelay={250} placement="top-start" title="Toggle active">
+                            <IconButton
+                              color={item.active === 1 ? 'primary' : 'default'}
+                              onClick={() => toggleRowHandler(item.id)}
+                            >
+                              {item.active === 1 ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                        <Tooltip enterDelay={250} placement="top-start" title="Open detail">
+                          <IconButton color="primary" onClick={() => openHandler(item.id)}>
+                            <EditIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip enterDelay={250} placement="top-start" title="Delete row">
+                          <RowDeleteButton color="error" onClick={() => deleteRowConfirmHandler(item.id)}>
+                            <DeleteIcon />
+                          </RowDeleteButton>
+                        </Tooltip>
                       </Stack>
                     </TableCell>
                   </TableRow>

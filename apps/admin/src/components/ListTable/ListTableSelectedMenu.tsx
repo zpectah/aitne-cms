@@ -8,10 +8,12 @@ const SelectedItemsMenu = ({
   selected,
   onDelete,
   onToggle,
+  withToggle,
 }: {
   selected: number;
   onDelete?: () => void;
   onToggle?: () => void;
+  withToggle?: boolean;
 }) => {
   const { t } = useTranslation(['table']);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -52,7 +54,7 @@ const SelectedItemsMenu = ({
         open={open}
       >
         {onDelete && <MenuItem onClick={deleteSelectedHandler}>{t('btn.deleteSelected')}</MenuItem>}
-        {onToggle && <MenuItem onClick={toggleSelectedHandler}>{t('btn.toggleSelected')}</MenuItem>}
+        {withToggle && <MenuItem onClick={toggleSelectedHandler}>{t('btn.toggleSelected')}</MenuItem>}
       </Menu>
     </div>
   );

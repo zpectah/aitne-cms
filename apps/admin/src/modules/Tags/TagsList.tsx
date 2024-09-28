@@ -14,6 +14,8 @@ const TagsList = () => {
     query: { isError }, // TODO #error handler
     onRowDelete,
     onSelectedDelete,
+    onRowToggle,
+    onSelectedToggle,
   } = useTagsList();
 
   const renderRow = ({ id, name, color }: TagsModel) => (
@@ -30,7 +32,9 @@ const TagsList = () => {
       headingCells={heading}
       items={items}
       onRowDelete={onRowDelete}
+      onRowToggle={onRowToggle}
       onSelectedDelete={onSelectedDelete}
+      onSelectedToggle={onSelectedToggle}
       renderRow={renderRow}
       rootPath={config.routes.tags.path}
       searchAttrs={['name', 'color']}

@@ -14,6 +14,8 @@ const TranslationsList = () => {
     query: { isError }, // TODO #error handler
     onRowDelete,
     onSelectedDelete,
+    onRowToggle,
+    onSelectedToggle,
   } = useTranslationsList();
 
   const renderRow = ({ id, name, type }: TranslationsModel) => (
@@ -30,7 +32,9 @@ const TranslationsList = () => {
       headingCells={heading}
       items={items}
       onRowDelete={onRowDelete}
+      onRowToggle={onRowToggle}
       onSelectedDelete={onSelectedDelete}
+      onSelectedToggle={onSelectedToggle}
       renderRow={renderRow}
       rootPath={config.routes.translations.path}
       searchAttrs={['name']}

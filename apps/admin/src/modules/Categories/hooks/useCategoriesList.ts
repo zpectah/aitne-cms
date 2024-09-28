@@ -11,7 +11,7 @@ export const useCategoriesList = () => {
   } = useCategoriesQuery();
 
   const { t } = useTranslation(['table']);
-  const { deleteMutation, deleteSelectedMutation } = useCategoriesMutations();
+  const { deleteMutation, deleteSelectedMutation, toggleMutation, toggleSelectedMutation } = useCategoriesMutations();
   const { createToast } = useToastsStore();
 
   const heading = [
@@ -85,6 +85,56 @@ export const useCategoriesList = () => {
     }
   };
 
+  const rowToggleHandler = (id: number) => {
+    try {
+      toggleMutation.mutate(
+        {
+          id,
+        },
+        {
+          onSuccess: () => {
+            refetch();
+            createToast({
+              message: 'Item was successfully updated',
+              severity: 'success',
+              autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
+            });
+          },
+          onError: () => {
+            createToast({ message: 'There is an error...', severity: 'error' });
+          },
+        }
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const selectedToggleHandler = (selected: readonly number[]) => {
+    try {
+      toggleSelectedMutation.mutate(
+        {
+          ids: selected,
+        },
+        {
+          onSuccess: () => {
+            refetch();
+            createToast({
+              message: 'Selected items was successfully updated',
+              severity: 'success',
+              autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
+            });
+          },
+          onError: () => {
+            createToast({ message: 'There is an error...', severity: 'error' });
+          },
+        }
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return {
     table: {
       heading,
@@ -95,5 +145,7 @@ export const useCategoriesList = () => {
     query,
     onRowDelete: rowDeleteHandler,
     onSelectedDelete: selectedDeleteHandler,
+    onRowToggle: rowToggleHandler,
+    onSelectedToggle: selectedToggleHandler,
   };
 };

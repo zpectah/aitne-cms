@@ -11,6 +11,8 @@ export const UsersList = () => {
     query: { isError }, // TODO #error handler
     onRowDelete,
     onSelectedDelete,
+    onRowToggle,
+    onSelectedToggle,
   } = useUsersList();
 
   const renderRow = ({ id, firstname, lastname, email }: UsersModel) => (
@@ -29,7 +31,9 @@ export const UsersList = () => {
       headingCells={heading}
       items={items}
       onRowDelete={onRowDelete}
+      onRowToggle={onRowToggle}
       onSelectedDelete={onSelectedDelete}
+      onSelectedToggle={onSelectedToggle}
       renderRow={renderRow}
       rootPath={config.routes.users.path}
       searchAttrs={['firstname', 'lastname', 'email']}

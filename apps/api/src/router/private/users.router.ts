@@ -11,4 +11,7 @@ router.patch('/:id', users.update);
 router.delete('/:id', users.delete);
 router.patch('/delete', users.deleteSelected);
 
+router.patch('/toggle/:id', users.toggle);
+router.patch('/selected/toggle', users.toggleSelected);
+
 export default router;

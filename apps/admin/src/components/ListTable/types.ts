@@ -12,6 +12,8 @@ export type ListTableItemLang = { [p: string]: unknown };
 
 export interface ListTableItemProps {
   id: number;
+  active: number;
+  deleted: number;
   lang?: {
     [p: string]: ListTableItemLang;
   };
@@ -32,6 +34,8 @@ export interface ListTableProps<T1 extends ListTableItemProps, T2 extends ListTa
   checkboxProps?: Partial<CheckboxProps>;
   onRowDelete: (id: number) => void;
   onSelectedDelete: (selected: readonly number[]) => void;
+  onRowToggle?: (id: number) => void;
+  onSelectedToggle?: (selected: readonly number[]) => void;
   onRowDetail?: (id: number) => void;
   onRowSelect?: (id: number) => void;
   onSelectAllRows?: () => void;

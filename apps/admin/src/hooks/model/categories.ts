@@ -4,10 +4,12 @@ import axios from 'axios';
 import { CategoriesFormData, CategoriesModel } from '@model';
 import { API_CATEGORIES_BASE } from '../../constants';
 
+const API_ROOT = `${process.env.API_BASE}${API_CATEGORIES_BASE}`;
+
 export const useCategoriesQuery = () => {
   const query = useQuery<unknown, unknown, CategoriesModel[]>({
     queryKey: ['categories', 'categories-list'],
-    queryFn: () => axios.get(`${process.env.API_BASE}${API_CATEGORIES_BASE}`).then((res) => res.data),
+    queryFn: () => axios.get(API_ROOT).then((res) => res.data),
   });
 
   return {
@@ -18,7 +20,7 @@ export const useCategoriesQuery = () => {
 export const useCategoriesDetailQuery = (id: number | undefined) => {
   const query = useQuery({
     queryKey: ['categories', `categories-detail-${id}`],
-    queryFn: () => axios.get(`${process.env.API_BASE}${API_CATEGORIES_BASE}/${id}`).then((res) => res.data),
+    queryFn: () => axios.get(`${API_ROOT}/${id}`).then((res) => res.data),
     enabled: !!id,
   });
 
@@ -30,22 +32,32 @@ export const useCategoriesDetailQuery = (id: number | undefined) => {
 export const useCategoriesMutations = () => {
   const createMutation = useMutation<unknown, unknown, CategoriesFormData>({
     mutationKey: ['categories', 'categories-create'],
-    mutationFn: (payload) => axios.put(`${process.env.API_BASE}${API_CATEGORIES_BASE}`, payload),
+    mutationFn: (payload) => axios.put(API_ROOT, payload),
   });
 
   const updateMutation = useMutation<unknown, unknown, CategoriesFormData>({
     mutationKey: ['categories', 'categories-update'],
-    mutationFn: (payload) => axios.patch(`${process.env.API_BASE}${API_CATEGORIES_BASE}/${payload.id}`, payload),
+    mutationFn: (payload) => axios.patch(`${API_ROOT}/${payload.id}`, payload),
   });
 
   const deleteMutation = useMutation<unknown, unknown, { id: number }>({
     mutationKey: ['categories', 'categories-delete'],
-    mutationFn: ({ id }) => axios.delete(`${process.env.API_BASE}${API_CATEGORIES_BASE}/${id}`),
+    mutationFn: ({ id }) => axios.delete(`${API_ROOT}/${id}`),
   });
 
   const deleteSelectedMutation = useMutation<unknown, unknown, { ids: readonly number[] }>({
     mutationKey: ['categories', 'categories-selected-delete'],
-    mutationFn: (payload) => axios.patch(`${process.env.API_BASE}${API_CATEGORIES_BASE}/selected/delete`, payload),
+    mutationFn: (payload) => axios.patch(`${API_ROOT}/selected/delete`, payload),
+  });
+
+  const toggleMutation = useMutation<unknown, unknown, { id: number }>({
+    mutationKey: ['categories', 'categories-toggle'],
+    mutationFn: ({ id }) => axios.patch(`${API_ROOT}/toggle/${id}`),
+  });
+
+  const toggleSelectedMutation = useMutation<unknown, unknown, { ids: readonly number[] }>({
+    mutationKey: ['categories', 'categories-selected-toggle'],
+    mutationFn: (payload) => axios.patch(`${API_ROOT}/selected/toggle`, payload),
   });
 
   return {
@@ -53,5 +65,7 @@ export const useCategoriesMutations = () => {
     updateMutation,
     deleteMutation,
     deleteSelectedMutation,
+    toggleMutation,
+    toggleSelectedMutation,
   };
 };

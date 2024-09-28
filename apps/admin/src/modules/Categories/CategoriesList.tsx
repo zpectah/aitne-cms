@@ -11,6 +11,8 @@ const CategoriesList = () => {
     query: { isError }, // TODO #error handler
     onRowDelete,
     onSelectedDelete,
+    onRowToggle,
+    onSelectedToggle,
   } = useCategoriesList();
 
   const renderRow = ({ id, name, parent_id }: CategoriesModel) => (
@@ -27,7 +29,9 @@ const CategoriesList = () => {
       headingCells={heading}
       items={items}
       onRowDelete={onRowDelete}
+      onRowToggle={onRowToggle}
       onSelectedDelete={onSelectedDelete}
+      onSelectedToggle={onSelectedToggle}
       renderRow={renderRow}
       rootPath={config.routes.categories.path}
       searchAttrs={['name']}

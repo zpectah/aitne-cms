@@ -14,6 +14,8 @@ const ArticlesList = () => {
     query: { isError }, // TODO #error handler
     onRowDelete,
     onSelectedDelete,
+    onRowToggle,
+    onSelectedToggle,
   } = useArticlesList();
 
   const renderRow = ({ id, name, type }: ArticlesModel) => (
@@ -30,7 +32,9 @@ const ArticlesList = () => {
       headingCells={heading}
       items={items}
       onRowDelete={onRowDelete}
+      onRowToggle={onRowToggle}
       onSelectedDelete={onSelectedDelete}
+      onSelectedToggle={onSelectedToggle}
       renderRow={renderRow}
       rootPath={config.routes.articles.path}
       searchAttrs={['name', 'type']}
