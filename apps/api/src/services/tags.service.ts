@@ -12,7 +12,7 @@ const getTags = async (): Promise<TagsModelData[]> => {
 
   try {
     const query = `SELECT * FROM ${TABLE} WHERE deleted = 0`;
-    const [rows] = await pool.query<TagsModelData[]>(query);
+    const [rows] = await connection.query<TagsModelData[]>(query);
 
     return rows;
   } finally {
@@ -25,7 +25,7 @@ const getTagById = async (id: number): Promise<TagsModelData> => {
 
   try {
     const query = `SELECT * FROM ${TABLE} WHERE id = ? AND deleted = 0`;
-    const [rows] = await pool.query<TagsModelData[]>(query, [id]);
+    const [rows] = await connection.query<TagsModelData[]>(query, [id]);
 
     return rows[0];
   } finally {
@@ -53,7 +53,7 @@ const updateTag = async (id: number, data: Partial<TagsModel>): Promise<Affected
   try {
     const { name, color, active, deleted } = data;
     const query = `UPDATE ${TABLE} SET name = ?, color = ?, active = ?, deleted = ? WHERE id = ?`;
-    const [result] = await pool.execute<ResultSetHeader>(query, [name, color, active, deleted, id]);
+    const [result] = await connection.execute<ResultSetHeader>(query, [name, color, active, deleted, id]);
 
     return { affectedRows: result.affectedRows };
   } finally {

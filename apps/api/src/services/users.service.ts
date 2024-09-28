@@ -12,7 +12,7 @@ const getUsers = async (): Promise<UsersModelData[]> => {
 
   try {
     const query = `SELECT id, firstname, lastname, email, type, role, created, updated, active, deleted FROM ${TABLE} WHERE deleted = 0`;
-    const [rows] = await pool.query<UsersModelData[]>(query);
+    const [rows] = await connection.query<UsersModelData[]>(query);
 
     return rows;
   } finally {
@@ -25,7 +25,7 @@ const getUserById = async (id: number): Promise<UsersModelData> => {
 
   try {
     const query = `SELECT * FROM ${TABLE} WHERE id = ? AND deleted = 0`;
-    const [rows] = await pool.query<UsersModelData[]>(query, [id]);
+    const [rows] = await connection.query<UsersModelData[]>(query, [id]);
 
     return rows[0];
   } finally {
@@ -40,7 +40,7 @@ const createUser = async (data: UsersFormData): Promise<InsertedIdResponse> => {
     const { firstname, lastname, email, password, type, role, salt, active, deleted } = data;
     const query = `INSERT INTO ${TABLE} (firstname, lastname, email, password, type, role, salt, active, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-    const [result] = await pool.execute<ResultSetHeader>(query, [
+    const [result] = await connection.execute<ResultSetHeader>(query, [
       firstname,
       lastname,
       email,
@@ -69,12 +69,12 @@ const updateUser = async (id: number, data: Partial<UsersModel>): Promise<Affect
     const valuesWithPassword = [firstname, lastname, email, password, type, role, salt, active, id];
 
     if (password !== '' && salt !== '') {
-      const [result] = await pool.execute<ResultSetHeader>(queryWithPassword, valuesWithPassword);
+      const [result] = await connection.execute<ResultSetHeader>(queryWithPassword, valuesWithPassword);
 
       return { affectedRows: result.affectedRows };
     }
 
-    const [result] = await pool.execute<ResultSetHeader>(query, values);
+    const [result] = await connection.execute<ResultSetHeader>(query, values);
 
     return { affectedRows: result.affectedRows };
   } finally {

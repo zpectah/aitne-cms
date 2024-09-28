@@ -4,19 +4,41 @@ import { CategoriesModelData, CategoriesFormData, CategoriesLangProps, Categorie
 import { pool } from '../utils';
 import { deleteRow, deleteRows, toggleRow, toggleRows } from './common';
 import { AffectedRowsResponse, AffectedRowsWithLangResponse, InsertedIdResponse } from '../types';
+import settingsService from './settings.service';
 
 const TABLE = 'cms_categories';
-const LANGUAGES = ['en', 'cs']; // TODO
+
+const getCategoriesObject = (row: CategoriesModelData, languages: string[]) => {
+  const langData: CategoriesLangProps = {};
+
+  languages.forEach((lang) => {
+    langData[lang] = {
+      title: row[`${lang}_title`],
+    };
+  });
+
+  return {
+    id: row.id,
+    name: row.name,
+    parent_id: row.parent_id,
+    updated: row.updated,
+    created: row.created,
+    active: row.active,
+    deleted: row.deleted,
+    lang: langData,
+  };
+};
 
 const getCategories = async (): Promise<CategoriesModel[]> => {
   const connection = await pool.getConnection();
 
   try {
-    const languageSelects = LANGUAGES.map((lang) => `${lang}.title AS ${lang}_title`).join(', ');
+    const languages = (await settingsService.getByName('app.language_active')) as string[];
+    const languageSelects = languages.map((lang) => `${lang}.title AS ${lang}_title`).join(', ');
 
-    const languageJoins = LANGUAGES.map(
-      (lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.category_id`
-    ).join(' ');
+    const languageJoins = languages
+      .map((lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.category_id`)
+      .join(' ');
 
     const query = `
       SELECT
@@ -33,28 +55,9 @@ const getCategories = async (): Promise<CategoriesModel[]> => {
       WHERE deleted = 0;
     `;
 
-    const [rows] = await pool.query<CategoriesModelData[]>(query);
+    const [rows] = await connection.query<CategoriesModelData[]>(query);
 
-    return rows.map((row) => {
-      const langData: CategoriesLangProps = {};
-
-      LANGUAGES.forEach((lang) => {
-        langData[lang] = {
-          title: row[`${lang}_title`],
-        };
-      });
-
-      return {
-        id: row.id,
-        name: row.name,
-        parent_id: row.parent_id,
-        updated: row.updated,
-        created: row.created,
-        active: row.active,
-        deleted: row.deleted,
-        lang: langData,
-      };
-    });
+    return rows.map((row) => getCategoriesObject(row, languages));
   } finally {
     connection.release();
   }
@@ -64,11 +67,12 @@ const getCategoryById = async (id: number): Promise<CategoriesModel> => {
   const connection = await pool.getConnection();
 
   try {
-    const languageSelects = LANGUAGES.map((lang) => `${lang}.title AS ${lang}_title`).join(', ');
+    const languages = (await settingsService.getByName('app.language_active')) as string[];
+    const languageSelects = languages.map((lang) => `${lang}.title AS ${lang}_title`).join(', ');
 
-    const languageJoins = LANGUAGES.map(
-      (lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.category_id`
-    ).join(' ');
+    const languageJoins = languages
+      .map((lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.category_id`)
+      .join(' ');
 
     const query = `
       SELECT
@@ -85,26 +89,9 @@ const getCategoryById = async (id: number): Promise<CategoriesModel> => {
       WHERE deleted = 0 AND c.id = ?;
     `;
 
-    const [rows] = await pool.query<CategoriesModelData[]>(query, [id]);
-    const row = rows[0];
-    const langData: CategoriesLangProps = {};
+    const [rows] = await connection.query<CategoriesModelData[]>(query, [id]);
 
-    LANGUAGES.forEach((lang) => {
-      langData[lang] = {
-        title: row[`${lang}_title`],
-      };
-    });
-
-    return {
-      id: row.id,
-      name: row.name,
-      parent_id: row.parent_id,
-      updated: row.updated,
-      created: row.created,
-      active: row.active,
-      deleted: row.deleted,
-      lang: langData,
-    };
+    return getCategoriesObject(rows[0], languages);
   } finally {
     connection.release();
   }
@@ -119,7 +106,7 @@ const createCategory = async (data: CategoriesFormData): Promise<InsertedIdRespo
       VALUES (?, ?, ?, ?);
     `;
 
-    const [result] = await pool.execute<ResultSetHeader>(insertQuery, [
+    const [result] = await connection.execute<ResultSetHeader>(insertQuery, [
       data.name,
       data.parent_id,
       data.active,

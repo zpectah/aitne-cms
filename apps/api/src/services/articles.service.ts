@@ -4,22 +4,54 @@ import { ArticlesModelData, ArticlesFormData, ArticlesLangProps, ArticlesModel }
 import { pool } from '../utils';
 import { deleteRow, deleteRows, toggleRow, toggleRows } from './common';
 import { AffectedRowsResponse, AffectedRowsWithLangResponse, InsertedIdResponse } from '../types';
+import settingsService from './settings.service';
 
 const TABLE = 'cms_articles';
-const LANGUAGES = ['en', 'cs']; // TODO
+
+const getArticlesObject = (row: ArticlesModelData, languages: string[]) => {
+  const langData: ArticlesLangProps = {};
+
+  languages.forEach((lang) => {
+    langData[lang] = {
+      title: row[`${lang}_title`],
+      description: row[`${lang}_description`],
+      content: row[`${lang}_content`],
+    };
+  });
+
+  return {
+    id: row.id,
+    name: row.name,
+    type: row.type,
+    tags: row.tags.split(',').map(Number),
+    categories: row.categories.split(',').map(Number),
+    custom_fields: '', // TODO
+    publish_start: row.publish_start,
+    publish_end: row.publish_end,
+    updated: row.updated,
+    created: row.created,
+    active: row.active,
+    deleted: row.deleted,
+    lang: langData,
+  };
+};
 
 const getArticles = async (): Promise<ArticlesModel[]> => {
   const connection = await pool.getConnection();
 
   try {
-    const languageSelects = LANGUAGES.map(
-      (lang) =>
-        `${lang}.title AS ${lang}_title, ${lang}.description AS ${lang}_description, ${lang}.content AS ${lang}_content`
-    ).join(', ');
+    const languages = (await settingsService.getByName('app.language_active')) as string[];
 
-    const languageJoins = LANGUAGES.map(
-      (lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.article_id`
-    ).join(' ');
+    const languageSelects = languages
+      .map(
+        (lang) =>
+          `${lang}.title AS ${lang}_title, ${lang}.description AS ${lang}_description, ${lang}.content AS ${lang}_content`
+      )
+      .join(', ');
+
+    const languageJoins = languages
+      .map((lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.article_id`)
+      .join(' ');
 
     const query = `
       SELECT
@@ -40,35 +72,9 @@ const getArticles = async (): Promise<ArticlesModel[]> => {
       WHERE deleted = 0;
     `;
 
-    const [rows] = await pool.query<ArticlesModelData[]>(query);
+    const [rows] = await connection.query<ArticlesModelData[]>(query);
 
-    return rows.map((row) => {
-      const langData: ArticlesLangProps = {};
-
-      LANGUAGES.forEach((lang) => {
-        langData[lang] = {
-          title: row[`${lang}_title`],
-          description: row[`${lang}_description`],
-          content: row[`${lang}_content`],
-        };
-      });
-
-      return {
-        id: row.id,
-        name: row.name,
-        type: row.type,
-        tags: row.tags.split(',').map(Number),
-        categories: row.categories.split(',').map(Number),
-        custom_fields: '', // TODO
-        publish_start: row.publish_start,
-        publish_end: row.publish_end,
-        updated: row.updated,
-        created: row.created,
-        active: row.active,
-        deleted: row.deleted,
-        lang: langData,
-      };
-    });
+    return rows.map((row) => getArticlesObject(row, languages));
   } finally {
     connection.release();
   }
@@ -78,14 +84,18 @@ const getArticleById = async (id: number): Promise<ArticlesModel> => {
   const connection = await pool.getConnection();
 
   try {
-    const languageSelects = LANGUAGES.map(
-      (lang) =>
-        `${lang}.title AS ${lang}_title, ${lang}.description AS ${lang}_description, ${lang}.content AS ${lang}_content`
-    ).join(', ');
+    const languages = (await settingsService.getByName('app.language_active')) as string[];
 
-    const languageJoins = LANGUAGES.map(
-      (lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.article_id`
-    ).join(' ');
+    const languageSelects = languages
+      .map(
+        (lang) =>
+          `${lang}.title AS ${lang}_title, ${lang}.description AS ${lang}_description, ${lang}.content AS ${lang}_content`
+      )
+      .join(', ');
+
+    const languageJoins = languages
+      .map((lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.article_id`)
+      .join(' ');
 
     const query = `
       SELECT
@@ -106,33 +116,9 @@ const getArticleById = async (id: number): Promise<ArticlesModel> => {
       WHERE deleted = 0 AND c.id = ?;
     `;
 
-    const [rows] = await pool.query<ArticlesModelData[]>(query, [id]);
-    const row = rows[0];
-    const langData: ArticlesLangProps = {};
+    const [rows] = await connection.query<ArticlesModelData[]>(query, [id]);
 
-    LANGUAGES.forEach((lang) => {
-      langData[lang] = {
-        title: row[`${lang}_title`],
-        description: row[`${lang}_description`],
-        content: row[`${lang}_content`],
-      };
-    });
-
-    return {
-      id: row.id,
-      name: row.name,
-      type: row.type,
-      tags: row.tags.split(',').map(Number),
-      categories: row.categories.split(',').map(Number),
-      custom_fields: '', // TODO
-      publish_start: row.publish_start,
-      publish_end: row.publish_end,
-      updated: row.updated,
-      created: row.created,
-      active: row.active,
-      deleted: row.deleted,
-      lang: langData,
-    };
+    return getArticlesObject(rows[0], languages);
   } finally {
     connection.release();
   }
@@ -147,7 +133,7 @@ const createArticle = async (data: ArticlesFormData): Promise<InsertedIdResponse
       VALUES (?, ?, ?, ?, ?, ?, ?, ?);
     `;
 
-    const [result] = await pool.execute<ResultSetHeader>(insertQuery, [
+    const [result] = await connection.execute<ResultSetHeader>(insertQuery, [
       data.name,
       data.type,
       data.tags.toString(),

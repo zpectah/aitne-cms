@@ -45,7 +45,7 @@ const getSettings = async (): Promise<SettingsModelData> => {
 
   try {
     const query = `SELECT * FROM ${TABLE}`;
-    const [rows] = await pool.query<SettingsTableModelData[]>(query);
+    const [rows] = await connection.query<SettingsTableModelData[]>(query);
 
     return transformRows(rows);
   } finally {
@@ -58,7 +58,7 @@ const getSettingsByName = async (name: keyof SettingsModel): Promise<SettingsRow
 
   try {
     const query = `SELECT * FROM ${TABLE} WHERE name = ?`;
-    const [rows] = await pool.query<SettingsTableModelData[]>(query, [name]);
+    const [rows] = await connection.query<SettingsTableModelData[]>(query, [name]);
 
     return transformRows(rows)[name];
   } finally {

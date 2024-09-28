@@ -4,19 +4,41 @@ import { TranslationsModelData, TranslationsFormData, TranslationsLangProps, Tra
 import { pool } from '../utils';
 import { deleteRow, deleteRows, toggleRow, toggleRows } from './common';
 import { AffectedRowsResponse, AffectedRowsWithLangResponse, InsertedIdResponse } from '../types';
+import settingsService from './settings.service';
 
 const TABLE = 'cms_translations';
-const LANGUAGES = ['en', 'cs']; // TODO
+
+const getTranslationsObject = (row: TranslationsModelData, languages: string[]) => {
+  const langData: TranslationsLangProps = {};
+
+  languages.forEach((lang) => {
+    langData[lang] = {
+      value: row[`${lang}_value`],
+    };
+  });
+
+  return {
+    id: row.id,
+    name: row.name,
+    type: row.type,
+    updated: row.updated,
+    created: row.created,
+    active: row.active,
+    deleted: row.deleted,
+    lang: langData,
+  };
+};
 
 const getTranslations = async (): Promise<TranslationsModel[]> => {
   const connection = await pool.getConnection();
 
   try {
-    const languageSelects = LANGUAGES.map((lang) => `${lang}.value AS ${lang}_value`).join(', ');
+    const languages = (await settingsService.getByName('app.language_active')) as string[];
+    const languageSelects = languages.map((lang) => `${lang}.value AS ${lang}_value`).join(', ');
 
-    const languageJoins = LANGUAGES.map(
-      (lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.translation_id`
-    ).join(' ');
+    const languageJoins = languages
+      .map((lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.translation_id`)
+      .join(' ');
 
     const query = `
       SELECT
@@ -33,28 +55,9 @@ const getTranslations = async (): Promise<TranslationsModel[]> => {
       WHERE deleted = 0;
     `;
 
-    const [rows] = await pool.query<TranslationsModelData[]>(query);
+    const [rows] = await connection.query<TranslationsModelData[]>(query);
 
-    return rows.map((row) => {
-      const langData: TranslationsLangProps = {};
-
-      LANGUAGES.forEach((lang) => {
-        langData[lang] = {
-          value: row[`${lang}_value`],
-        };
-      });
-
-      return {
-        id: row.id,
-        name: row.name,
-        type: row.type,
-        updated: row.updated,
-        created: row.created,
-        active: row.active,
-        deleted: row.deleted,
-        lang: langData,
-      };
-    });
+    return rows.map((row) => getTranslationsObject(row, languages));
   } finally {
     connection.release();
   }
@@ -64,11 +67,12 @@ const getTranslationById = async (id: number): Promise<TranslationsModel> => {
   const connection = await pool.getConnection();
 
   try {
-    const languageSelects = LANGUAGES.map((lang) => `${lang}.value AS ${lang}_value`).join(', ');
+    const languages = (await settingsService.getByName('app.language_active')) as string[];
+    const languageSelects = languages.map((lang) => `${lang}.value AS ${lang}_value`).join(', ');
 
-    const languageJoins = LANGUAGES.map(
-      (lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.translation_id`
-    ).join(' ');
+    const languageJoins = languages
+      .map((lang) => `LEFT JOIN ${TABLE}__${lang} ${lang} ON c.id = ${lang}.translation_id`)
+      .join(' ');
 
     const query = `
       SELECT
@@ -85,26 +89,9 @@ const getTranslationById = async (id: number): Promise<TranslationsModel> => {
       WHERE deleted = 0 AND c.id = ?;
     `;
 
-    const [rows] = await pool.query<TranslationsModelData[]>(query, [id]);
-    const row = rows[0];
-    const langData: TranslationsLangProps = {};
+    const [rows] = await connection.query<TranslationsModelData[]>(query, [id]);
 
-    LANGUAGES.forEach((lang) => {
-      langData[lang] = {
-        value: row[`${lang}_value`],
-      };
-    });
-
-    return {
-      id: row.id,
-      name: row.name,
-      type: row.type,
-      updated: row.updated,
-      created: row.created,
-      active: row.active,
-      deleted: row.deleted,
-      lang: langData,
-    };
+    return getTranslationsObject(rows[0], languages);
   } finally {
     connection.release();
   }
@@ -119,7 +106,7 @@ const createTranslation = async (data: TranslationsFormData): Promise<InsertedId
       VALUES (?, ?, ?, ?);
     `;
 
-    const [result] = await pool.execute<ResultSetHeader>(insertQuery, [
+    const [result] = await connection.execute<ResultSetHeader>(insertQuery, [
       data.name,
       data.type,
       data.active,
