@@ -8,6 +8,9 @@ import ArticleIcon from '@mui/icons-material/Article';
 import TagIcon from '@mui/icons-material/Tag';
 import CategoryIcon from '@mui/icons-material/Category';
 import TranslateIcon from '@mui/icons-material/Translate';
+import CloudIcon from '@mui/icons-material/Cloud';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 import config from '../../../../config';
 import SidebarNavigationItem from './SidebarNavigationItem';
@@ -53,15 +56,34 @@ const SidebarNavigationPrimary = () => {
       icon: <TranslateIcon />,
     },
     {
+      key: 5,
+      path: routes.media.path,
+      label: t('media.label'),
+      icon: <CloudIcon />,
+    },
+    {
+      key: 6,
+      path: routes.members.path,
+      label: t('members.label'),
+      icon: <PeopleOutlineIcon />,
+    },
+    {
+      key: 7,
+      path: routes.pages.path,
+      label: t('pages.label'),
+      icon: <DescriptionIcon />,
+    },
+
+    {
       key: 100,
       path: routes.login.path,
-      label: t('login.label'),
+      label: `${t('login.label')} *`,
       icon: <QuestionMarkIcon />,
     },
     {
       key: 101,
       path: routes.passwordRecovery.path,
-      label: t('passwordRecovery.label'),
+      label: `${t('passwordRecovery.label')} *`,
       icon: <QuestionMarkIcon />,
     },
   ];

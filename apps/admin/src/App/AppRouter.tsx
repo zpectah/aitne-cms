@@ -14,6 +14,9 @@ const Settings = lazy(() => import('../modules/Settings/Settings'));
 const Tags = lazy(() => import('../modules/Tags/Tags'));
 const Categories = lazy(() => import('../modules/Categories/Categories'));
 const Translations = lazy(() => import('../modules/Translations/Translations'));
+const Media = lazy(() => import('../modules/Media/Media'));
+const Members = lazy(() => import('../modules/Members/Members'));
+const Pages = lazy(() => import('../modules/Pages/Pages'));
 
 const AppRouter = () => {
   const { routes } = config;
@@ -119,6 +122,36 @@ const AppRouter = () => {
               {
                 path: `${routes.translations.path}/:id`,
                 element: <Translations />,
+              },
+            ],
+          },
+          {
+            path: routes.media.path,
+            element: <Media />,
+            children: [
+              {
+                path: `${routes.media.path}/:id`,
+                element: <Media />,
+              },
+            ],
+          },
+          {
+            path: routes.members.path,
+            element: <Members />,
+            children: [
+              {
+                path: `${routes.members.path}/:id`,
+                element: <Members />,
+              },
+            ],
+          },
+          {
+            path: routes.pages.path,
+            element: <Pages />,
+            children: [
+              {
+                path: `${routes.pages.path}/:id`,
+                element: <Pages />,
               },
             ],
           },

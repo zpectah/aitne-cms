@@ -27,13 +27,12 @@ export default {
     dashboard: {
       path: '/dashboard',
     },
-    articles: {
-      path: '/articles',
-    },
     settings: {
       path: '/settings',
       routes: {
-        global: {},
+        global: {
+          path: '/settings',
+        },
         system: {
           path: '/settings/system',
         },
@@ -44,6 +43,9 @@ export default {
           path: '/settings/maintenance',
         },
       },
+    },
+    articles: {
+      path: '/articles',
     },
     users: {
       path: '/users',
@@ -56,6 +58,15 @@ export default {
     },
     translations: {
       path: '/translations',
+    },
+    media: {
+      path: '/media',
+    },
+    members: {
+      path: '/members',
+    },
+    pages: {
+      path: '/pages',
     },
   },
 };
