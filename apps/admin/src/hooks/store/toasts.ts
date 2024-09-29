@@ -13,8 +13,8 @@ const useToastsStore = create<ToastsStore>((set, getState) => {
   const toasts: ToastItem[] = [];
 
   const createToastHandler = (toast: Omit<ToastItem, 'id'>) => {
-    const s = getState();
-    const newToasts: ToastItem[] = [...s.toasts];
+    const state = getState();
+    const newToasts: ToastItem[] = [...state.toasts];
 
     newToasts.push({
       id: getRandomUUID(),
@@ -25,8 +25,8 @@ const useToastsStore = create<ToastsStore>((set, getState) => {
   };
 
   const destroyToastHandler = (id: string) => {
-    const s = getState();
-    const newToasts: ToastItem[] = [...s.toasts];
+    const state = getState();
+    const newToasts: ToastItem[] = [...state.toasts];
     const index = newToasts.findIndex((toast) => toast.id === id);
 
     if (index > -1) newToasts.splice(index, 1);

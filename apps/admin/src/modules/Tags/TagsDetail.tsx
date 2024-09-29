@@ -15,7 +15,7 @@ import { useTagsDetail } from './hooks';
 const TagsDetail = () => {
   const { id } = useParams();
   const { onConfirm } = useConfirmSore();
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['common', 'modules']);
   const isNew = useMemo(() => id === 'new', [id]);
 
   const {
@@ -31,12 +31,13 @@ const TagsDetail = () => {
 
   const detailTitle = useMemo(() => {
     if (isNew) {
-      return 'New tag';
+      return t('modules:tags.new');
     }
 
     if (data) {
       return data.name;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isNew, data]);
 
   useEffect(() => {

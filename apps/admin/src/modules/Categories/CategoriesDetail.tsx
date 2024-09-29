@@ -16,7 +16,7 @@ import { useCategoriesDetail } from './hooks';
 const CategoriesDetail = () => {
   const { id } = useParams();
   const { onConfirm } = useConfirmSore();
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['common', 'modules']);
   const isNew = useMemo(() => id === 'new', [id]);
 
   const {
@@ -32,12 +32,13 @@ const CategoriesDetail = () => {
 
   const detailTitle = useMemo(() => {
     if (isNew) {
-      return 'New category';
+      return t('modules:categories.new');
     }
 
     if (data) {
       return data.name;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isNew, data]);
 
   useEffect(() => {

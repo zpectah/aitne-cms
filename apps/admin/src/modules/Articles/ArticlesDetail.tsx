@@ -26,7 +26,7 @@ import { useArticlesDetail } from './hooks';
 const ArticlesDetail = () => {
   const { id } = useParams();
   const { onConfirm } = useConfirmSore();
-  const { t, i18n } = useTranslation(['common']);
+  const { t, i18n } = useTranslation(['common', 'modules']);
   const isNew = useMemo(() => id === 'new', [id]);
 
   const {
@@ -43,12 +43,13 @@ const ArticlesDetail = () => {
 
   const detailTitle = useMemo(() => {
     if (isNew) {
-      return 'New article';
+      return t('modules:articles.new');
     }
 
     if (data) {
       return data.name;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isNew, data]);
 
   useEffect(() => {

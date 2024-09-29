@@ -16,7 +16,7 @@ import { useUsersDetail } from './hooks';
 const UsersDetail = () => {
   const { id } = useParams();
   const { onConfirm } = useConfirmSore();
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['common', 'modules']);
   const isNew = useMemo(() => id === 'new', [id]);
 
   const {
@@ -32,12 +32,13 @@ const UsersDetail = () => {
 
   const detailTitle = useMemo(() => {
     if (isNew) {
-      return 'New user';
+      return t('modules:users.new');
     }
 
     if (data) {
       return data.email;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isNew, data]);
 
   useEffect(() => {
