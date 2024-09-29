@@ -1,5 +1,9 @@
 export { default as articles } from './articles.service';
 export { default as categories } from './categories.service';
+export { default as comments } from './comments.service';
+export { default as media } from './media.service';
+export { default as members } from './members.service';
+export { default as pages } from './pages.service';
 export { default as settings } from './settings.service';
 export { default as tags } from './tags.service';
 export { default as translations } from './translations.service';

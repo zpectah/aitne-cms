@@ -1,3 +1,5 @@
+import { RowDataPacket } from 'mysql2';
+
 import { commentsOriginTypeKeys } from '../enums';
 
 export type CommentsOriginType = keyof typeof commentsOriginTypeKeys;
@@ -11,4 +13,11 @@ export interface CommentsModel {
   title: string;
   content: string;
   created: string;
+  deleted: number;
+}
+
+export type CommentsModelData = RowDataPacket & CommentsModel;
+
+export interface CommentsFormData extends Omit<CommentsModel, 'id' | 'created'> {
+  id?: number | 'new';
 }

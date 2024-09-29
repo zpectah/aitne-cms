@@ -1,3 +1,5 @@
+import { RowDataPacket } from 'mysql2';
+
 import { membersTypeKeys } from '../enums';
 
 export type MembersType = keyof typeof membersTypeKeys;
@@ -34,4 +36,10 @@ export interface MembersModel {
   updated: string;
   active: number;
   deleted: number;
+}
+
+export type MembersModelData = RowDataPacket & MembersModel;
+
+export interface MembersFormData extends Omit<MembersModel, 'id' | 'created' | 'updated'> {
+  id?: number | 'new';
 }
