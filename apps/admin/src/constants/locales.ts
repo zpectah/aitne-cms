@@ -19,6 +19,14 @@ const locales: Locales = {
       time: 'hh:mm',
     },
   },
+  sk: {
+    label: 'Slovenčina',
+    format: {
+      datetime: 'DD.MM.YYYY',
+      date: 'DD.MM.YYYY hh:mm',
+      time: 'hh:mm',
+    },
+  },
 };
 
 export default locales;

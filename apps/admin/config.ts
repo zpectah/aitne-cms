@@ -8,6 +8,9 @@ export default {
     fallback: 'en',
     supported: ['en', 'cs'],
   },
+  theme: {
+    mode: 'light',
+  },
   routes: {
     root: {
       path: '/',

@@ -1,4 +1,4 @@
-import { useState, useMemo, MouseEvent, ChangeEvent, useCallback } from 'react';
+import { useState, useMemo, MouseEvent, ChangeEvent } from 'react';
 
 import { listTableOrderKeys, ListTableItemProps, UseListTable, ListTableOrder } from './types';
 
@@ -93,6 +93,7 @@ export const useListTable = <T extends ListTableItemProps>({ items = [], perPage
     onPageChange: changePageHandler,
     onRowsPerPageChange: changeRowsPerPageHandler,
     setSelected,
+    setOrder,
     emptyRows,
     order,
     orderBy,

@@ -17,18 +17,18 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Stack from '@mui/material/Stack';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Tooltip from '@mui/material/Tooltip';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ToggleButton from '@mui/material/ToggleButton';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 import { capitalizeString } from '@common';
 import { useConfirmSore } from '../../hooks';
-import { SearchInput } from '../input';
-import { ListTableProps, ListTableItemProps, ListTableItemLang, listTableOrderKeys } from './types';
+import { SearchInput, Select } from '../input';
+import { listTableOrderKeys, ListTableProps, ListTableItemProps, ListTableItemLang, ListTableOrder } from './types';
 import { ROWS_PER_PAGE_OPTIONS, SEARCH_MIN_LENGTH } from './constants';
 import { useListTable } from './useListTable';
 import { useListTableSearch } from './useListTableSearch';
@@ -76,6 +76,7 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
     isChecked,
     emptyRows,
     setSelected,
+    setOrder,
     onSort,
     order,
     orderBy,
@@ -84,7 +85,7 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
     perPage,
   });
 
-  const { t } = useTranslation(['common', 'table']);
+  const { t } = useTranslation(['common', 'table', 'message']);
   const { onConfirm } = useConfirmSore();
   const navigate = useNavigate();
 
@@ -111,7 +112,7 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
   };
 
   const deleteRowConfirmHandler = (id: number) =>
-    onConfirm(() => deleteRowHandler(id), 'Do you want to delete this item?');
+    onConfirm(() => deleteRowHandler(id), t('message:confirm.deleteItem'));
 
   const deleteSelectedHandler = () => {
     onSelectedDelete(selected);
@@ -120,7 +121,7 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
   };
 
   const deleteSelectedConfirmHandler = () =>
-    onConfirm(() => deleteSelectedHandler(), 'Do you want to delete these items?');
+    onConfirm(() => deleteSelectedHandler(), t('message:confirm.deleteSelected'));
 
   const rowSelectHandler = (event: MouseEvent<unknown>, id: number) => {
     onSelect(event, id);
@@ -165,6 +166,22 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headingCells, searchQuery, results]);
 
+  const toolbarSortOrderOptions = Object.keys(listTableOrderKeys).map((item) => ({
+    id: item,
+    value: item,
+    label: capitalizeString(item),
+  }));
+
+  const toolbarSortOrderByOptions = useMemo(
+    () =>
+      sortColumns.map(String).map((item) => ({
+        id: item,
+        value: item,
+        label: capitalizeString(item),
+      })),
+    [sortColumns]
+  );
+
   const renderToolbar = useMemo(
     () => (
       <>
@@ -185,48 +202,63 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
               value={searchQuery}
             />
           </Stack>
-          <Stack direction="row" gap={2}>
-            <ToggleButtonGroup value={orderBy}>
-              {sortColumns.map(String).map((item) => (
-                <ToggleButton
-                  aria-label={`sort table by: ${item}`}
-                  key={item}
-                  onClick={() => onSort(item as keyof T1)}
-                  size="small"
-                  sx={{ px: 1.75, gap: 1 }}
-                  value={item}
-                >
-                  {capitalizeString(item)}
-                  {orderBy === item ? (
-                    // eslint-disable-next-line react/jsx-no-useless-fragment
-                    <>
-                      {order === listTableOrderKeys.asc ? (
-                        <ArrowDownwardIcon fontSize="inherit" />
-                      ) : (
-                        <ArrowUpwardIcon fontSize="inherit" />
-                      )}
-                    </>
-                  ) : null}
-                </ToggleButton>
-              ))}
-            </ToggleButtonGroup>
+          <Stack direction="row" gap={1}>
+            {toolbarSlot}
           </Stack>
           <Stack direction="row" gap={2}>
-            {toolbarSlot}
-
             <ListTableSelectedMenu
               onDelete={deleteSelectedConfirmHandler}
               onToggle={toggleSelectedHandler}
               selected={selected.length}
               withToggle={!!onSelectedToggle}
             />
+            <Stack direction="row" gap={1}>
+              <ToggleButtonGroup
+                exclusive
+                onChange={(__, value) => setOrder(value as ListTableOrder)}
+                size="small"
+                value={order}
+              >
+                {toolbarSortOrderOptions.map((item) => (
+                  <Tooltip key={item.id} title={item.label}>
+                    <ToggleButton sx={{ px: 1.5 }} value={item.value}>
+                      {item.value === listTableOrderKeys.asc ? (
+                        <ArrowDownwardIcon fontSize="small" />
+                      ) : (
+                        <ArrowUpwardIcon fontSize="small" />
+                      )}
+                    </ToggleButton>
+                  </Tooltip>
+                ))}
+              </ToggleButtonGroup>
+              <Select
+                defaultValue="id"
+                items={toolbarSortOrderByOptions}
+                onChange={(e) => onSort(e.target.value as keyof T1)}
+                size="small"
+                sx={{ width: '100px' }}
+                value={orderBy}
+              />
+            </Stack>
           </Stack>
         </Stack>
         <Divider />
       </>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [searchQuery, selected, setSearchQuery, toolbarSlot, onSort, sortColumns]
+    [
+      searchQuery,
+      toolbarSlot,
+      selected,
+      onSelectedToggle,
+      order,
+      toolbarSortOrderOptions,
+      toolbarSortOrderByOptions,
+      orderBy,
+      setSearchQuery,
+      setOrder,
+      onSort,
+    ]
   );
 
   return (

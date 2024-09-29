@@ -10,6 +10,8 @@ import HeaderNotifications from './HeaderNotifications';
 import HeaderUser from './HeaderUser';
 import HeaderSearch from './HeaderSearch';
 import HeaderBreadcrumbs from './HeaderBreadcrumbs';
+import HeaderLocales from './HeaderLocales';
+import HeaderTheme from './HeaderTheme';
 
 const HeaderWrapper = styled('header')(({ theme }) => ({
   width: '100%',
@@ -46,6 +48,8 @@ const Header = () => {
           <Stack direction="row" gap={2}>
             <HeaderSearch />
             <HeaderNotifications />
+            <HeaderTheme />
+            <HeaderLocales />
             <HeaderUser />
           </Stack>
         </HeaderContent>

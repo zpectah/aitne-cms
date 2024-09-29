@@ -1,0 +1,2 @@
+export const STORAGE_LOCALES_KEY = 'LOCALES';
+export const STORAGE_THEME_MODE_KEY = 'THEME';

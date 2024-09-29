@@ -1,6 +1,9 @@
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
+  colorSchemes: {
+    dark: true,
+  },
   palette: {
     primary: {
       main: '#01719A',
@@ -9,12 +12,14 @@ const theme = createTheme({
   typography: {
     fontFamily: '"Open Sans", sans-serif',
     h1: {
-      fontSize: '2.35rem',
-      fontWeight: 300,
+      fontSize: '2rem',
+      fontWeight: 500,
+      letterSpacing: '-.025em',
     },
     h2: {
       fontSize: '2rem',
       fontWeight: 700,
+      textTransform: 'uppercase',
     },
     h3: {
       fontSize: '1.6rem',

@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 
+import config from '../../../../config';
 import { useLayoutStore, useBreakpoint } from '../../../hooks';
 import { SidebarNavigationPrimary, SidebarNavigationSecondary } from '../navigation';
 import { SIDEBAR_DESKTOP_WIDTH, SIDEBAR_WIDTH_WIDTH, HEADER_DESKTOP_HEIGHT } from '../../../styles';
@@ -71,7 +72,7 @@ const Sidebar = () => {
     <SidebarWrapper isMobile={isMobile} isOpen={sidebarOpen}>
       <SidebarHeading isMobile={isMobile}>
         <Typography component="h1" variant="h1">
-          logo
+          {config.cms.meta.name}
         </Typography>
         <IconButton onClick={sidebarToggle}>
           <MenuOpenIcon />

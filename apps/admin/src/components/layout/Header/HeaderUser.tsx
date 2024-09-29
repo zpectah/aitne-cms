@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -7,14 +7,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 const HeaderUser = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-
-  const clickHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const closeHandler = () => {
-    setAnchorEl(null);
-  };
+  const openHandler = (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
+  const closeHandler = () => setAnchorEl(null);
 
   return (
     <>
@@ -23,7 +17,7 @@ const HeaderUser = () => {
         aria-expanded={open ? 'true' : undefined}
         aria-haspopup="true"
         id="header-user-trigger"
-        onClick={clickHandler}
+        onClick={openHandler}
       >
         <AccountCircleIcon />
       </IconButton>

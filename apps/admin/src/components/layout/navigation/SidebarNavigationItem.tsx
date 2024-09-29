@@ -40,7 +40,7 @@ const SidebarNavigationItem = ({
     <NavigationItem disablePadding>
       <ListItemButton component={Link} onClick={clickHandler} selected={selected} {...rest}>
         {icon && <ListItemIcon sx={{ minWidth: '2.75rem' }}>{icon}</ListItemIcon>}
-        <ListItemText primary={children} />
+        <ListItemText disableTypography primary={children} sx={{ fontWeight: 600 }} />
       </ListItemButton>
     </NavigationItem>
   );
