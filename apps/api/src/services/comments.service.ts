@@ -1,6 +1,6 @@
 import { ResultSetHeader } from 'mysql2/promise';
 
-import { CommentsModel, CommentsFormData, CommentsModelData } from '@model';
+import { CommentsModel, CommentsFormData, CommentsModelData, CommentsOriginType } from '@model';
 import { pool } from '../utils';
 import { deleteRow, deleteRows, toggleRow, toggleRows } from './common';
 import { AffectedRowsResponse, InsertedIdResponse } from '../types';
@@ -28,6 +28,22 @@ const getCommentById = async (id: number): Promise<CommentsModelData> => {
     const [rows] = await connection.query<CommentsModelData[]>(query, [id]);
 
     return rows[0];
+  } finally {
+    connection.release();
+  }
+};
+
+const getCommentsByOrigin = async (
+  origin_type: CommentsOriginType,
+  origin_id: number
+): Promise<CommentsModelData[]> => {
+  const connection = await pool.getConnection();
+
+  try {
+    const query = `SELECT * FROM ${TABLE} WHERE origin_type = ? AND origin_id = ? AND deleted = 0`;
+    const [rows] = await connection.query<CommentsModelData[]>(query, [origin_type, origin_id]);
+
+    return rows;
   } finally {
     connection.release();
   }
@@ -78,6 +94,7 @@ const toggleSelectedComments = async (ids: number[]): Promise<AffectedRowsRespon
 export default {
   get: getComments,
   getById: getCommentById,
+  getByOrigin: getCommentsByOrigin,
   create: createComment,
   update: updateComment,
   delete: deleteComment,

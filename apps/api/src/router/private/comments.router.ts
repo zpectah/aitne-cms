@@ -6,6 +6,7 @@ const router = Router();
 
 router.get('/', comments.get);
 router.get('/:id', comments.getById);
+router.get('/:type/:id', comments.getByOrigin);
 router.put('/', comments.create);
 router.patch('/:id', comments.update);
 router.delete('/:id', comments.delete);

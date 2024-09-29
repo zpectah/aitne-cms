@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 import { comments as service } from '../../services';
+import { CommentsOriginType } from '@model';
 
 const getComments = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -22,6 +23,23 @@ const getCommentById = async (req: Request, res: Response, next: NextFunction) =
       res.status(200).json(item);
     } else {
       res.status(404).json({ message: 'Item not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching item' });
+  }
+};
+
+const getCommentsByOrigin = async (req: Request, res: Response, next: NextFunction) => {
+  const originType = req.params.type as CommentsOriginType;
+  const originId = parseInt(req.params.id, 10);
+
+  try {
+    const item = await service.getByOrigin(originType, originId);
+
+    if (item) {
+      res.status(200).json(item);
+    } else {
+      res.status(404).json({ message: 'Items not found' });
     }
   } catch (error) {
     res.status(500).json({ message: 'Error fetching item' });
@@ -111,6 +129,7 @@ const toggleSelectedComments = async (req: Request, res: Response, next: NextFun
 export default {
   get: getComments,
   getById: getCommentById,
+  getByOrigin: getCommentsByOrigin,
   create: createComment,
   update: updateComment,
   delete: deleteComment,
