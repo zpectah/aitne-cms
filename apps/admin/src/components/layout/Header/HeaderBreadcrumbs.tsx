@@ -4,16 +4,12 @@ import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 
 import config from '../../../../config';
-import { useBreakpoint } from '../../../hooks';
+import { useBreakpoint, useSettings } from '../../../hooks';
 
 type Route = {
   path: string;
-  label?: string;
+  key: string;
 };
-
-interface HeaderBreadcrumbsProps {
-  disableLanguage?: boolean;
-}
 
 const findRoute = (pathname: string): Route => {
   let route = { path: '/' } as Route;
@@ -21,26 +17,30 @@ const findRoute = (pathname: string): Route => {
 
   keys.forEach((key) => {
     if (pathname.includes(key)) {
-      route = config.routes[key as keyof typeof config.routes];
+      route = {
+        ...config.routes[key as keyof typeof config.routes],
+        key,
+      };
     }
   });
 
   return route;
 };
 
-const HeaderBreadcrumbs = ({ disableLanguage }: HeaderBreadcrumbsProps) => {
+const HeaderBreadcrumbs = () => {
   const { isDesktop } = useBreakpoint();
   const location = useLocation();
   const route = findRoute(location.pathname);
-  const { t, i18n } = useTranslation();
-  const { panel } = useParams();
+  const { t } = useTranslation('modules');
+  const { panel, id } = useParams();
+  const { settings } = useSettings();
 
   if (isDesktop)
     return (
       <Breadcrumbs>
-        <Typography>{config.cms.meta.name}</Typography>
-        {!disableLanguage && <Typography>{i18n.language}</Typography>}
-        <Typography>{t(`${route?.label}`)}</Typography>
+        <Typography>{settings['app.meta_title'] ?? config.cms.meta.name}</Typography>
+        <Typography>{t(`${route.key}.label`)}</Typography>
+        {id && <Typography>#{id}</Typography>}
         {panel && <Typography>{panel}</Typography>}
       </Breadcrumbs>
     );

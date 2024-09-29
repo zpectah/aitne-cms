@@ -1,14 +1,16 @@
+import { useTranslation } from 'react-i18next';
+
 import { ViewLayout } from '../../components';
 
 const Error = () => {
-  console.log('page view: Error');
+  const { t } = useTranslation('modules');
 
   return (
     <ViewLayout
       isCentered
       layoutContainerProps={{ containerProps: { maxWidth: 'md' } }}
-      meta={{ title: 'Error' }}
-      title="Error"
+      meta={{ title: t('error.title') }}
+      title={t('error.title')}
     >
       <p>
         Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi

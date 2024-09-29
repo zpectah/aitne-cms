@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { DIALOG_TRANSITION_DELAY } from '../../styles';
+import { DIALOG_TRANSITION_DELAY } from '../../constants';
 
 interface ConfirmStore {
   dialogOpen: boolean;

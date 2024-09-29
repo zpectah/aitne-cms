@@ -1,16 +1,18 @@
+import { useTranslation } from 'react-i18next';
+
 import config from '../../../config';
 import { ViewLayout, DetailDrawerWrapper, NewButtonLink } from '../../components';
 import TagsList from './TagsList';
 import TagsDetail from './TagsDetail';
 
 const Tags = () => {
-  console.log('page view: Users');
+  const { t } = useTranslation('modules');
 
   return (
     <ViewLayout
-      meta={{ title: 'Tags' }}
-      title="Tags"
-      titleSlot={<NewButtonLink to={`${config.routes.tags.path}/new`}>New tag</NewButtonLink>}
+      meta={{ title: t('tags.title') }}
+      title={t('tags.title')}
+      titleSlot={<NewButtonLink to={`${config.routes.tags.path}/new`}>{t('tags.new')}</NewButtonLink>}
     >
       <TagsList />
       <DetailDrawerWrapper rootPath={config.routes.tags.path}>

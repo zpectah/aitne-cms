@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material';
 import List from '@mui/material/List';
 import GroupIcon from '@mui/icons-material/Group';
@@ -13,21 +14,22 @@ const NavigationWrapper = styled('nav')(() => ({
 }));
 
 const SidebarNavigationSecondary = () => {
+  const { t } = useTranslation('modules');
   const { pathname } = useLocation();
   const { routes } = config;
 
   const navItems = [
     {
       key: 0,
-      path: routes.settings.path,
-      label: 'Settings',
-      icon: <SettingsIcon />,
+      path: routes.users.path,
+      label: t('users.label'),
+      icon: <GroupIcon />,
     },
     {
       key: 1,
-      path: routes.users.path,
-      label: 'Users',
-      icon: <GroupIcon />,
+      path: routes.settings.path,
+      label: t('settings.label'),
+      icon: <SettingsIcon />,
     },
   ];
 

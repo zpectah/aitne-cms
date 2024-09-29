@@ -1,0 +1,60 @@
+{
+  "articles.title": "Články",
+  "articles.label": "Články",
+  "articles.new": "Nový článek",
+
+  "categories.title": "Kategorie",
+  "categories.label": "Kategorie",
+  "categories.new": "Nová kategorie",
+
+  "comments.title": "Komentáře",
+  "comments.label": "Komentáře",
+  "comments.new": "Nový komentář",
+
+  "customFields.title": "Vlastní pole",
+  "customFields.label": "Vlastní pole",
+  "customFields.new": "Nové vlastní pole",
+
+  "dashboard.title": "Dashboard",
+  "dashboard.label": "Dashboard",
+
+  "error.title": "Error",
+  "error.label": "Error",
+
+  "login.title": "Login",
+  "login.label": "Login",
+
+  "media.title": "Media",
+  "media.label": "Media",
+  "media.new": "Nové média",
+
+  "members.title": "Members",
+  "members.label": "Members",
+  "members.new": "Nový member",
+
+  "pages.title": "Stránky",
+  "pages.label": "Stránky",
+  "pages.new": "Nová stránka",
+
+  "passwordRecovery.title": "Obnova hesla",
+  "passwordRecovery.label": "Obnova hesla",
+
+  "settings.title": "Nastavení",
+  "settings.label": "Nastavení",
+  "settings.panel.global": "Globalní",
+  "settings.panel.system": "Systém",
+  "settings.panel.locales": "Jazyky",
+  "settings.panel.maintenance": "Údržba",
+
+  "tags.title": "Tagy",
+  "tags.label": "Tagy",
+  "tags.new": "Nový tag",
+
+  "translations.title": "Překlady",
+  "translations.label": "Překlady",
+  "translations.new": "Nový překlad",
+
+  "users.title": "Uživatelé",
+  "users.label": "Uživatelé",
+  "users.new": "Nový uživatel"
+}

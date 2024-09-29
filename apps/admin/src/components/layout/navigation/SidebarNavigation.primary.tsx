@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material';
 import List from '@mui/material/List';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
@@ -16,6 +17,7 @@ const NavigationWrapper = styled('nav')(() => ({
 }));
 
 const SidebarNavigationPrimary = () => {
+  const { t } = useTranslation('modules');
   const { pathname } = useLocation();
   const { routes } = config;
 
@@ -23,43 +25,43 @@ const SidebarNavigationPrimary = () => {
     {
       key: 0,
       path: routes.dashboard.path,
-      label: 'Home',
+      label: t('dashboard.label'),
       icon: <HomeIcon />,
     },
     {
       key: 1,
       path: routes.articles.path,
-      label: 'Articles',
+      label: t('articles.label'),
       icon: <ArticleIcon />,
     },
     {
       key: 2,
       path: routes.tags.path,
-      label: 'Tags',
+      label: t('tags.label'),
       icon: <TagIcon />,
     },
     {
       key: 3,
       path: routes.categories.path,
-      label: 'Categories',
+      label: t('categories.label'),
       icon: <CategoryIcon />,
     },
     {
       key: 4,
       path: routes.translations.path,
-      label: 'Translations',
+      label: t('translations.label'),
       icon: <TranslateIcon />,
     },
     {
       key: 100,
       path: routes.login.path,
-      label: 'Login *',
+      label: t('login.label'),
       icon: <QuestionMarkIcon />,
     },
     {
       key: 101,
       path: routes.passwordRecovery.path,
-      label: 'Password recovery *',
+      label: t('passwordRecovery.label'),
       icon: <QuestionMarkIcon />,
     },
   ];

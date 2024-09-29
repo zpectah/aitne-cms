@@ -7,7 +7,7 @@ const Settings = () => {
   const { t } = useTranslation();
 
   return (
-    <ViewLayout meta={{ title: t('page.settings') }} title={t('page.settings')}>
+    <ViewLayout meta={{ title: t('settings.title') }} title={t('settings.title')}>
       <SettingsTabs />
     </ViewLayout>
   );

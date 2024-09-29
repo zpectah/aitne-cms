@@ -85,7 +85,7 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
     perPage,
   });
 
-  const { t } = useTranslation(['common', 'table', 'message']);
+  const { t } = useTranslation(['common', 'table', 'message', 'options']);
   const { onConfirm } = useConfirmSore();
   const navigate = useNavigate();
 
@@ -169,7 +169,7 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
   const toolbarSortOrderOptions = Object.keys(listTableOrderKeys).map((item) => ({
     id: item,
     value: item,
-    label: capitalizeString(item),
+    label: t(`options:sort.${item}`),
   }));
 
   const toolbarSortOrderByOptions = useMemo(
@@ -182,9 +182,9 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
     [sortColumns]
   );
 
-  const renderToolbar = useMemo(
-    () => (
-      <>
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Paper sx={{ width: '100%' }}>
         <Stack
           gap={2}
           sx={({ spacing }) => ({
@@ -243,28 +243,6 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
           </Stack>
         </Stack>
         <Divider />
-      </>
-    ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      searchQuery,
-      toolbarSlot,
-      selected,
-      onSelectedToggle,
-      order,
-      toolbarSortOrderOptions,
-      toolbarSortOrderByOptions,
-      orderBy,
-      setSearchQuery,
-      setOrder,
-      onSort,
-    ]
-  );
-
-  return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%' }}>
-        {renderToolbar}
         <TableContainer>
           <Table sx={{ minWidth: 750 }}>
             <TableHead>

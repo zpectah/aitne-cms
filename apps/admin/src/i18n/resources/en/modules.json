@@ -1,0 +1,60 @@
+{
+  "articles.title": "Articles",
+  "articles.label": "Articles",
+  "articles.new": "New article",
+
+  "categories.title": "Categories",
+  "categories.label": "Categories",
+  "categories.new": "New category",
+
+  "comments.title": "Comments",
+  "comments.label": "Comments",
+  "comments.new": "New comment",
+
+  "customFields.title": "Custom fields",
+  "customFields.label": "Custom fields",
+  "customFields.new": "New custom field",
+
+  "dashboard.title": "Dashboard",
+  "dashboard.label": "Dashboard",
+
+  "error.title": "Error",
+  "error.label": "Error",
+
+  "login.title": "Login",
+  "login.label": "Login",
+
+  "media.title": "Media",
+  "media.label": "Media",
+  "media.new": "New media",
+
+  "members.title": "Members",
+  "members.label": "Members",
+  "members.new": "New member",
+
+  "pages.title": "Pages",
+  "pages.label": "Pages",
+  "pages.new": "New page",
+
+  "passwordRecovery.title": "Password recovery",
+  "passwordRecovery.label": "Password recovery",
+
+  "settings.title": "Settings",
+  "settings.label": "Settings",
+  "settings.panel.global": "Global",
+  "settings.panel.system": "System",
+  "settings.panel.locales": "Locales",
+  "settings.panel.maintenance": "Maintenance",
+
+  "tags.title": "Tags",
+  "tags.label": "Tags",
+  "tags.new": "New tag",
+
+  "translations.title": "Translations",
+  "translations.label": "Translations",
+  "translations.new": "New translations",
+
+  "users.title": "Users",
+  "users.label": "Users",
+  "users.new": "New users"
+}

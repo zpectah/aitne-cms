@@ -1,12 +1,13 @@
+import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 
 import { ViewLayout } from '../../components';
 
 const Dashboard = () => {
-  console.log('page view: Dashboard');
+  const { t } = useTranslation('modules');
 
   return (
-    <ViewLayout meta={{ title: 'Dashboard' }} title="Dashboard">
+    <ViewLayout meta={{ title: t('dashboard.title') }} title={t('dashboard.title')}>
       <p>
         Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
         orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus
@@ -22,7 +23,9 @@ const Dashboard = () => {
         maximus dolor ut nulla in nisi. Vivamus sollicitudin, vehicula et iaculis curabitur mauris proin posuere
         imperdiet, ut venenatis suspendisse suscipit vestibulum.
       </p>
-      <Button>Test Button</Button>
+      <div>
+        <Button>Test Button</Button>
+      </div>
       <p>
         Maximus felis a, urna sapien ultricies auctor adipiscing nulla donec, vestibulum elit in donec euismod. Metus mi
         orci, nunc lorem ipsum dolor sit amet aenean vel arcu iaculis integer accumsan, suspendisse sed elementum luctus

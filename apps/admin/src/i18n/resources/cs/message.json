@@ -1,4 +1,18 @@
 {
+  "common.error.unspecified": "Vznikl blíže nespecifikovaný problém",
+
   "confirm.deleteItem": "Chcete smazat tuto položku?",
-  "confirm.deleteSelected": "Chcete smazat tyto vybrané položky?"
+  "confirm.deleteSelected": "Chcete smazat tyto vybrané položky?",
+
+  "detail.success.created": "Nová položka byla úspěšně vytvořena",
+  "detail.success.updated": "Položka byla úspěšně aktualizována",
+  "detail.error.created": "Nastal problém během vytváření položky",
+  "detail.error.updated": "Nastal problém během aktualizace položky",
+
+  "detail.success.deleted": "Položka byla úspěšně smazána",
+  "selected.success.deleted": "Vybrané položky byly úspěšně smazány",
+  "selected.success.updated": "Vybrané položky byly úspěšně aktualizovány",
+  "detail.error.deleted": "Nastal problém během mazání položky",
+  "selected.error.deleted": "Nastal problém během mazání položek",
+  "selected.error.updated": "Nastal problém během aktualizace položky"
 }

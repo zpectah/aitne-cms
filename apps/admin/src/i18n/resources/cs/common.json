@@ -8,19 +8,5 @@
   "btn.create": "Vytvořit",
   "btn.update": "Aktualizovat",
   "btn.delete": "Smazat",
-  "btn.toggle": "Přepnout",
-
-  "page.login": "Přihlášení",
-  "page.password-recovery": "Obnova ztraceného hesla",
-  "page.dashboard": "Dashboard",
-  "page.articles": "Articles",
-  "page.settings": "Nastavení",
-  "page.settings.panel.global": "Global",
-  "page.settings.panel.system": "System",
-  "page.settings.panel.locales": "Locales",
-  "page.settings.panel.maintenance": "Údržba",
-  "page.users": "Uživatelé",
-  "page.tags": "Tagy",
-  "page.categories": "Kategorie",
-  "page.translations": "Překlady"
+  "btn.toggle": "Přepnout"
 }

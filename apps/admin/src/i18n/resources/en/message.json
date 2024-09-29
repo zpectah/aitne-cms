@@ -1,4 +1,18 @@
 {
+  "common.error.unspecified": "An unspecified problem has occurred",
+
   "confirm.deleteItem": "Do you want to delete this item?",
-  "confirm.deleteSelected": "Do you want to delete these selected items?"
+  "confirm.deleteSelected": "Do you want to delete these selected items?",
+
+  "detail.success.created": "New item was successfully created",
+  "detail.success.updated": "Item was successfully updated",
+  "detail.error.created": "Error during creating item",
+  "detail.error.updated": "Error during updating item",
+
+  "detail.success.deleted": "Item was successfully deleted",
+  "selected.success.deleted": "Selected items was successfully deleted",
+  "selected.success.updated": "Selected items was successfully updated",
+  "detail.error.deleted": "Error during deleting item",
+  "selected.error.deleted": "Error during deleting items",
+  "selected.error.updated": "Error during updating items"
 }

@@ -18,7 +18,7 @@ const SettingsTabs = () => {
   const [selectedPanel, setSelectedPanel] = useState('');
   const { panel } = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['common', 'modules']);
 
   const renderPanel = useMemo(() => {
     switch (selectedPanel) {
@@ -59,28 +59,28 @@ const SettingsTabs = () => {
           <Tab
             aria-controls={`${TABS_PANEL_PFX}global`}
             id={`${TABS_TAB_PFX}global`}
-            label={t(config.routes.settings.routes.global.label)}
+            label={t('modules:settings.panel.global')}
             onClick={() => navigate(config.routes.settings.path)}
             value=""
           />
           <Tab
             aria-controls={`${TABS_PANEL_PFX}system`}
             id={`${TABS_TAB_PFX}system`}
-            label={t(config.routes.settings.routes.system.label)}
+            label={t('modules:settings.panel.system')}
             onClick={() => navigate(config.routes.settings.routes.system.path)}
             value="system"
           />
           <Tab
             aria-controls={`${TABS_PANEL_PFX}locales`}
             id={`${TABS_TAB_PFX}locales`}
-            label={t(config.routes.settings.routes.locales.label)}
+            label={t('modules:settings.panel.locales')}
             onClick={() => navigate(config.routes.settings.routes.locales.path)}
             value="locales"
           />
           <Tab
             aria-controls={`${TABS_PANEL_PFX}maintenance`}
             id={`${TABS_TAB_PFX}maintenance`}
-            label={t(config.routes.settings.routes.maintenance.label)}
+            label={t('modules:settings.panel.maintenance')}
             onClick={() => navigate(config.routes.settings.routes.maintenance.path)}
             value="maintenance"
           />

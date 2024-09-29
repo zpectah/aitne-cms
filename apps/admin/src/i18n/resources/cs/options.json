@@ -1,4 +1,7 @@
 {
+  "sort.asc": "Vzestupně",
+  "sort.desc": "Sestupně",
+
   "tags.color.none": "Žádná",
   "tags.color.black": "Černá",
   "tags.color.white": "Bílá",

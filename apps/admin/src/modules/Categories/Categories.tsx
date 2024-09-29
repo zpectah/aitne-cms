@@ -1,16 +1,18 @@
+import { useTranslation } from 'react-i18next';
+
 import config from '../../../config';
 import { ViewLayout, DetailDrawerWrapper, NewButtonLink } from '../../components';
 import CategoriesList from './CategoriesList';
 import CategoriesDetail from './CategoriesDetail';
 
 const Categories = () => {
-  console.log('page view: Categories');
+  const { t } = useTranslation('modules');
 
   return (
     <ViewLayout
-      meta={{ title: 'Categories' }}
-      title="Categories"
-      titleSlot={<NewButtonLink to={`${config.routes.categories.path}/new`}>New category</NewButtonLink>}
+      meta={{ title: t('categories.title') }}
+      title={t('categories.title')}
+      titleSlot={<NewButtonLink to={`${config.routes.categories.path}/new`}>{t('categories.new')}</NewButtonLink>}
     >
       <CategoriesList />
       <DetailDrawerWrapper rootPath={config.routes.categories.path}>

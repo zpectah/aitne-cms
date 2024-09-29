@@ -1,4 +1,7 @@
 {
+  "sort.asc": "Ascend",
+  "sort.desc": "Descend",
+
   "tags.color.none": "None",
   "tags.color.black": "Black",
   "tags.color.white": "White",

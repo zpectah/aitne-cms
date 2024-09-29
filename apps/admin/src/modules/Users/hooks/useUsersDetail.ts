@@ -11,7 +11,7 @@ import { TOAST_AUTOCLOSE_DELAY_DEFAULT } from '../../../constants';
 
 export const useUsersDetail = () => {
   const [isLoading, setLoading] = useState(false);
-  const { t } = useTranslation('options');
+  const { t } = useTranslation(['options', 'messages']);
   const form = useForm<UsersFormData>({});
   const navigate = useNavigate();
   const { id } = useParams();
@@ -60,17 +60,18 @@ export const useUsersDetail = () => {
                 query.refetch();
                 navigate(config.routes.users.path);
                 createToast({
-                  message: 'New item was successfully created',
+                  message: t('message:detail.success.created'),
                   severity: 'success',
                   autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
                 });
               },
               onError: () => {
-                createToast({ message: 'There is an error...', severity: 'error' });
+                createToast({ message: t('message:detail.error.created'), severity: 'error' });
               },
             }
           );
         } catch (err) {
+          createToast({ message: t('message:common.error.unspecified'), severity: 'error' });
           console.error(err);
         } finally {
           setLoading(false);
@@ -86,17 +87,18 @@ export const useUsersDetail = () => {
                 query.refetch();
                 navigate(config.routes.users.path);
                 createToast({
-                  message: 'Item was successfully updated',
+                  message: t('message:detail.success.updated'),
                   severity: 'success',
                   autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
                 });
               },
               onError: () => {
-                createToast({ message: 'There is an error...', severity: 'error' });
+                createToast({ message: t('message:detail.error.updated'), severity: 'error' });
               },
             }
           );
         } catch (err) {
+          createToast({ message: t('message:common.error.unspecified'), severity: 'error' });
           console.error(err);
         } finally {
           setLoading(false);

@@ -10,7 +10,7 @@ export const useUsersList = () => {
     query: { data, isLoading, refetch, ...query },
   } = useUsersQuery();
 
-  const { t } = useTranslation(['table']);
+  const { t } = useTranslation(['table', 'messages']);
   const { deleteMutation, deleteSelectedMutation, toggleMutation, toggleSelectedMutation } = useUsersMutations();
   const { createToast } = useToastsStore();
 
@@ -45,17 +45,18 @@ export const useUsersList = () => {
           onSuccess: () => {
             refetch();
             createToast({
-              message: 'Item was successfully deleted',
+              message: t('messages:detail.success.deleted'),
               severity: 'success',
               autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
             });
           },
           onError: () => {
-            createToast({ message: 'There is an error...', severity: 'error' });
+            createToast({ message: t('messages:detail.error.deleted'), severity: 'error' });
           },
         }
       );
     } catch (err) {
+      createToast({ message: t('message:common.error.unspecified'), severity: 'error' });
       console.error(err);
     }
   };
@@ -70,17 +71,18 @@ export const useUsersList = () => {
           onSuccess: () => {
             refetch();
             createToast({
-              message: 'Selected items was successfully deleted',
+              message: t('messages:selected.success.deleted'),
               severity: 'success',
               autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
             });
           },
           onError: () => {
-            createToast({ message: 'There is an error...', severity: 'error' });
+            createToast({ message: t('messages:selected.error.deleted'), severity: 'error' });
           },
         }
       );
     } catch (err) {
+      createToast({ message: t('message:common.error.unspecified'), severity: 'error' });
       console.error(err);
     }
   };
@@ -95,17 +97,18 @@ export const useUsersList = () => {
           onSuccess: () => {
             refetch();
             createToast({
-              message: 'Item was successfully updated',
+              message: t('messages:detail.success.updated'),
               severity: 'success',
               autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
             });
           },
           onError: () => {
-            createToast({ message: 'There is an error...', severity: 'error' });
+            createToast({ message: t('messages:detail.error.updated'), severity: 'error' });
           },
         }
       );
     } catch (err) {
+      createToast({ message: t('message:common.error.unspecified'), severity: 'error' });
       console.error(err);
     }
   };
@@ -120,17 +123,18 @@ export const useUsersList = () => {
           onSuccess: () => {
             refetch();
             createToast({
-              message: 'Selected items was successfully updated',
+              message: t('messages:selected.success.updated'),
               severity: 'success',
               autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
             });
           },
           onError: () => {
-            createToast({ message: 'There is an error...', severity: 'error' });
+            createToast({ message: t('messages:selected.error.updated'), severity: 'error' });
           },
         }
       );
     } catch (err) {
+      createToast({ message: t('message:common.error.unspecified'), severity: 'error' });
       console.error(err);
     }
   };

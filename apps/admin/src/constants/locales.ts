@@ -2,7 +2,7 @@ interface Locales {
   [p: string]: { label: string; format: { datetime: string; date: string; time: string } };
 }
 
-const locales: Locales = {
+export const locales: Locales = {
   en: {
     label: 'English',
     format: {
@@ -28,5 +28,3 @@ const locales: Locales = {
     },
   },
 };
-
-export default locales;
