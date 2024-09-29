@@ -1,5 +1,4 @@
-export const SettingsPanelLocales = () => {
-  return (
+export const SettingsPanelLocales = () => (
     <>
       ...SettingsLocales...
       <p>
@@ -15,6 +14,5 @@ export const SettingsPanelLocales = () => {
       </p>
     </>
   );
-};
 
 export default SettingsPanelLocales;

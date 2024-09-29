@@ -16,7 +16,6 @@
     "baseUrl": ".",
     "paths": {
       "@common": ["libs/common/src/index.ts"],
-      "@core": ["libs/core/src/index.ts"],
       "@model": ["libs/model/src/index.ts"]
     }
   },

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { comments as service } from '../../services';
 import { CommentsOriginType } from '@model';
+import { comments as service } from '../../services';
 
 const getComments = async (req: Request, res: Response, next: NextFunction) => {
   try {

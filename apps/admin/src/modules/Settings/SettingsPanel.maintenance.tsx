@@ -1,5 +1,4 @@
-export const SettingsMaintenance = () => {
-  return (
+export const SettingsMaintenance = () => (
     <>
       ...SettingsMaintenance...
       <p>
@@ -15,6 +14,5 @@ export const SettingsMaintenance = () => {
       </p>
     </>
   );
-};
 
 export default SettingsMaintenance;

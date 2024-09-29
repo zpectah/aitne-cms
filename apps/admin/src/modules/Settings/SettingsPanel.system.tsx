@@ -1,5 +1,4 @@
-export const SettingsPanelSystem = () => {
-  return (
+export const SettingsPanelSystem = () => (
     <>
       ...SettingsSystem...
       <p>
@@ -15,6 +14,5 @@ export const SettingsPanelSystem = () => {
       </p>
     </>
   );
-};
 
 export default SettingsPanelSystem;

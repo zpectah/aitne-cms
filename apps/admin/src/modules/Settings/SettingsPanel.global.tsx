@@ -1,5 +1,4 @@
-export const SettingsPanelGlobal = () => {
-  return (
+export const SettingsPanelGlobal = () => (
     <>
       ...SettingsGlobal...
       <p>
@@ -15,6 +14,5 @@ export const SettingsPanelGlobal = () => {
       </p>
     </>
   );
-};
 
 export default SettingsPanelGlobal;

@@ -39,6 +39,7 @@ const createMember = async (data: MembersFormData): Promise<InsertedIdResponse> 
   try {
     const { type, email, password, salt, firstname, lastname } = data;
     const query = `INSERT INTO ${TABLE} (type, email, password, salt, firstname, lastname, active, deleted) VALUES (?, ?, ?, ?, ?, ?, 1, 0)`;
+
     const [result] = await connection.execute<ResultSetHeader>(query, [
       type,
       email,
