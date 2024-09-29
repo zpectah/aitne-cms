@@ -1,7 +1,7 @@
 import inquirer from 'inquirer';
 import fs from 'fs';
 import path from 'path';
-import utils from './utils/index.mjs';
+import { node_createFile, node_getSalt } from '../utility/index.mjs';
 
 const TOKEN_ENV_KEY = 'CMS_INTEGRITY_TOKEN';
 const ENV_SRC = '.env.example';
@@ -20,9 +20,9 @@ const replaceKeyValue = (content, key, newValue) => {
 const prepareDevEnv = async () => {
   try {
     const data = await fs.promises.readFile(ENV_SRC_PATH, 'utf8');
-    const content = replaceKeyValue(data, TOKEN_ENV_KEY, utils.getSalt(8));
+    const content = replaceKeyValue(data, TOKEN_ENV_KEY, node_getSalt(8));
 
-    utils.createFile(ENV_DEV_PATH, content);
+    node_createFile(ENV_DEV_PATH, content);
   } catch (err) {
     console.error(err);
   }
@@ -36,13 +36,13 @@ const updateDevEnv = async ({
 }) => {
   try {
     let data = await fs.promises.readFile(ENV_SRC_PATH, 'utf8');
-    data = replaceKeyValue(data, TOKEN_ENV_KEY, utils.getSalt(8));
+    data = replaceKeyValue(data, TOKEN_ENV_KEY, node_getSalt(8));
     data = replaceKeyValue(data, 'CMS_DB_NAME', dbName);
     data = replaceKeyValue(data, 'CMS_DB_USER', dbUser);
     data = replaceKeyValue(data, 'CMS_DB_PASSWORD', dbPass);
     const content = replaceKeyValue(data, 'CMS_DB_PORT', dbPort);
 
-    utils.createFile(ENV_DEV_PATH, content);
+    node_createFile(ENV_DEV_PATH, content);
   } catch (err) {
     console.error(err);
   }
@@ -51,9 +51,9 @@ const updateDevEnv = async ({
 const prepareProdEnv = async () => {
   try {
     const data = await fs.promises.readFile(ENV_SRC_PATH, 'utf8');
-    const content = replaceKeyValue(data, TOKEN_ENV_KEY, utils.getSalt(8));
+    const content = replaceKeyValue(data, TOKEN_ENV_KEY, node_getSalt(8));
 
-    utils.createFile(ENV_PROD_PATH, content);
+    node_createFile(ENV_PROD_PATH, content);
   } catch (err) {
     console.error(err);
   }

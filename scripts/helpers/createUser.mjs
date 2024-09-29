@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 import { config } from 'dotenv';
-import utils from '../utils/index.mjs';
+import { node_getSalt, node_hashPassword } from '../../utility/index.mjs';
 
 config();
 
@@ -31,8 +31,8 @@ const createUser = async ({ firstname, lastname, email, password }) => {
       return;
     }
 
-    const salt = utils.getSalt();
-    const hashedPassword = utils.hashPassword(password, salt);
+    const salt = node_getSalt();
+    const hashedPassword = node_hashPassword(password, salt);
 
     const [rows] = await connection.execute(
       'INSERT INTO cms_users (firstname, lastname, email, password, type, role, salt, active, deleted) VALUES (?,?,?,?,?,?,?,?,?)',

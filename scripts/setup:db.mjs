@@ -2,9 +2,9 @@ import inquirer from 'inquirer';
 import { config } from 'dotenv';
 import path from 'path';
 import { execSync } from 'child_process';
-import utils from './utils/index.mjs';
-import testConnection from './utils/testConnection.mjs';
-import createUser from './utils/createUser.mjs';
+import { isEmailValid } from '../utility/index.mjs';
+import testConnection from './helpers/testConnection.mjs';
+import createUser from './helpers/createUser.mjs';
 
 config();
 
@@ -57,7 +57,7 @@ const createAdmin = async () => {
         type: 'input',
         name: 'email',
         message: 'Email',
-        validate: (input) => utils.isEmailValid(input),
+        validate: (input) => isEmailValid(input),
       },
       {
         type: 'password',
