@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { usersTypeKeys, usersRoleKeys, UsersFormData } from '@model';
-import { crypto } from '@common';
 import config from '../../../../config';
+import { getSalt, hashPassword } from '../../../utils';
 import { useToastsStore, useUsersMutations, useUsersQuery } from '../../../hooks';
 import { TOAST_AUTOCLOSE_DELAY_DEFAULT } from '../../../constants';
 
@@ -41,8 +41,8 @@ export const useUsersDetail = () => {
       setLoading(true);
 
       if (data.password) {
-        const salt = crypto.getSalt();
-        const password = await crypto.hashPassword(data.password, salt);
+        const salt = getSalt();
+        const password = await hashPassword(data.password, salt);
 
         master = { ...data, password, salt };
       } else {

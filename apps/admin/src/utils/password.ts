@@ -1,4 +1,4 @@
-const getSalt = (length = 16) => {
+export const getSalt = (length = 16) => {
   const array = new Uint8Array(length);
 
   window.crypto.getRandomValues(array);
@@ -8,7 +8,7 @@ const getSalt = (length = 16) => {
     .join('');
 };
 
-const hashPassword = async (password: string, salt: string) => {
+export const hashPassword = async (password: string, salt: string) => {
   const encoder = new TextEncoder();
   const passwordBuffer = encoder.encode(password);
   const saltBuffer = encoder.encode(salt);
@@ -28,14 +28,12 @@ const hashPassword = async (password: string, salt: string) => {
     .join('');
 };
 
-const verifyPassword = async (storedSalt: string, storedHash: string, inputPassword: string): Promise<boolean> => {
+export const verifyPassword = async (
+  storedSalt: string,
+  storedHash: string,
+  inputPassword: string
+): Promise<boolean> => {
   const isMatch = await verifyPassword(storedSalt, storedHash, inputPassword);
 
   return isMatch;
-};
-
-export default {
-  getSalt,
-  hashPassword,
-  verifyPassword,
 };

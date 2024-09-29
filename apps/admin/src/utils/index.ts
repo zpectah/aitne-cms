@@ -1,1 +1,2 @@
-export const getRandomUUID = () => window.crypto.randomUUID();
+export * from './string';
+export * from './password';

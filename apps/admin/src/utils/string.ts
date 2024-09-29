@@ -14,3 +14,5 @@ export const getTimestamp = () => {
 
   return now.toISOString();
 };
+
+export const getRandomUUID = () => window.crypto.randomUUID();

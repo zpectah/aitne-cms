@@ -25,7 +25,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
-import { capitalizeString } from '@common';
+import { capitalizeString } from '../../utils';
 import { useConfirmSore } from '../../hooks';
 import { SearchInput, Select } from '../input';
 import { listTableOrderKeys, ListTableProps, ListTableItemProps, ListTableItemLang, ListTableOrder } from './types';
