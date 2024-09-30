@@ -1,19 +1,24 @@
 import { useState, MouseEvent, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 import { useNotificationsStore } from '../../../hooks';
 
 const HeaderNotifications = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const { notifications } = useNotificationsStore();
+  const { notifications, markRead } = useNotificationsStore();
+  const { t } = useTranslation();
   const openHandler = (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
   const closeHandler = () => setAnchorEl(null);
-  const unreadNotifications = useMemo(() => notifications.filter((notif) => !notif.isRead), [notifications]);
+  const unreadNotifications = useMemo(() => notifications.filter((not) => !not.isRead), [notifications]);
 
   return (
     <Badge badgeContent={unreadNotifications.length} color="primary">
@@ -35,13 +40,25 @@ const HeaderNotifications = () => {
         onClose={closeHandler}
         open={open}
       >
-        {notifications.map((notif) => (
-          <MenuItem key={notif.id}>
-            <span>
-              <span>{notif.title}</span>
-              <span>{notif.content}</span>
-              <button onClick={closeHandler}>ok</button>
-            </span>
+        {notifications.map((not) => (
+          <MenuItem divider key={not.id}>
+            <Stack gap={2}>
+              <Stack gap={1}>
+                <Typography variant="body1">{not.title}</Typography>
+                <Typography variant="body2">{not.content}</Typography>
+              </Stack>
+              {!not.isRead && (
+                <Button
+                  onClick={() => {
+                    markRead(not.id);
+                    closeHandler();
+                  }}
+                  size="small"
+                >
+                  {t('btn.dismiss')}
+                </Button>
+              )}
+            </Stack>
           </MenuItem>
         ))}
       </Menu>
