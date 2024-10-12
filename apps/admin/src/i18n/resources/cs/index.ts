@@ -1,6 +1,6 @@
 import common from './common.json';
 import form from './form.json';
-import messages from './message.json';
+import message from './message.json';
 import modules from './modules.json';
 import options from './options.json';
 import table from './table.json';
@@ -8,7 +8,7 @@ import table from './table.json';
 export default {
   common,
   form,
-  messages,
+  message,
   modules,
   options,
   table,

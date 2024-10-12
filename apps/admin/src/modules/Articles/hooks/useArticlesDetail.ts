@@ -10,7 +10,7 @@ import { TOAST_AUTOCLOSE_DELAY_DEFAULT } from '../../../constants';
 
 export const useArticlesDetail = () => {
   const [isLoading, setLoading] = useState(false);
-  const { t } = useTranslation(['options', 'messages']);
+  const { t } = useTranslation(['options', 'message']);
   const form = useForm<ArticlesFormData>({});
   const navigate = useNavigate();
   const { id } = useParams();

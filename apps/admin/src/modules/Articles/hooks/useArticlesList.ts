@@ -10,7 +10,7 @@ export const useArticlesList = () => {
     query: { data, isLoading, refetch, ...query },
   } = useArticlesQuery();
 
-  const { t } = useTranslation(['table', 'messages']);
+  const { t } = useTranslation(['table', 'message']);
   const { deleteMutation, deleteSelectedMutation, toggleMutation, toggleSelectedMutation } = useArticlesMutations();
   const { createToast } = useToastsStore();
 
@@ -45,13 +45,13 @@ export const useArticlesList = () => {
           onSuccess: () => {
             refetch();
             createToast({
-              message: t('messages:detail.success.deleted'),
+              message: t('message:detail.success.deleted'),
               severity: 'success',
               autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
             });
           },
           onError: () => {
-            createToast({ message: t('messages:detail.error.deleted'), severity: 'error' });
+            createToast({ message: t('message:detail.error.deleted'), severity: 'error' });
           },
         }
       );
@@ -71,13 +71,13 @@ export const useArticlesList = () => {
           onSuccess: () => {
             refetch();
             createToast({
-              message: t('messages:selected.success.deleted'),
+              message: t('message:selected.success.deleted'),
               severity: 'success',
               autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
             });
           },
           onError: () => {
-            createToast({ message: t('messages:selected.error.deleted'), severity: 'error' });
+            createToast({ message: t('message:selected.error.deleted'), severity: 'error' });
           },
         }
       );
@@ -97,13 +97,13 @@ export const useArticlesList = () => {
           onSuccess: () => {
             refetch();
             createToast({
-              message: t('messages:detail.success.updated'),
+              message: t('message:detail.success.updated'),
               severity: 'success',
               autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
             });
           },
           onError: () => {
-            createToast({ message: t('messages:detail.error.updated'), severity: 'error' });
+            createToast({ message: t('message:detail.error.updated'), severity: 'error' });
           },
         }
       );
@@ -123,13 +123,13 @@ export const useArticlesList = () => {
           onSuccess: () => {
             refetch();
             createToast({
-              message: t('messages:selected.success.updated'),
+              message: t('message:selected.success.updated'),
               severity: 'success',
               autoclose: TOAST_AUTOCLOSE_DELAY_DEFAULT,
             });
           },
           onError: () => {
-            createToast({ message: t('messages:selected.error.updated'), severity: 'error' });
+            createToast({ message: t('message:selected.error.updated'), severity: 'error' });
           },
         }
       );
