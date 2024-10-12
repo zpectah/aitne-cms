@@ -28,7 +28,14 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { capitalizeString } from '../../utils';
 import { useConfirmSore } from '../../hooks';
 import { SearchInput, Select } from '../input';
-import { listTableOrderKeys, ListTableProps, ListTableItemProps, ListTableItemLang, ListTableOrder } from './types';
+import {
+  listTableOrderKeys,
+  ListTableProps,
+  ListTableItemProps,
+  ListTableItemLang,
+  ListTableOrder,
+  ListTableSortDefaults,
+} from './types';
 import { ROWS_PER_PAGE_OPTIONS, SEARCH_MIN_LENGTH } from './constants';
 import { useListTable } from './useListTable';
 import { useListTableSearch } from './useListTableSearch';
@@ -60,8 +67,16 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
   sortColumns = [],
   onRowToggle,
   onSelectedToggle,
+  sortDefaults,
+  onSortChange,
 }: ListTableProps<T1, T2>) => {
   const { results, searchQuery, setSearchQuery } = useListTableSearch<T1, T2>({ items, searchAttrs, searchLangAttrs });
+
+  const tableSortDefaults: ListTableSortDefaults<T1> = {
+    order: listTableOrderKeys.asc,
+    orderBy: 'id',
+    ...sortDefaults,
+  };
 
   const {
     rows,
@@ -83,6 +98,8 @@ const ListTable = <T1 extends ListTableItemProps, T2 extends ListTableItemLang>(
   } = useListTable<T1>({
     items: results,
     perPage,
+    sortDefaults: tableSortDefaults,
+    onSortChange,
   });
 
   const { t } = useTranslation(['common', 'table', 'message', 'options']);

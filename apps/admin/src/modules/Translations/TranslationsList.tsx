@@ -4,10 +4,11 @@ import TableCell from '@mui/material/TableCell';
 import { TranslationsModel, TranslationsLangModel } from '@model';
 import config from '../../../config';
 import { ListTable, ButtonLink } from '../../components';
-import { useTranslationsList } from './hooks';
+import { useTranslationsList, useTranslationsListStore } from './hooks';
 
 const TranslationsList = () => {
   const { t } = useTranslation(['options']);
+  const { sort, setSort } = useTranslationsListStore();
 
   const {
     table: { heading, items },
@@ -35,11 +36,13 @@ const TranslationsList = () => {
       onRowToggle={onRowToggle}
       onSelectedDelete={onSelectedDelete}
       onSelectedToggle={onSelectedToggle}
+      onSortChange={setSort}
       renderRow={renderRow}
       rootPath={config.routes.translations.path}
       searchAttrs={['name']}
       searchLangAttrs={['value']}
       sortColumns={['id', 'name', 'type', 'updated']}
+      sortDefaults={{ ...sort }}
     />
   );
 };

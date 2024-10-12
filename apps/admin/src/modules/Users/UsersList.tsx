@@ -1,11 +1,15 @@
+import { useTranslation } from 'react-i18next';
 import TableCell from '@mui/material/TableCell';
 
 import { UsersModel } from '@model';
 import config from '../../../config';
 import { ListTable, ButtonLink } from '../../components';
-import { useUsersList } from './hooks';
+import { useUsersList, useUsersListStore } from './hooks';
 
 export const UsersList = () => {
+  const { t } = useTranslation(['options']);
+  const { sort, setSort } = useUsersListStore();
+
   const {
     table: { heading, items },
     query: { isError }, // TODO #error handler
@@ -34,10 +38,12 @@ export const UsersList = () => {
       onRowToggle={onRowToggle}
       onSelectedDelete={onSelectedDelete}
       onSelectedToggle={onSelectedToggle}
+      onSortChange={setSort}
       renderRow={renderRow}
       rootPath={config.routes.users.path}
       searchAttrs={['firstname', 'lastname', 'email']}
       sortColumns={['id', 'lastname', 'updated']}
+      sortDefaults={{ ...sort }}
     />
   );
 };

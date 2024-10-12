@@ -9,6 +9,7 @@ export const listTableOrderKeys = {
 
 export type ListTableOrder = keyof typeof listTableOrderKeys;
 export type ListTableItemLang = { [p: string]: unknown };
+export type ListTableSortDefaults<T> = { order: ListTableOrder; orderBy: keyof T };
 
 export interface ListTableItemProps {
   id: number;
@@ -42,11 +43,15 @@ export interface ListTableProps<T1 extends ListTableItemProps, T2 extends ListTa
   showEmptyRows?: boolean;
   toolbarSlot?: ReactNode;
   sortColumns: (keyof T1)[];
+  sortDefaults?: Partial<ListTableSortDefaults<T1>>;
+  onSortChange?: (defaults: ListTableSortDefaults<T1>) => void;
 }
 
 export interface UseListTable<T extends ListTableItemProps> {
   items: T[];
   perPage?: number;
+  sortDefaults: ListTableSortDefaults<T>;
+  onSortChange?: (defaults: ListTableSortDefaults<T>) => void;
 }
 
 export interface UseListTableSearch<T1 extends ListTableItemProps, T2 extends ListTableItemLang>

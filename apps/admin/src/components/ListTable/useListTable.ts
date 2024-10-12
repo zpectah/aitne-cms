@@ -1,4 +1,4 @@
-import { useState, useMemo, MouseEvent, ChangeEvent } from 'react';
+import { useState, useMemo, MouseEvent, ChangeEvent, useEffect } from 'react';
 
 import { listTableOrderKeys, ListTableItemProps, UseListTable, ListTableOrder } from './types';
 
@@ -23,9 +23,14 @@ function getComparator<Key extends keyof never>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export const useListTable = <T extends ListTableItemProps>({ items = [], perPage = 15 }: UseListTable<T>) => {
-  const [order, setOrder] = useState<ListTableOrder>(listTableOrderKeys.asc);
-  const [orderBy, setOrderBy] = useState<keyof T>('id');
+export const useListTable = <T extends ListTableItemProps>({
+  items = [],
+  perPage = 15,
+  sortDefaults,
+  onSortChange,
+}: UseListTable<T>) => {
+  const [order, setOrder] = useState<ListTableOrder>(sortDefaults.order);
+  const [orderBy, setOrderBy] = useState<keyof T>(sortDefaults.orderBy);
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(perPage);
@@ -84,6 +89,8 @@ export const useListTable = <T extends ListTableItemProps>({ items = [], perPage
 
   const isIndeterminate = useMemo(() => selected.length > 0 && selected.length < items.length, [selected, items]);
   const isChecked = useMemo(() => items.length > 0 && selected.length === items.length, [selected, items]);
+
+  useEffect(() => onSortChange?.({ order, orderBy }), [onSortChange, order, orderBy]);
 
   return {
     rows: visibleRows,

@@ -4,10 +4,11 @@ import TableCell from '@mui/material/TableCell';
 import { ArticlesModel, ArticlesLangModel } from '@model';
 import config from '../../../config';
 import { ListTable, ButtonLink } from '../../components';
-import { useArticlesList } from './hooks';
+import { useArticlesList, useArticlesListStore } from './hooks';
 
 const ArticlesList = () => {
   const { t } = useTranslation(['options']);
+  const { sort, setSort } = useArticlesListStore();
 
   const {
     table: { heading, items },
@@ -35,11 +36,13 @@ const ArticlesList = () => {
       onRowToggle={onRowToggle}
       onSelectedDelete={onSelectedDelete}
       onSelectedToggle={onSelectedToggle}
+      onSortChange={setSort}
       renderRow={renderRow}
       rootPath={config.routes.articles.path}
       searchAttrs={['name', 'type']}
       searchLangAttrs={['title', 'description']}
       sortColumns={['id', 'name', 'updated']}
+      sortDefaults={{ ...sort }}
     />
   );
 };

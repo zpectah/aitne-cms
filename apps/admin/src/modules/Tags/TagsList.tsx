@@ -4,10 +4,11 @@ import TableCell from '@mui/material/TableCell';
 import { TagsModel } from '@model';
 import config from '../../../config';
 import { ListTable, ButtonLink } from '../../components';
-import { useTagsList } from './hooks';
+import { useTagsList, useTagsListStore } from './hooks';
 
 const TagsList = () => {
   const { t } = useTranslation(['options']);
+  const { sort, setSort } = useTagsListStore();
 
   const {
     table: { heading, items },
@@ -35,10 +36,12 @@ const TagsList = () => {
       onRowToggle={onRowToggle}
       onSelectedDelete={onSelectedDelete}
       onSelectedToggle={onSelectedToggle}
+      onSortChange={setSort}
       renderRow={renderRow}
       rootPath={config.routes.tags.path}
       searchAttrs={['name', 'color']}
       sortColumns={['id', 'name', 'updated']}
+      sortDefaults={{ ...sort }}
     />
   );
 };
